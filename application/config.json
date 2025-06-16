@@ -1,8 +1,7 @@
 {
     "name": "Application-name",
-    "client_port": 5000,
-    "server_port": 23104,
-    "sql_alchemy_uri": "mysql+pymysql://root:root@localhost/ProgrammingLibrary",
+    "port": 5000,
+    "sql_alchemy_uri": "default-sql-alchemy-uri",
     "prefix": "applicationPrefix",
-    "start_command": "npm start"
+    "start_command": "default start"
 }
