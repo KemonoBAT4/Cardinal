@@ -17,6 +17,7 @@ import os
 # local imports
 from core.cardinal.cardinal import Cardinal
 from core.models.base import db
+from core.handlers.handlers import *
 
 # Create App
 app = Flask(__name__,  template_folder="core/web/templates")
@@ -30,19 +31,20 @@ host = str(config.get("Cardinal", "host"))
 
 # register the application routes
 # json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'application', 'config.json')
-json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'application', 'config.json')
+# json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'application', 'config.json')
 
-data = {}
+data = getConfig()
 
-with open(json_path, 'r') as f:
-    data = json.load(f)
-#endwith
+# with open(json_path, 'r') as f:
+#     data = json.load(f)
+# #endwith
 
 try:
-    app.config['SQLALCHEMY_DATABASE_URI'] = data.get("sql_alchemy_uri") if data.get("sql_alchemy_uri") != "" else config.get("Cardinal", "SQLALCHEMY_DATABASE_URI")
-    port = int(data.get("server_port"))
-except ValueError:
+    # mysql+pymysql://root:root@localhost/ProgrammingLibrary
+    app.config['SQLALCHEMY_DATABASE_URI'] = data.get("sql_alchemy_uri") if data.get("sql_alchemy_uri") != "" or data.get("sql_alchemy_uri") != "default-sql-alchemy-uri" else config.get("Cardinal", "SQLALCHEMY_DATABASE_URI")
     port = int(config.get("Cardinal", "port"))
+except ValueError:
+    port = 5000
 #endtry
 
 # Init app's database
