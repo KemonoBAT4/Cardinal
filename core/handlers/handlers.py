@@ -1,8 +1,9 @@
 
 from core.models.base import db
 from core.models.models import *
-
 from core.web.routes import main_routes
+
+import os
 
 # from core.logging.cardinalLogger import CardinalLogger
 from flask import current_app
@@ -32,6 +33,47 @@ def resetDatabase() -> bool:
         # logger.debug("See the log file for the complete error.")
     #endtry
     return False
+#enddef
+
+def getApplicationRoutePrefix() -> str:
+    """
+    DESCRIPTION:
+    Retrieves the application route prefix from the configuration file.
+    the prefix cannot be empty, a slash (/) or double slash (//).
+    If the prefix is not set, it defaults to '/app'.
+
+    PARAMETERS:
+    - no parameters required
+
+    RETURN:
+    - A string representing the application route prefix.
+    """
+
+    prefix = getConfig().get("prefix")
+    prefix = prefix.strip() if prefix != '' else '/app'
+
+    if len(prefix) > 1 or prefix != '/' and prefix != '//':
+        if prefix[0] != '/':
+            prefix = f'/{prefix}'
+        #endif
+
+        if prefix[-1] == '/':
+            prefix = prefix[:-1]
+        #endif
+    else:
+        prefix = '/app'
+    #endif
+    return prefix
+#enddef
+
+def getConfig() -> dict:
+    data = {}
+
+    with open(f'{os.path.dirname(os.path.realpath(__file__))}\config.json', 'r') as f:
+        data = json.load(f)
+    #endwith
+
+    return data
 #enddef
 
 # logger = CardinalLogger()
