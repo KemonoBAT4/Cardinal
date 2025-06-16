@@ -110,47 +110,6 @@ class Cardinal:
             # self._startApplications()
     #enddef
 
-    def getApplicationRoutePrefix(self) -> str:
-        """
-        DESCRIPTION:
-        Retrieves the application route prefix from the configuration file.
-        the prefix cannot be empty, a slash (/) or double slash (//).
-        If the prefix is not set, it defaults to '/app'.
-
-        PARAMETERS:
-        - no parameters required
-
-        RETURN:
-        - A string representing the application route prefix.
-        """
-
-        prefix = self._config.get("prefix")
-        prefix = prefix.strip() if prefix != '' else '/app'
-
-        if len(prefix) > 1 or prefix != '/' and prefix != '//':
-            if prefix[0] != '/':
-                prefix = f'/{prefix}'
-            #endif
-
-            if prefix[-1] == '/':
-                prefix = prefix[:-1]
-            #endif
-        else:
-            prefix = '/app'
-        #endif
-        return prefix
-    #enddef
-
-    def getConfig(self) -> dict:
-        data = {}
-
-        with open(f'{os.path.dirname(os.path.realpath(__file__))}\config.json', 'r') as f:
-            data = json.load(f)
-        #endwith
-
-        return data
-    #enddef
-
     def resetDatabase(self) -> bool:
         """
         DESCRIPTION:
