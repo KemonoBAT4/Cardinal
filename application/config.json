@@ -1,7 +1,8 @@
 {
     "name": "Application-name",
     "port": 5000,
-    "sql_alchemy_uri": "default-sql-alchemy-uri",
+    "sql_alchemy_uri": "mysql+pymysql://root:root@localhost/CardinalSystem", 
+    "defualt-sql-alchemy-uri": "default-sql-alchemy-uri",
     "prefix": "applicationPrefix",
     "start_command": "default start"
 }

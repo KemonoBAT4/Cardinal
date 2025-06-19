@@ -24,7 +24,7 @@ class Cardinal:
     _db = None
 
     _config = None
-    _preix = None
+    _prefix = None
 
     _applications = []  # a list of all the application data
     _threads = []
@@ -33,14 +33,13 @@ class Cardinal:
     _version = None
     _api_version = None
 
-    def __init__(self, app):
-
+    def __init__(self, app, *args, **kwargs):
         self._app = app
         self._app_context = app.app_context()
         self._app_context.push()
 
-        self._config = self.getConfig()
-        self._preix = self.getApplicationRoutePrefix()
+        self._config = getConfig()
+        self._preix = getApplicationRoutePrefix()
         # self._config = config if config else configparser.ConfigParser()
 
         self._db = db

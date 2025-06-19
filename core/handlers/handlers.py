@@ -70,7 +70,7 @@ def getApplicationRoutePrefix() -> str:
 def getConfig() -> dict:
     data = {}
 
-    with open(f'{os.path.dirname(os.path.realpath(__file__))}\config.json', 'r') as f:
+    with open(f'{os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))}/application/config.json', 'r') as f:
         data = json.load(f)
     #endwith
 
