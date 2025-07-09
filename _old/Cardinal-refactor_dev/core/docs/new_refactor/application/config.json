@@ -1,8 +1,0 @@
-{
-    "name": "ProgrammingLibrary",
-    "client_port": 5000,
-    "server_port": "23104",
-    "sql_alchemy_uri": "mysql+pymysql://root:root@localhost/ProgrammingLibrary",
-    "prefix": "/library",
-    "start_command": "npm start"
-}

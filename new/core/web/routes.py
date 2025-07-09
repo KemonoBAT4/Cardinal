@@ -18,7 +18,7 @@ from .pages import *
 config = configparser.ConfigParser()
 config.read("application.cfg")
 
-main_routes = Blueprint('Main_Routes', __name__)
+main_routes = Blueprint('main_routes', __name__)
 
 
 @main_routes.route("/", methods=['GET'])
@@ -26,7 +26,7 @@ def index():
     """
     Redirects to the homepage
     """
-    return redirect(url_for('app.home'))
+    return redirect(url_for('main_routes.home'))
 #enddef
 
 @main_routes.route("/home", methods=['GET'])

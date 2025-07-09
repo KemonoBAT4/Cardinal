@@ -20,7 +20,7 @@ from core.models.base import BaseModel, db
 from core.models.models import *
 # from handlers.handlers import *
 from core.web.routes import main_routes
-from core.web.apis import api_routes
+# from core.web.apis import api_routes
 
 class Cardinal:
 
@@ -33,22 +33,25 @@ class Cardinal:
 
     def __init__(self, config=None):
 
-        self.app = Flask(__name__,  template_folder="core/web/templates")
+        self.app = Flask(__name__, template_folder="../web/templates")
         self.config = config
 
         try:
             self.app.config['SQLALCHEMY_DATABASE_URI'] = str(self.config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
         except Exception as e:
-            self.logger.info(f"Exception: {e}")
+            # self.logger.info(f"Exception: {e}")
+            pass
         #endtry
 
         # TODO: test if this is correct
-        self.host = (str(self.config.get("Cardinal", "host")), "0.0.0.0")
-        self.port = (int(self.config.get("Cardinal", "port")), 23104)
+
+        self.host = str(self.config.get("Cardinal", "host"))
+        self.port = int(self.config.get("Cardinal", "port"))
+
 
         # register routes
         self.app.register_blueprint(main_routes, url_prefix="/")
-        self.app.register_blueprint(api_routes, url_prefix="")
+        # self.app.register_blueprint(api_routes, url_prefix="/api")
     #enddef
 
     def start(self, host=None, port=None):
