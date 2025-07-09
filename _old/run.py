@@ -12,6 +12,7 @@ from core.cardinal.cardinal import Cardinal
 # other imports
 import configparser
 import json
+
 import os
 
 # local imports
@@ -30,27 +31,21 @@ host = str(config.get("Cardinal", "host"))
 
 # register the application routes
 # json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'application', 'config.json')
-json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'application', 'config.json')
 
-data = {}
+app.config['SQLALCHEMY_DATABASE_URI'] = str(config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
 
-with open(json_path, 'r') as f:
-    data = json.load(f)
-#endwith
-
-app.config['SQLALCHEMY_DATABASE_URI'] = data.get("sql_alchemy_uri")
 try:
-    port = int(data.get("port"))
-except ValueError:
     port = int(config.get("Cardinal", "port"))
+except ValueError:
+    port = 23104
 #endtry
 
 # Init app's database
 db.init_app(app)
 
 cardinal = Cardinal(app=app, config=data)
+cardinal.start()
 
 if __name__ == "__main__":
-    cardinal.start()
     app.run(debug=True, host=host, port=port)
 #endif
