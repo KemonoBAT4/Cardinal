@@ -1,27 +1,32 @@
-# Cardinal: Home -- home page title
 
-from flask import Blueprint, redirect, url_for
-from flask import render_template, send_from_directory
+# FIXME: fix this if its not working
+# from core.system import current_app as app
 
+# other imports
 import os
 import configparser
 
+# flask imports
+from flask import Blueprint, redirect, url_for
+from flask import render_template, send_from_directory
+
+# local imports
 from core.models.base import db
 from core.models.models import *
-
 from .pages import *
 
 config = configparser.ConfigParser()
 config.read("application.cfg")
 
-main_routes = Blueprint('Main_Routes', __name__)
+main_routes = Blueprint('main_routes', __name__)
+
 
 @main_routes.route("/", methods=['GET'])
 def index():
     """
     Redirects to the homepage
     """
-    return redirect(url_for('Main_Routes.home'))
+    return redirect(url_for('main_routes.home'))
 #enddef
 
 @main_routes.route("/home", methods=['GET'])

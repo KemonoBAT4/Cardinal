@@ -1,3 +1,6 @@
+# core.handlers.handlers.py
+
+# TODO: add here utility functions
 
 from core.models.base import db
 from core.models.models import *

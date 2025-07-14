@@ -13,7 +13,22 @@ class BaseModel(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
 
-    def save(self):
+    class Result:
+
+        status = False
+        message = ""
+
+        def __init__(self, status, message):
+            self.status = status
+            self.message = message
+        #enddef
+
+        def __repr__(self) -> tuple:
+            return self.status, self.message
+        #enddef
+    #endclass
+
+    def save(self) -> tuple:
         """
         DESCRIPTION:
         Saves the model instance to the database.
@@ -25,10 +40,7 @@ class BaseModel(db.Model):
         - no return
         """
 
-        response = {
-            "status": True,
-            "message": "Object saved successfully"
-        }
+        response = self.Result(True, "Object saved successfully")
 
         try:
             if self.id is None:
@@ -45,13 +57,14 @@ class BaseModel(db.Model):
         except Exception as e:
             db.session.rollback()
 
-            response["status"] = False
-            response["message"] = f"Error while saving object: {str(e)}"
+            response.status = False
+            response.message = f"Error while saving object: {str(e)}"
+
             return response
         #endtry
     #enddef
 
-    def delete(self):
+    def delete(self) -> tuple:
         """
         DESCRIPTION:
         Deletes the model instance from the database.
@@ -63,20 +76,30 @@ class BaseModel(db.Model):
         - no return
         """
 
+        response = self.Result(True, "Object deleted successfully")
+
         try:
-            db.session.query(self.__class__).filter_by(id=self.id).delete(synchronize_session=False)
+            if self.id != None:
+                db.session.query(self.__class__).filter_by(id=self.id).delete(synchronize_session=False)
+            else:
+                response.status = False
+                response.message = "Object ID is None, cannot delete"
+            #endif
         except Exception as e:
             db.session.rollback()
-            raise Exception(f"Error while deleting object: {str(e)}")
+
+            response.status = False
+            response.message = (f"Error while deleting object: {str(e)}")
         #endtry
-        # db.session.delete(self)
-        return db.session.commit()
+        db.session.commit()
+
+        return response
     #enddef
 
-    def update(self, object: any) -> dict:
+    def update(self, object: any) -> tuple:
         """
         DESCRIPTION:
-        Updates the model instance with the provided object.
+        Updates the model instance with the new object's values without changing the id.
 
         PARAMETERS:
         - object (any): The object to update the model instance with (must be of the same type).
@@ -84,14 +107,12 @@ class BaseModel(db.Model):
         RETURN:
         - dict: A dictionary containing the status and message.
         """
-        response = {
-            "status": True,
-            "message": "Object updated successfully"
-        }
+
+        response = self.Result(True, "Object updated successfully")
 
         if not isinstance(object, self.__class__):
-            response["status"] = False
-            response["message"] = "Object type mismatch"
+            response.status = False
+            response.message = "Object type mismatch"
             return response
         #endif
 
@@ -102,52 +123,19 @@ class BaseModel(db.Model):
                 #endif
             #endfor
 
-            save_result = self.save()
+            status, message = self.save()
 
-            if save_result['status'] == False:
-                response["status"] = False
-                response["message"] = save_result['message']
+            if status == False:
+                response.status = False
+                response.message = message
             #endif
 
         except Exception as e:
-            response["status"] = False
-            response["message"] = f'Error: {str(e)}'
+            response.status = False
+            response.message = f'Error: {str(e)}'
         #endtry
 
         return response
-    #enddef
-
-    def patch(self, patch_dict) -> bool:
-        """
-        DESCRIPTION:
-        Updates the model instance with the provided patch dictionary.
-        ex: {"name": "<new name>", "email": "<new email>"}
-
-        PARAMETERS:
-        - patch_dict (dict): The patch dictionary to update the model instance with.
-
-        RETURN:
-        - dict: A dictionary containing the status and message.
-        """
-        response = {
-            "status": True,
-            "message": "Object updated successfully"
-        }
-
-        try:
-            for key, value in patch_dict.items():
-                if hasattr(self, key):
-                    setattr(self, key, value)
-                #endif
-            #endfor
-
-            self.save()
-            return True
-        except Exception as e:
-            response["status"] = False
-            response["message"] = f'Error: {str(e)}'
-            return False
-        #endtry
     #enddef
 
     def to_dict(self) -> dict:
