@@ -250,11 +250,8 @@ class Cardinal:
 
         apps_root = Path(__file__).parent.parent / "app"
 
-
         model_locations = []
-        model_locations.extend(apps_root.glob("*/models.py"))
-        model_locations.extend(apps_root.glob("*/*/models.py"))
-        
+        model_locations.extend(apps_root.rglob("models.py"))
 
         imported_models = []
 
