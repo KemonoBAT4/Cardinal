@@ -11,8 +11,11 @@ and selecting the starting file, cardinal then will be able to download the proj
 
  - install all the requirements with `pip install -r requirements.txt`
  - run cardinal with `python run.py`
- - visit the dashboard page `/dashboard/settings` to setup the application
- - run the application with the `start` button
+ - visit the dashboard page `/cardinal/dashboard` to see the dashboard
+
+## The idea of Cardinal
+Right now cardinal can create multiple tables on a single database for all the applications + the core, this will be changed so every application has its own sub-core and configuration, making calls to the main cardinal to send analytics data, informations, statuses and other, also the Users will be set in the main Cardinal and redistribuited through the application, without the need to create an account every time, the project will be executed in a small beta with a discord bot made in node js and a old webiste also made in node js and the api that will be used is the cardinal application
+
 
 ### Contribute the project
  
