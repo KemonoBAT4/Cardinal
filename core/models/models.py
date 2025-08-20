@@ -17,39 +17,23 @@ class User(BaseModel):
     is_active = db.Column(db.Boolean, default=True)
 #endclass
 
-# class Role(BaseModel):
+class Role(BaseModel):
 
-#     _classname = "Role"
-#     __tablename__ = "roles"
+    _classname = "Role"
+    __tablename__ = "roles"
 
-#     code = db.Column(db.String(80), unique=True, nullable=False)
-#     name = db.Column(db.String(80), unique=True, nullable=False)
-#     description = db.Column(db.String(120), unique=True, nullable=False)
-# #endclass
+    code = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), unique=False, nullable=False)
+    description = db.Column(db.String(120), unique=False, nullable=False)
+#endclass
 
-# class UserRole(BaseModel):
+class Application(BaseModel):
 
-#     _classname = "UserRole"
-#     __tablename__ = "user_roles"
+    _classname = "Application"
+    __tablename__ = "applications"
 
-#     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-#     user = relationship(User, backref=backref("user_roles", cascade="all, delete-orphan"))
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    description = db.Column(db.Text, unique=False, nullable=False)
 
-#     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable=False)
-#     role = relationship(Role, backref=backref("user_roles", cascade="all, delete-orphan"))
-# #endclass
-
-# class Application(BaseModel):
-
-#     _classname = "Application"
-#     __tablename__ = "applications"
-
-#     name = db.Column(db.String(255), unique=True, nullable=False)
-#     description = db.Column(db.Text, unique=False, nullable=False)
-
-#     blueprint_name = db.Column(db.String(255), nullable=False)
-#     folder_path = db.Column(db.Text, nullable=False)
-#     url_prefix = db.Column(db.String(255), nullable=False)
-
-#     is_active = db.Column(db.Boolean, default=True, nullable=False)
-# #endclass
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+#endclass

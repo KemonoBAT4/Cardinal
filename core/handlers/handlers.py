@@ -11,6 +11,79 @@ import json
 # from core.logging.cardinalLogger import CardinalLogger
 from flask import current_app
 
+
+def importModels(app=None):
+    """
+    DESCRIPTION:
+    Dynamically imports all SQLAlchemy models from registred applications.
+
+    PARAMETERS:
+    - no parameters required
+
+    RETURN:
+    - no return
+    """
+    # TODO: implement this function
+    pass
+#enddef
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def resetDatabase() -> bool:
     """
     DESCRIPTION:

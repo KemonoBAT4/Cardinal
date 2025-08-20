@@ -10,23 +10,24 @@ config.read("application.cfg")
 
 class Page:
 
-    _sections = []
     _cards = []
 
-    website_title = ""
-    title = None
-    subtitle = None
+    _title = ""
+    _page_title = ""
+    _subtitle = ""
 
-    template = "index.html"
-    icon = "/icons/cardinal/favicon.ico"
+    _template = "index.html"
+    _icon = "/icons/cardinal/favicon.ico"
 
-    def __init__( self, website_title="", title="", subtitle="", icon=None):
+    _logged_user = ""
 
-        self.title = title
-        self.subtitle = subtitle
-        self.website_title = website_title if website_title != "" else title
-        self.icon = icon if icon is not None else self.icon
-        self.logged_user = "Not logged in"  # This should be replaced with the actual logged-in user, e.g., current_user.username
+    def __init__(self, page_title="", title="", subtitle="", icon=None, template=None):
+        self._page_title = page_title
+        self._title = title
+        self._subtitle = subtitle
+        self._template = template if template is not None else self._template
+        self._icon = icon if icon is not None else self._icon
+        self._logged_user = "Not logged in"
     #enddef
 
     def addCard(self, card):
@@ -37,6 +38,32 @@ class Page:
         #endif
     #enddef
 
+    def render(self):
+        return render_template(
+            self._template,
+            icon=self._icon,
+            website_title=self._page_title,
+            page_title=self._title,
+            logged_user=self._logged_user,
+            cards=[card.html() for card in self._cards],
+            cardinal_version=config.get("Cardinal", "version")
+        )
+    #enddef
+#endclass
+
+class Card:
+
+    _title = ""
+    _subtitle = ""
+    _sections = []
+
+    _template = "card.html"
+
+    def __init__(self, title="", subtitle=""):
+        self._title = title
+        self._subtitle = subtitle
+    #enddef
+
     def addSection(self, section):
         if isinstance(section, Section):
             self._sections.append(section)
@@ -45,41 +72,28 @@ class Page:
         #endif
     #enddef
 
-    def render(self):
+    def html(self):
         return render_template(
-            self.template,
-            icon=self.icon,
-            website_title=self.website_title,
-            page_title=self.title,
-            logged_user=self.logged_user,
-            sections=[section.html() for section in self._sections],
-            cardinal_version=config.get("Cardinal", "version")
+            self._template,
+            self._title,
+            self._subtitle,
+            sections=[section.html() for section in self._sections]
         )
     #enddef
 #endclass
 
 class Section:
-
     _actions = []
 
     _title = None
     _subtitle = None
 
-    html = None
+    _template = "section.html"
 
     def __init__(self):
         pass
     #enddef
-    def table(self):
-        pass
-    #enddef
 
-    def grid(self):
-        pass
-    #enddef
-    def form(self):
-        pass
-    #enddef
     def addAction(self, action):
         if isinstance(action, Action):
             self._actions.append(action)
@@ -87,12 +101,31 @@ class Section:
             raise TypeError("action must be an instance of Action")
         #endif
     #enddef
+
+    def table(self):
+        pass
+    #enddef
+
+    def grid(self):
+        pass
+    #enddef
+
+    def form(self):
+        pass
+    #enddef
+
     def getActions(self):
         return self._actions
     #enddef
 
     def html(self):
-        return ""
+        return render_template(
+            self._template,
+            self._title,
+            self._subtitle,
+            actions=[action.html() for action in self._actions]
+        )
+    #enddef
 #endclass
 
 class Action:
@@ -122,26 +155,5 @@ class Action:
 
     def getIcon(self):
         return self._icon
-    #enddef
-#endclass
-
-class Card:
-
-    _title = None
-    _subtitle = None
-
-    _sections = []
-
-    def __init__(self, title="", subtitle=""):
-        self._title = title
-        self._subtitle = subtitle
-    #enddef
-
-    def addSection(self, section):
-        if isinstance(section, Section):
-            self._sections.append(section)
-        else:
-            raise TypeError("section must be an instance of Section")
-        #endif
     #enddef
 #endclass

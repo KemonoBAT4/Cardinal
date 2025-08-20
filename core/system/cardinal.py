@@ -214,7 +214,6 @@ class Cardinal:
         """
 
         models = self._importModels()
-        print(f"models: {models}")
 
         try:
             if self._db is not None:
@@ -226,13 +225,11 @@ class Cardinal:
             #endif
         except Exception as e:
             print(f"Error resetting the database: {e}")
-            # logger.error(f"Error resetting the database: {e}")
-            # logger.debug("See the log file for the complete error.")
         #endtry
         return False
     #enddef
 
-    def _importModels(self):
+    def _importModels(self) -> list:
         """
         DESCRIPTION:
         Dynamically imports all SQLAlchemy models from registred applications.
@@ -248,26 +245,18 @@ class Cardinal:
             raise RuntimeError("No Flask application context available.")
         #endif
 
-
         cardinal_root = os.path.join(self._app.root_path, "..", "..", "app")
         path_parts =os.path.normpath(cardinal_root).split(os.sep)
         apps_root = os.sep.join(path_parts[:-1])
 
         apps_root = os.path.join(apps_root, "app")
 
-        print(apps_root)
-
         imported_models = []
 
         for dirpath, dirnames, filenames in os.walk(apps_root):
             if 'models.py' in filenames:
                 try:
-                    # Convert path to module notation (e.g., "apps/app1/models.py" -> "apps.app1.models")
-                    # module_path = str(model_path.with_suffix('')).replace('/', '.')
-                    # module_path = str(model_path.relative_to(apps_root)).replace('/', '.').replace('\\', '.').replace('models.py', '')
-
                     module_path = f"app.{(str(os.path.relpath(dirpath, apps_root).replace(os.sep, '.') + '.models'))}"
-                    print("#2 test")
 
                     if '__' in module_path:
                         continue
@@ -278,8 +267,7 @@ class Cardinal:
                     for attr_name in dir(module):
                         attr = getattr(module, attr_name)
 
-
-                        if isinstance(attr, type) and issubclass(attr, BaseModel):
+                        if isinstance(attr, type) and issubclass(attr, BaseModel) and attr:
                             imported_models.append(attr.__name__)
                             print(f"Imported model: {attr.__name__} from {module_path}")
                         #endif
@@ -295,57 +283,9 @@ class Cardinal:
             #endif
         #endfor
 
-
-        # for root, dirs, files in os.walk(apps_root):
-        #     print(root, dirs, files)
-            # for file in files:
-            #     if file.endswith(".py") and file != "__init__.py":
-            #         model_locations.append(Path(root) / file)
-            #     #endif
-            # #endfor
-        #endfor
-
-
-        # print("#3 test")
-        # print("model_locations: ", model_locations)
-        imported_models = []
-
-
-        # for model_path in model_locations:
-
-        #     try:
-        #         # Convert path to module notation (e.g., "apps/app1/models.py" -> "apps.app1.models")
-        #         # module_path = str(model_path.with_suffix('')).replace('/', '.')
-        #         module_path = str(model_path.relative_to(apps_root)).replace('/', '.').replace('\\', '.').replace('models.py', '')
-
-        #         print("#2 test")
-
-        #         if '__' in module_path:
-        #             continue
-        #         #endif
-
-        #         module = importlib.import_module(module_path)
-
-        #         for attr_name in dir(module):
-        #             attr = getattr(module, attr_name)
-
-
-        #             if isinstance(attr, type) and issubclass(attr, BaseModel):
-        #                 imported_models.append(attr.__name__)
-        #                 print(f"Imported model: {attr.__name__} from {module_path}")
-        #             #endif
-        #         #endfor
-
-        #     except ImportError as e:
-        #         print(f"Failed to import model from {model_path}: {str(e)}")
-
-        #     except Exception as e:
-        #         print(f"Unexpected error loading {model_path}: {str(e)}", exc_info=True)
-        #         # module = importlib.import_module(module_path)
-        #     #endtry
-        # #endfor
-        # return imported_models
+        return imported_models
     #enddef
+#endclass
 
     # class Config:
     #     # Model discovery configuration
@@ -359,4 +299,3 @@ class Cardinal:
     # app.config.from_object(Config)
 
     #endregion ##
-#endclass
