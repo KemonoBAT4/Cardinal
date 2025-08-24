@@ -65,17 +65,12 @@
                     </div>
                 </div>
 
+                <!-- the content of the page -->
                 <div class="main-container">
-
-                    <div class="selected-app-preview-container">
-
-                    </div>
-
-                    <div class="selected-app-">
-
-                    </div>
+                    {% for card in cards %}
+                        {{ card }}
+                    {% endfor %}
                 </div>
-
             </div>
         </div>
 
