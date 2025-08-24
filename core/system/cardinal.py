@@ -38,7 +38,7 @@ class Cardinal:
 
     # TODO: complete
 
-    def __init__(self, config=None):
+    def __init__(self, config=None, setup=False):
 
         self._app = Flask(__name__, template_folder="../web/templates")
         self._config = config
@@ -56,8 +56,10 @@ class Cardinal:
         #endtry
 
         self._db.init_app(self._app)
-        self.setup()
 
+        if setup == True: # TODO: change this, instead of False, use a setup variable
+            self.setup()
+        #endif
 
         # TODO: test if this is correct
         self._host = str(self._config.get("Cardinal", "host"))

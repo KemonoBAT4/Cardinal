@@ -14,6 +14,7 @@ body, html {
     height: 100%;
 }
 
+/* INDEX CSS */
 .header-container {
     width: 100%;
     height: 10%;
@@ -100,7 +101,6 @@ body, html {
             align-items: center;
 
             padding-top: 15px;
-
             background-color: gray;
 
             .sidebar-content-container {
@@ -131,13 +131,68 @@ body, html {
                 font-size: 15px;
             }
         }
-
     }
 
     .main-container {
         width: 80%;
         height: 100%;
 
+        display: flex;
+        flex-direction: column;
+
         background-color: yellow;
     }
 }
+/* INDEX CSS */
+
+
+/* CARD CSS */
+.card-container {
+
+    width: 95%;
+
+    display: flex;
+    flex-direction: column;
+
+    .card-title-container {
+        width: 95%;
+        height: 300px;
+
+        background-color: rebeccapurple;
+    }
+
+    .card-content-container {
+        width: 95%;
+
+        display: flex;
+        flex-direction: column;
+    }
+}
+/* CARD CSS */
+
+/* SECTION CSS */
+
+.section-container {
+
+    width: 95%;
+
+    display: flex;
+    flex-direction: column;
+
+    .section-title-container {
+        width: 95%;
+        height: 300px;
+
+        background-color: rebeccapurple;
+    }
+
+    .section-content-container {
+        width: 95%;
+
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+/* SECTION CSS */

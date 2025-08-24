@@ -31,30 +31,15 @@ def index():
 @routes.route("/home", methods=['GET'])
 def home():
     current_version = config.get("Cardinal", "version")
-    username = "Kemono_BAT_4" # current_user.username
     page_title = "The Cardinal System"
+    title = "Cardinal: Home"
 
-    website_title = "Cardinal: Home"
-
-    page = Page(title=page_title, website_title=website_title)
-    # section = Section(title)
-    # Section()
-
-    # page.addSection(
-    # )
+    page = Page(page_title=page_title, title=title)
 
     return page.render()
-
-    return render_template(
-        'index.html',
-        cardinal_version=current_version,
-        logged_user=username,
-        website_title=website_title,
-        page_title=page_title
-    )
 #enddef
 
-#################
+#################z
 # GET THE FILES #
 #region #########
 
