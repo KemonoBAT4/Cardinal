@@ -1,46 +1,50 @@
+from core.system import cardinal
 
-
-# flask imports:
-from flask import Flask, request, jsonify, redirect, url_for
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_mail import Mail, Message
-from flask_bcrypt import Bcrypt
-
-# other imports:
-import configparser
-
-# cardinal imports:
-from core.Cardinal.cardinal import Cardinal
-from core.Models.models import db
-
-# Create App
-app = Flask(__name__, template_folder="core/web/templates")
-cors = CORS(app)
-
-config = configparser.ConfigParser()
-config.read("application.cfg")
-
-# Setup Database
-app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')
-
-port = int(config.get("Cardinal", "port"))
-# Init app's database
-db.init_app(app)
-
-# TODO: find a way to not comment / uncomment every time we need a database reset / migration
-# from core.Models.models import *
-# with app.app_context():
-#     # db.drop_all() # drop all tables
-#     db.create_all() # create all tables
-
-
-cardinal = Cardinal(app=app, config=config)
-cardinal.setup()
-
-if __name__ == "__main__":
-    cardinal.start()
-    app.run(debug=True, host='0.0.0.0', port=port)
+if __name__ == '__main__':
+    cardinal.run()
 #endif
+
+
+
+
+
+
+
+
+
+
+# import os
+# import importlib
+# from flask import Flask
+
+# app = Flask(__name__)
+
+# def addBlueprint(bp, prefix):
+#     print("addBlueprint called")
+#     app.register_blueprint(bp, url_prefix=prefix)
+# #enddef
+
+# @app.route('/')
+# def hello():
+#     return 'Hello, World!'
+# #enddef
+
+# # Dynamically import all route files in the 'routes' directory
+# app_dir = 'app'
+# for folder in os.listdir(app_dir):
+#     folder_path = os.path.join(app_dir, folder)
+#     if os.path.isdir(folder_path):
+#         routes_file = os.path.join(folder_path, 'routes.py')
+#         if os.path.isfile(routes_file):
+#             module_name = os.path.splitext(os.path.basename(routes_file))[0]
+#             module = importlib.import_module(f'{app_dir}.{folder}.{module_name}')
+#             bp = getattr(module, module_name)
+#             addBlueprint(bp, f'/{folder}')
+#         #endif
+#     #endif
+# #endfor
+
+# if __name__ == '__main__':
+#     app.run()
+# #endif
+

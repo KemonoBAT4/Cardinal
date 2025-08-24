@@ -1,12 +1,8 @@
 
-# Cardinal
-cardinalLog.txt
+# cardinalLog.txt
 
 # Virtual Environment
 .venv
 
 # Python
 __pycache__
-
-# Node
-node_modules
