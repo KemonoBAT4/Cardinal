@@ -21,3 +21,5 @@ Right now cardinal can create multiple tables on a single database for all the a
  
 If you have access to this repository you are free to fork the dev branch to help the project.
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/cardinal-system/pulls) providing a detailed description of all the changes you made
+If you have access to this repository you are free to fork the dev branch to help the project.
+When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/cardinal-system/pulls) providing a detailed description of all the changes you made
