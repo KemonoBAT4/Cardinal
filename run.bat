@@ -1,0 +1,1 @@
+docker run -it -p 23104:23104 cardinal_system
