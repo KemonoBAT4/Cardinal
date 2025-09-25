@@ -1,0 +1,1 @@
+docker pull kemonobat4:cardinal_system:latest
