@@ -1,0 +1,11 @@
+version: 3.12
+services:
+  cardinal:
+    image: kemonobat4/cardinal_system:latest
+    environment:
+      - DATABASE_URI=/data/database.db
+    volumes:
+      - ./${APP_ID}:/data
+    ports:
+      - "${APP_PORT}:23104"
+      # TODO: make a way to create dynamic ports
