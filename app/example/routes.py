@@ -7,3 +7,4 @@ routes = Blueprint('intranet', __name__)
 def route1Test():
     return 'route 2 test'
 #enddef
+
