@@ -1,7 +1,7 @@
 
 from flask import Blueprint
 
-api = Blueprint('intranet_api', __name__)
+api = Blueprint('Example_api', __name__)
 
 @api.route('/test')
 def apiTest():

@@ -1,11 +1,36 @@
-version: 3.12
+# # # # version: 3.12
+# # # # services:
+# # # #   cardinal:
+# # # #     image: kemonobat4/cardinal_system:latest
+# # # #     environment:
+# # # #       - DATABASE_URI=/data/database.db
+# # # #     volumes:
+# # # #       - ./${APP_ID}:/data
+# # # #     ports:
+# # # #       - "${APP_PORT}:23104"
+# # # #       # TODO: make a way to create dynamic ports
+
+
+
+# version: "3.12"
 services:
   cardinal:
     image: kemonobat4/cardinal_system:latest
+    working_dir: /app
+
+    # Montiamo la logica dell'app e il file di config specifico
+    volumes:
+      - ./app:/app
+      - ./apps/${APP_NAME}/application.cfg:/app/application.cfg:ro
+      - ${APP_DATA}:/data
+
+    # Variabile d'ambiente per il DB
     environment:
       - DATABASE_URI=/data/database.db
-    volumes:
-      - ./${APP_ID}:/data
+
+    # Avvio del programma principale
+    command: ["python", "run.py"]
+
+    # Ogni istanza espone una porta diversa sull'host
     ports:
       - "${APP_PORT}:23104"
-      # TODO: make a way to create dynamic ports

@@ -23,11 +23,6 @@ from core.models.base import BaseModel, db
 from core.web.routes import routes
 from core.web.api import api
 
-
-
-
-
-
 class Cardinal:
 
     _config = None
@@ -86,8 +81,8 @@ class Cardinal:
         self._host = host if host is not None else self._host
         self._port = port if port is not None else self._port
 
-        self.processRoutes()
-        self.processApis()
+        # self.processRoutes()
+        # self.processApis()
 
         self._app.run(debug=True, host=self._host, port=self._port)
     #enddef
@@ -147,7 +142,7 @@ class Cardinal:
         self._app_context.pop()
     #enddef
 
-    def _processBlueprints(self, filename="routes.py"):
+    def _processBlueprints(self, filename="routes"):
         """
         DESCRIPTION:
         Dynamically import all route files in the directory provided
@@ -161,25 +156,49 @@ class Cardinal:
 
         app_dir = 'app'
 
-        for folder in os.listdir(app_dir):
-            folder_path = os.path.join(app_dir, folder)
+        app_name = self._config.get("Cardinal", "name", fallback=None)
+        if not app_name:
+            print("⚠️ Nessun app name specificato in application.cfg")
+            return False
+        #endif
 
-            if os.path.isdir(folder_path):
-                routes_file = os.path.join(folder_path, f"{filename}.py")
+        app_dir = os.path.join("apps", app_name)
 
-                if os.path.isfile(routes_file):
-                    module_name = os.path.splitext(os.path.basename(routes_file))[0]
-                    module = importlib.import_module(f'{app_dir}.{folder}.{module_name}')
-                    bp = getattr(module, module_name)
+        routes_file = os.path.join(app_dir, f"{filename}.py")
+        if os.path.isfile(routes_file):
 
-                    if filename == "routes":
-                        self._addBlueprint(bp, f'/{folder}')
-                    elif filename == "api":
-                        self._addBlueprint(bp, f'/{folder}/api/v{self._config.get("Cardinal", "api")}')
-                    #endif
-                #endif
-            #endif
-        #endfor
+            module_name = f"apps.{app_name}.{filename}"
+            module = importlib.import_module(module_name)
+
+            bp = getattr(module, filename)
+            prefix = f"/{app_name}" if filename == "routes" else f"/{app_name}/api/v{self._config.get('Cardinal', 'api')}"
+
+            self._addBlueprint(bp, prefix)
+            return True
+        #endif
+
+        return False
+
+
+        # for folder in os.listdir(app_dir):
+        #     folder_path = os.path.join(app_dir, folder)
+
+        #     if os.path.isdir(folder_path):
+        #         routes_file = os.path.join(folder_path, f"{filename}.py")
+
+        #         if os.path.isfile(routes_file):
+        #             module_name = os.path.splitext(os.path.basename(routes_file))[0]
+        #             module = importlib.import_module(f'{app_dir}.{folder}.{module_name}')
+        #             bp = getattr(module, module_name)
+
+        #             if filename == "routes":
+        #                 self._addBlueprint(bp, f'/{folder}')
+        #             elif filename == "api":
+        #                 self._addBlueprint(bp, f'/{folder}/api/v{self._config.get("Cardinal", "api")}')
+        #             #endif
+        #         #endif
+        #     #endif
+        # #endfor
     #enddef
 
     def _addBlueprint(self, bluprint, prefix):

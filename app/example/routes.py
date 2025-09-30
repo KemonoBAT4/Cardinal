@@ -1,7 +1,7 @@
 
 from flask import Blueprint
 
-routes = Blueprint('intranet', __name__)
+routes = Blueprint('Example', __name__)
 
 @routes.route('/test')
 def route1Test():

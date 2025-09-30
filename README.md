@@ -16,8 +16,33 @@ and selecting the starting file, cardinal then will be able to download the proj
 ## The idea of Cardinal
 Right now cardinal can create multiple tables on a single database for all the applications + the core, this will be changed so every application has its own sub-core and configuration, making calls to the main cardinal to send analytics data, informations, statuses and other, also the Users will be set in the main Cardinal and redistribuited through the application, without the need to create an account every time, the project will be executed in a small beta with a discord bot made in node js and a old webiste also made in node js and the api that will be used is the cardinal application
 
-
 ### Contribute the project
- 
 If you have access to this repository you are free to fork the dev branch to help the project.
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made
+
+
+```
+Cardinal/
+├── core/                 # codice riutilizzabile, models, utils
+|    ├── cardinal/
+|    ├── docs/
+|    ├── handlers/
+|    ├── models/
+|    ├── system/
+|    |    ├── __init__.py # espone la classe Cardinal e aggiunge la configurazione con il cfg esterno
+|    |    ├── cardinal.py # codice contenente l'applicazione flask, posso condividere il codice
+|    ├── web/
+├── docker-compose.yml    # generico, parametrico
+├── run.py                # entrypoint
+├── application.cfg 	   # la configurazione generale per l'applicazione (potrebbe essere inutile)
+├── Dockerfile
+├── app/
+│   ├── example1/         # un'esempio generico di un'applicazione
+│   │   ├── application.cfg
+│   │   ├── routes.py
+│   │   ├── api.py
+│   └── example2/
+│       ├── application.cfg
+│       ├── routes.py
+│       ├── api.py
+```
