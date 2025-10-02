@@ -1,5 +1,7 @@
 FROM python:3.13-slim
 
+WORKDIR /app
+
 # Aggiorna pip e pacchetti base
 RUN pip install --upgrade pip setuptools wheel psutil
 
@@ -10,6 +12,9 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+# Copiamo il core (riutilizzabile per tutte le app)
+COPY core /core
+COPY run.py /app/run.py
 
 # CMD ["python", "run.py"]
+

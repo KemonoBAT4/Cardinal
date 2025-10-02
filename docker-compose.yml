@@ -13,24 +13,45 @@
 
 
 # version: "3.12"
+# services:
+#   cardinal:
+#     build: .
+#     working_dir: /app
+
+#     # Montiamo il core e l'app selezionata
+#     volumes:
+#       - ./core:/core:ro
+#       - ./app/${APP_NAME}:/app/app:ro
+#       - ${APP_NAME}_data:/data
+
+#     environment:
+#       - APP_NAME=${APP_NAME}
+#       - DATABASE_URI=sqlite:////data/database.db
+
+#     command: ["python", "run.py", "--config", "/app/app/application.cfg"]
+
+#     ports:
+#       - "${APP_PORT}:${APP_PORT}"
+
+
 services:
   cardinal:
-    image: kemonobat4/cardinal_system:latest
+    build: .
     working_dir: /app
 
-    # Montiamo la logica dell'app e il file di config specifico
     volumes:
-      - ./app:/app
-      - ./apps/${APP_NAME}/application.cfg:/app/application.cfg:ro
-      - ${APP_DATA}:/data
+      - ./core:/core:ro
+      - ./app/${APP_NAME}:/app/app:ro
+      - app_data:/data
 
-    # Variabile d'ambiente per il DB
     environment:
-      - DATABASE_URI=/data/database.db
+      - APP_NAME=${APP_NAME}
+      - DATABASE_URI=sqlite:////data/database.db
 
-    # Avvio del programma principale
-    command: ["python", "run.py"]
+    command: ["python", "run.py", "--config", "/app/app/application.cfg"]
 
-    # Ogni istanza espone una porta diversa sull'host
     ports:
-      - "${APP_PORT}:23104"
+      - "${APP_PORT}:${APP_PORT}"
+
+volumes:
+  app_data:
