@@ -40,7 +40,7 @@ services:
     working_dir: /app
 
     volumes:
-      - ./core:/core:ro
+      - ./core:/app/core:ro
       - ./app/${APP_NAME}:/app/app:ro
       - app_data:/data
 
