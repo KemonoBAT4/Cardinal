@@ -48,7 +48,8 @@ services:
       - APP_NAME=${APP_NAME}
       - DATABASE_URI=sqlite:////data/database.db
 
-    command: ["python", "run.py", "--config", "/app/app/application.cfg"]
+    # command: ["python", "run.py", "--config", "/app/app/application.cfg"]
+    command: ["/bin/sh"]
 
     ports:
       - "${APP_PORT}:${APP_PORT}"
