@@ -15,6 +15,12 @@ LABEL maintainer="kemono.bat.4@gmail.com"
 COPY requirements.txt .
 COPY core ./core
 COPY run.py ./run.py
+COPY run.sh ./run.sh
+COPY application.cfg ./application.cfg
+COPY cardinal.log ./cardinal.log
+COPY requirements.txt ./requirements.txt
+COPY setup.sh ./setup.sh
+COPY cleanup.sh ./cleanup.sh
 
 # Installa le librerie Python
 RUN pip install --no-cache-dir -r requirements.txt
@@ -22,7 +28,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Imposta il PYTHONPATH in modo che includa /app
 # ENV PYTHONPATH="/app:${PYTHONPATH}"
 ENV PYTHONPATH="/app:${PYTHONPATH}"
-
 
 # Comando di default (sovrascrivibile dal docker-compose)
 # CMD ["python", "run.py"]
