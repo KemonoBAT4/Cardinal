@@ -8,16 +8,75 @@ and selecting the starting file, cardinal then will be able to download the proj
 
 ## Getting Started
 ### How to run Cardinal
-
- - install all the requirements with `pip install -r requirements.txt`
- - run cardinal with `python run.py`
- - visit the dashboard page `/cardinal/dashboard` to see the dashboard
+Cardinal is updating, so there's currently not a fixed method to start the applications.
+<!--  (- install all the requirements with `pip install -r requirements.txt`) -->
+<!--  (- run cardinal with `python run.py`) -->
+<!--  (- visit the dashboard page `/cardinal/dashboard` to see the dashboard) -->
 
 ## The idea of Cardinal
 Right now cardinal can create multiple tables on a single database for all the applications + the core, this will be changed so every application has its own sub-core and configuration, making calls to the main cardinal to send analytics data, informations, statuses and other, also the Users will be set in the main Cardinal and redistribuited through the application, without the need to create an account every time, the project will be executed in a small beta with a discord bot made in node js and a old webiste also made in node js and the api that will be used is the cardinal application
 
-
 ### Contribute the project
- 
 If you have access to this repository you are free to fork the dev branch to help the project.
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made
+
+### Current 
+```
+Cardinal/
+├── core/
+|    ├── cardinal/
+|    |    └── cardinal.py
+|    ├── database/
+|    |    └── database.db
+|    ├── docs/
+|    |    ├── documentation/
+|    |    |    ├── Creating a new Application.md
+|    |    |    ├── Creating the models.md
+|    |    |    ├── Understanding the Commands.md
+|    |    |    ├── Using Cardinal.md
+|    |    |    └── temp-models.json
+|    |    └── example/
+|    |         ├── api.py
+│    │         ├── application.cfg
+│    │         ├── handlers.py
+│    │         ├── models.py
+│    │         └── routes.py
+|    ├── handlers/
+|    |    └── handlers.py
+|    ├── models/
+|    |    ├── base.py
+|    |    └── models.py
+|    ├── system/
+|    |    ├── __init__.py
+|    |    └── cardinal.py
+|    └── web/
+|         ├── icons/
+|         ├── scripts/
+|         ├── styles/
+|         ├── templates/
+|         ├── api.py
+|         ├── handlers.py
+|         ├── pages.py
+|         └── routes.py
+├── docker-compose.yml
+├── run.py
+├── application.cfg
+├── Dockerfile
+├── app/
+│    ├── example1/
+│    │    ├── application.cfg
+│    │    ├── routes.py
+│    │    └── api.py
+│    └── example2/
+│         ├── application.cfg
+│         ├── routes.py
+│         └── api.py
+├── cardinal.log
+├── run.sh
+├── run.py
+├── LICENCE.txt
+├── dockerfile
+├── docker-compose.yml
+├── README.md
+└── requirements.txt
+```

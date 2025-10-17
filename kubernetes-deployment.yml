@@ -1,0 +1,19 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: cardinal-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: cardinal
+#   template:
+#     metadata:
+#       labels:
+#         app: cardinal
+#     spec:
+#       containers:
+#       - name: cardinal
+#         image: cardinal_system   # or <dockerhub-username>/cardinal_system:latest
+#         ports:
+#         - containerPort: 23104

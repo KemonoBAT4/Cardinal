@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import bcrypt
 
 db = SQLAlchemy()
 
@@ -168,5 +169,51 @@ class BaseModel(db.Model):
 
     def __repr__(self) -> str:
         return f"<{self._class__.__name__} {self.id}>"
+    #enddef
+#endclass
+
+class _BaseUser(BaseModel):
+    __abstract__ = True
+
+    name = db.Column(db.String(80), nullable=False)
+    surname = db.Column(db.String(80), nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.LargeBinary, nullable=False)
+
+    def addUser(self, password: str):
+        """
+        DESCRIPTION:
+        Adds a new user with the provided password.
+
+        PARAMETERS:
+        - password (str): The password to set for the user.
+
+        RETURN:
+        - tuple: A tuple containing the status and message of the operation.
+        """
+
+        # TODO: implement this function
+        return None, "Not implemented yet"
+
+        # generate salt
+        salt = bcrypt.gensalt()
+
+        # hash password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+
+        return self.save()
+    #enddef
+
+    @staticmethod
+    def login(cls, mail: str, password: str):
+
+        # TODO: implement this function
+        return None, "Not implemented yet"
+        
+        user = cls.query.filter(cls.email == mail).first()
+
+
+        return bcrypt.checkpw(password.encode("utf-8"), user.password_hash)
     #enddef
 #endclass
