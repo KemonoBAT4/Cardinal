@@ -20,29 +20,63 @@ Right now cardinal can create multiple tables on a single database for all the a
 If you have access to this repository you are free to fork the dev branch to help the project.
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made
 
-
+### Current 
 ```
 Cardinal/
-├── core/                 # codice riutilizzabile, models, utils
+├── core/
 |    ├── cardinal/
+|    |    └── cardinal.py
+|    ├── database/
+|    |    └── database.db
 |    ├── docs/
+|    |    ├── documentation/
+|    |    |    ├── Creating a new Application.md
+|    |    |    ├── Creating the models.md
+|    |    |    ├── Understanding the Commands.md
+|    |    |    ├── Using Cardinal.md
+|    |    |    └── temp-models.json
+|    |    └── example/
+|    |         ├── api.py
+│    │         ├── application.cfg
+│    │         ├── handlers.py
+│    │         ├── models.py
+│    │         └── routes.py
 |    ├── handlers/
+|    |    └── handlers.py
 |    ├── models/
+|    |    ├── base.py
+|    |    └── models.py
 |    ├── system/
-|    |    ├── __init__.py # espone la classe Cardinal e aggiunge la configurazione con il cfg esterno
-|    |    ├── cardinal.py # codice contenente l'applicazione flask, posso condividere il codice
-|    ├── web/
-├── docker-compose.yml    # generico, parametrico
-├── run.py                # entrypoint
-├── application.cfg 	   # la configurazione generale per l'applicazione (potrebbe essere inutile)
+|    |    ├── __init__.py
+|    |    └── cardinal.py
+|    └── web/
+|         ├── icons/
+|         ├── scripts/
+|         ├── styles/
+|         ├── templates/
+|         ├── api.py
+|         ├── handlers.py
+|         ├── pages.py
+|         └── routes.py
+├── docker-compose.yml
+├── run.py
+├── application.cfg
 ├── Dockerfile
 ├── app/
-│   ├── example1/         # un'esempio generico di un'applicazione
-│   │   ├── application.cfg
-│   │   ├── routes.py
-│   │   ├── api.py
-│   └── example2/
-│       ├── application.cfg
-│       ├── routes.py
-│       ├── api.py
+│    ├── example1/
+│    │    ├── application.cfg
+│    │    ├── routes.py
+│    │    └── api.py
+│    └── example2/
+│         ├── application.cfg
+│         ├── routes.py
+│         └── api.py
+├── cardinal.log
+├── run.sh
+├── run.py
+├── LICENCE.txt
+├── dockerfile
+├── docker-compose.yml
+├── README.md
+└── requirements.txt
 ```
