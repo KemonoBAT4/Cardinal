@@ -1,9 +1,11 @@
+
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import backref, relationship
 
-from .base import BaseModel, BaseUser, db
+from .base import BaseModel, _BaseUser, db
 
-class User(BaseUser):
+class User(_BaseUser):
 
     _classname = "User"
     __tablename__ = "users"

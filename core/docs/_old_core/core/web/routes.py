@@ -1,3 +1,4 @@
+
 # other imports
 import os
 import configparser
@@ -38,36 +39,6 @@ def home():
     return page.render()
 #enddef
 
-
-
-##################
-# ABOUT CARDINAL #
-#region ##########
-
-@routes.route("/about", methods=['GET'])
-def about():
-    current_version = config.get("Cardinal", "version")
-    page_title = "The Cardinal System"
-    title = "Cardinal: About"
-
-    page = Page(page_title=page_title, title=title)
-
-    return page.render()
-#enddef
-
-@routes.route("/credits", methods=['GET'])
-def credits():
-    current_version = config.get("Cardinal", "version")
-    page_title = "The Cardinal System"
-    title = "Cardinal: Credits"
-
-    page = Page(page_title=page_title, title=title)
-
-    return page.render()
-#enddef
-
-#endregion #######
-
 #################z
 # GET THE FILES #
 #region #########
@@ -94,5 +65,4 @@ def icons(app, filename):
     #enddef
 #enddef
 
-#endregion ######
-
+#endregion
