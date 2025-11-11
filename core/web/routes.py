@@ -1,23 +1,18 @@
 # other imports
 import os
-import configparser
 
 # flask imports
 from flask import Blueprint, redirect, url_for
 from flask import render_template, send_from_directory
 
 # local imports
+from core.models.base import db
+from core.models.models import *
+from core.configs import config
 from .pages import *
 from .handlers import *
 
-from core.models.base import db
-from core.models.models import *
-from .pages import *
-
 routes = Blueprint('main', __name__)
-
-config = configparser.ConfigParser()
-config.read("application.cfg")
 
 @routes.route("/", methods=['GET'])
 def index():
@@ -26,7 +21,6 @@ def index():
     """
     return redirect(url_for('main.home'))
 #enddef
-
 @routes.route("/home", methods=['GET'])
 def home():
     current_version = config.get("Cardinal", "version")
@@ -35,10 +29,20 @@ def home():
 
     page = Page(page_title=page_title, title=title)
 
+    card = Card("Home")
+
+    # card.addSection(
+    #     # Section(fullscreen=True).initialPage(
+    #     #     console=True,
+    #     #     logs=True,
+    #     #     applications=True,
+    #     #     users=True
+    #     # )
+    # )
+
+    page.addCard(card)
     return page.render()
 #enddef
-
-
 
 ##################
 # ABOUT CARDINAL #
@@ -55,17 +59,6 @@ def about():
     return page.render()
 #enddef
 
-@routes.route("/credits", methods=['GET'])
-def credits():
-    current_version = config.get("Cardinal", "version")
-    page_title = "The Cardinal System"
-    title = "Cardinal: Credits"
-
-    page = Page(page_title=page_title, title=title)
-
-    return page.render()
-#enddef
-
 #endregion #######
 
 #################z
@@ -74,24 +67,38 @@ def credits():
 
 @routes.route("/styles/<string:app>/<path:filename>", methods=['GET'])
 def styles(app, filename):
-    if "cardinal" in app.lower():
+    if "cardinal" == app:
         return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'styles'), filename)
+    else:
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', '..', 'app', app, 'static', 'styles'), filename)
     #endif
 #enddef
 
 @routes.route("/scripts/<string:app>/<path:filename>", methods=['GET'])
 def scripts(app, filename):
-    if "cardinal" in app.lower():
+    if "cardinal" == app:
         return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'scripts'), filename)
-    #enddef
+    else:
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', '..', 'app', app, 'static', 'scripts'), filename)
+    #endif
 #enddef
-
 
 @routes.route("/icons/<string:app>/<path:filename>", methods=['GET'])
 def icons(app, filename):
-    if "cardinal" in app.lower():
+    if "cardinal" == app:
         return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'icons'), filename)
-    #enddef
+    else:
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', '..', 'app', app, 'static', 'icons'), filename)
+    #endif
+#enddef
+
+@routes.route("/assets/<string:app>/<path:filename>", methods=['GET'])
+def assets(app, filename):
+    if "cardinal" == app:
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'assets'), filename)
+    else:
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', '..', 'app', app, 'assets'), filename)
+    #endif
 #enddef
 
 #endregion ######

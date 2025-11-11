@@ -1,6 +1,5 @@
 
 from flask import Blueprint
-from .pages import *
 from .handlers import *
 
 api = Blueprint('main_api', __name__)
