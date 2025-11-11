@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ website_title }}</title>
+
+        <link rel="icon" type="image/png" href="{{ icon }}">
+
+
+        <link rel="stylesheet" href="/styles/cardinal/index.css">
+    </head>
+    <body>
+
+        <!-- page container -->
+        <div class="page">
+
+            <!-- header container -->
+            <div class="header-container">
+                <div class="menu-container">
+                    <button class="menu-button">
+                        <span class="menu-button-text">Menu</span>
+                    </button>
+                </div>
+
+                <div class="title-container">
+                    <span class="title-text">{{page_title}}</span>
+                </div>
+
+                <div class="user-containaer">
+                    <span class="username-text">{{logged_user}}</span>
+                </div>
+            </div>
+
+            <!-- page content container -->
+            <div class="content-container">
+
+                <!-- a vertical container for letting the version
+                and the sidebar to be one above each other -->
+                <div class="vertical-container">
+
+                    <div class="sidebar-container">
+
+                        <!-- applications list container -->
+                        <div class="sidebar-content-container">
+                            {% for application in applications %}
+                                <div class="application-container" onclick="window.location.href='/applications/{{ application.name }}'">
+                                    <div class="application-icon-container">
+                                        <img src="{{ application.icon }}" alt="{{ application.name }} icon" class="application-icon">
+                                    </div>
+                                    <div class="application-name-container">
+                                        <span class="application-name-text">{{ application.name }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="version-container">
+                        <!-- clickable text to see what is cardinal -->
+                        <span class="infos-text">Powered by Cardinal</span>
+
+                        <!-- clickable text too see all the cardinal versions -->
+                        <span class="version-text">v {{cardinal_version}}</span>
+                    </div>
+                </div>
+
+                <!-- the content of the page -->
+                <div class="main-container">
+                    {% for card in cards %}
+                        {{ card }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <script src="/scripts/cardinal/index.js"></script>
+    </body>
+</html>
