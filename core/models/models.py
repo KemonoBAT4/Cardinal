@@ -5,7 +5,6 @@ from .base import BaseModel, BaseUser, db
 
 class User(BaseUser):
 
-    _classname = "User"
     __tablename__ = "users"
 
     is_active = db.Column(db.Boolean, default=True)
@@ -13,7 +12,6 @@ class User(BaseUser):
 
 class Role(BaseModel):
 
-    _classname = "Role"
     __tablename__ = "roles"
 
     code = db.Column(db.String(80), unique=True, nullable=False)
@@ -23,7 +21,6 @@ class Role(BaseModel):
 
 class Application(BaseModel):
 
-    _classname = "Application"
     __tablename__ = "applications"
 
     name = db.Column(db.String(255), unique=True, nullable=False)

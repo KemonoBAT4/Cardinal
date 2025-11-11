@@ -8,6 +8,7 @@ import configparser
 #region #########
 
 config = configparser.ConfigParser()
+config.read("application.cfg")
 
 #endregion ######
 

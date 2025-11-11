@@ -173,6 +173,7 @@ class BaseModel(db.Model):
 #endclass
 
 class BaseUser(BaseModel):
+
     __abstract__ = True
 
     name = db.Column(db.String(80), nullable=False)
