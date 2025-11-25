@@ -13,4 +13,4 @@ from core.configs import config
 
 # config.read(sys.argv[sys.argv.index("--config")+1] if "--config" in sys.argv else "application.cfg")
 #           sys.argv[sys.argv.index("--config")+1] if "--config" in sys.argv else "application.cfg"
-cardinal = Cardinal(config=config)
+cardinal = Cardinal(_config=config)

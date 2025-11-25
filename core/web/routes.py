@@ -31,15 +31,6 @@ def home():
 
     card = Card("Home")
 
-    # card.addSection(
-    #     # Section(fullscreen=True).initialPage(
-    #     #     console=True,
-    #     #     logs=True,
-    #     #     applications=True,
-    #     #     users=True
-    #     # )
-    # )
-
     page.addCard(card)
     return page.render()
 #enddef

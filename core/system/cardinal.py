@@ -36,21 +36,26 @@ class Cardinal:
 
     # TODO: complete
 
-    def __init__(self, config=None, setup=False):
-        self._app = Flask(__name__, template_folder='../web/templates')
+    def __init__(self, _config=None):
+
         # , static_folder='../web/static'
-
-        self._config = config
-        self._db = db
-
-        self._app_context = self._app.app_context()
-        self._app_context.push()
+        self._app = Flask(__name__, template_folder='../web/templates')
+        self._config = _config
 
         cors = CORS(self._app)
 
-        if (setup == True):
-            self.setup()
-        #endif
+        self._db = db
+        self._app_context = self._app.app_context()
+        self._app_context.push()
+
+        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
+        self._db.init_app(self._app)
+
+        # try:
+        # except:
+        #     print("error", exec_info=True)
+        #     # self._app.logger.error("Error while setting up database connection", exc_info=True)
+        # #endtry
 
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
@@ -58,10 +63,6 @@ class Cardinal:
         self._addBlueprint(routes, "/")
         self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
         self._addBlueprint(users, "/access")
-    #enddef
-
-    def __del__(self):
-        self._app_context.pop()
     #enddef
 
     def setup(self):
@@ -79,7 +80,7 @@ class Cardinal:
         return self._resetDatabase()
     #enddef
 
-    def run(self, host=None, port=None):
+    def run(self, host=None, port=None, setup=False):
         """
         #### DESCRIPTION:
         Runs the application.
@@ -94,6 +95,11 @@ class Cardinal:
 
         self._host = host if host is not None else self._host
         self._port = port if port is not None else self._port
+
+
+        if (setup == True):
+            self.setup()
+        #endif
 
         welcome_text = f"""
 
@@ -234,6 +240,13 @@ class Cardinal:
         # TODO: see if this is correct
         return self._app.url_map.iter_rules()
     #enddef
-
     #endregion ##
+
+    def __del__(self):
+        self._app_context.pop()
+    #enddef
+
+    def __repr__(self):
+        return f"<Cardinal {self._config.get('Cardinal', 'version')}>"
+    #enddef
 #endclass
