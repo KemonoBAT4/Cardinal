@@ -1,0 +1,21 @@
+[
+    {
+        "name": "<model name>",
+        "fields": [
+            {
+                "name": "<field name>",
+                "required": false,
+                "unique": false,
+                "label": "<field label name>",
+                "description": "<field description>",
+
+                "type": {
+                    "type": "<field type>",
+                    "relationship": false,
+                    "relationshipModel": "<relationship model name>",
+                    "relationshipField": "<relationship model field name>"
+                }
+            }
+        ]
+    }
+]
