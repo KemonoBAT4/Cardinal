@@ -8,8 +8,19 @@ import configparser
 #region #########
 
 config = configparser.ConfigParser()
-config.read("application.cfg")
 
+ARGUMENTS_LIST = [
+    "setup",
+    "run",
+    "test",   # TODO: not implemented yet
+    "build",  # TODO: not implemented yet
+    "deploy", # TODO: not implemented yet
+    "migrate" # TODO: not implemented yet
+
+    "--help",
+    "help",
+
+]
 #endregion ######
 
 

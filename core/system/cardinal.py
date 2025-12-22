@@ -24,23 +24,29 @@ from core.web.routes import routes
 from core.web.api import api
 from core.web.users import users
 
+
 class Cardinal:
 
     _config = None
+    _name = None
 
-    _app = None
+    _app: Flask = None
     _app_context = None
 
-    _host = None
-    _port = None
+    _host: str = "0.0.0.0"
+    _port: int = 23104
 
-    # TODO: complete
+    _reference_app: str = None
 
-    def __init__(self, _config=None):
+    def __init__(self, name: str = "cardinal"):
 
         # , static_folder='../web/static'
         self._app = Flask(__name__, template_folder='../web/templates')
-        self._config = _config
+        self._name = name
+        # self._config = _config
+
+        # gets the configuration
+        self._getApplicationConfig()
 
         cors = CORS(self._app)
 
@@ -50,12 +56,6 @@ class Cardinal:
 
         self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
         self._db.init_app(self._app)
-
-        # try:
-        # except:
-        #     print("error", exec_info=True)
-        #     # self._app.logger.error("Error while setting up database connection", exc_info=True)
-        # #endtry
 
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
@@ -80,7 +80,7 @@ class Cardinal:
         return self._resetDatabase()
     #enddef
 
-    def run(self, host=None, port=None, setup=False):
+    def run(self, host=None, port=None):
         """
         #### DESCRIPTION:
         Runs the application.
@@ -96,9 +96,8 @@ class Cardinal:
         self._host = host if host is not None else self._host
         self._port = port if port is not None else self._port
 
-
-        if (setup == True):
-            self.setup()
+        if (self._name != "cardinal"):
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, "/example")
         #endif
 
         welcome_text = f"""
@@ -131,6 +130,31 @@ class Cardinal:
     #############
     # UTILITIES #
     #region #####
+
+    def _getApplicationConfig(self):
+        """
+        #### DESCRIPTION:
+        Returns the application configuration.
+
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - no return
+        """
+
+        config = configparser.ConfigParser()
+
+        if (self._name != "cardinal"):
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')
+        else:
+            config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'application.cfg')
+            # config_path = "application.cfg"
+        #endif
+
+        config.read(config_path)
+        self._config = config
+    #enddef
 
     def _resetDatabase(self) -> bool:
         """
@@ -176,29 +200,23 @@ class Cardinal:
             raise RuntimeError("No Flask application context available.")
         #endif
 
-        cardinal_root = os.path.join(self._app.root_path, "..", "..", "app")
-        path_parts =os.path.normpath(cardinal_root).split(os.sep)
-        apps_root = os.sep.join(path_parts[:-1])
-
-        apps_root = os.path.join(apps_root, "app")
+        apps_root = os.path.join(self._app.root_path, "..", "..", "app", self._name)
 
         imported_models = []
 
         for dirpath, dirnames, filenames in os.walk(apps_root):
             if 'models.py' in filenames:
                 try:
-                    module_path = f"app.{(str(os.path.relpath(dirpath, apps_root).replace(os.sep, '.') + '.models'))}"
 
-                    if '__' in module_path:
-                        continue
-                    #endif
-
+                    module_path = f"app.{self._name}.models"
                     module = importlib.import_module(module_path)
 
+                    # Loop through all the attributes in the module
                     for attr_name in dir(module):
-                        attr = getattr(module, attr_name)
 
+                        attr = getattr(module, attr_name)
                         if isinstance(attr, type) and issubclass(attr, BaseModel) and attr:
+
                             imported_models.append(attr.__name__)
                             print(f"Imported model: {attr.__name__} from {module_path}")
                         #endif
