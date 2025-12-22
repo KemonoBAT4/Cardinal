@@ -16,7 +16,7 @@ from .forms import *
 from .models import *
 from .handlers import *
 
-routes = Blueprint('example_routes', __name__)
+routes = Blueprint('moviecatalog_routes', __name__)
 
 @routes.route("/", methods=['GET'])
 def index():
@@ -27,7 +27,6 @@ def index():
 #enddef
 @routes.route("/home", methods=['GET'])
 def home():
-
     page_title = "The Cardinal System"
     title = "Example: Home"
 
