@@ -1,15 +1,38 @@
-# /models.py
 
-from core.models.base import BaseModel, db
+from core.models import *
+from core.configs import *
 
-# Creates all the models
+class Example(BaseModel):
 
-# class Role(BaseModel):
+    __tablename__ = "examples"
 
-#     _classname = "Role"
-#     __tablename__ = "roles"
+    # string related fields
+    string = db.Column(db.String(255), unique=False, nullable=True)
+    text = db.Column(db.Text, unique=False, nullable=True)
 
-#     code = db.Column(db.String(80), unique=True, nullable=False)
-#     name = db.Column(db.String(80), unique=True, nullable=False)
-#     description = db.Column(db.String(120), unique=True, nullable=False)
-# #endclass
+    # numeric related fields
+    integer = db.Column(db.Integer, unique=False, nullable=True)
+    float = db.Column(db.Float, unique=False, nullable=True)
+
+    # date related fields
+    date = db.Column(db.Date, unique=False, nullable=True)
+    datetime = db.Column(db.DateTime, unique=False, nullable=True)
+    time = db.Column(db.Time, unique=False, nullable=True)
+
+    # other fields
+    boolean = db.Column(db.Boolean, unique=False, nullable=True)
+    largebinary = db.Column(db.LargeBinary, unique=False, nullable=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    #enddef
+
+    def normal_method(self, *args, **kwargs):
+        pass
+    #enddef
+
+    @classmethod
+    def class_method(cls, *args, **kwargs):
+        pass
+    #enddef
+#endclass

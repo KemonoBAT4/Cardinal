@@ -1,11 +1,40 @@
-# /routes.py
+# other imports
+import os
 
-from flask import Blueprint
+# flask imports
+from flask import Blueprint, redirect, url_for
+from flask import render_template, send_from_directory
 
-routes = Blueprint('Example', __name__)
+# core imports
+from core.models.base import db
+from core.models.models import *
+from core.configs import config
+from core.web import *
 
-@routes.route('/test')
-def route1Test():
-    return 'route 2 test'
+# local imports
+from .forms import *
+from .models import *
+from .handlers import *
+
+routes = Blueprint('example_routes', __name__)
+
+@routes.route("/", methods=['GET'])
+def index():
+    """
+    Redirects to the homepage
+    """
+    return redirect(url_for('example_routes.home'))
 #enddef
+@routes.route("/home", methods=['GET'])
+def home():
 
+    page_title = "The Cardinal System"
+    title = "Example: Home"
+
+    page = Page(page_title=page_title, title=title)
+
+    card = Card("Home")
+
+    page.addCard(card)
+    return page.render()
+#enddef

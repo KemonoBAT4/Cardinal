@@ -172,7 +172,8 @@ class BaseModel(db.Model):
     #enddef
 #endclass
 
-class _BaseUser(BaseModel):
+class BaseUser(BaseModel):
+
     __abstract__ = True
 
     name = db.Column(db.String(80), nullable=False)
@@ -210,7 +211,7 @@ class _BaseUser(BaseModel):
 
         # TODO: implement this function
         return None, "Not implemented yet"
-        
+
         user = cls.query.filter(cls.email == mail).first()
 
 

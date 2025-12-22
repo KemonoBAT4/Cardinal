@@ -1,4 +1,3 @@
-
 from flask import Blueprint, redirect, url_for
 from flask import render_template, send_from_directory
 
@@ -45,7 +44,7 @@ class Page:
             website_title=self._page_title,
             page_title=self._title,
             logged_user=self._logged_user,
-            cards=[card.html() for card in self._cards],
+            # cards=[card.html() for card in self._cards],
             cardinal_version=config.get("Cardinal", "version")
         )
     #enddef
@@ -87,19 +86,12 @@ class Section:
 
     _title = None
     _subtitle = None
+    _fullscreen = False
 
     _template = "section.html"
 
-    def __init__(self):
-        pass
-    #enddef
-
-    def addAction(self, action):
-        if isinstance(action, Action):
-            self._actions.append(action)
-        else:
-            raise TypeError("action must be an instance of Action")
-        #endif
+    def __init__(self, fullscreen: bool = False):
+        self._fullscreen = fullscreen
     #enddef
 
     def table(self):
@@ -112,6 +104,18 @@ class Section:
 
     def form(self):
         pass
+    #enddef
+
+    def initialPage( console: bool = False, logs: bool = False,  applications: bool = False, users: bool = False) -> None:
+        pass
+    #enddef
+
+    def addAction(self, action):
+        if isinstance(action, Action):
+            self._actions.append(action)
+        else:
+            raise TypeError("action must be an instance of Action")
+        #endif
     #enddef
 
     def getActions(self):

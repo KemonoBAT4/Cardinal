@@ -1,1 +1,0 @@
-APP_NAME=example APP_PORT=50104 docker compose -p example run --rm cardinal bash

@@ -1,10 +1,11 @@
-# /api.py
 
 from flask import Blueprint
+from .handlers import *
 
-api = Blueprint('Example_api', __name__)
+api = Blueprint('example_api', __name__)
 
-@api.route('/test')
+@api.route('/exmaple')
 def apiTest():
-    return {"test": "test"}
+
+    return {"exmaple": "example"}
 #enddef

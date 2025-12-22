@@ -1,43 +1,24 @@
-from core.system import cardinal
+
+from core.system.cardinal import Cardinal
+import sys
+
+from core.configs import *
 
 if __name__ == '__main__':
-    cardinal.run()
+
+    args: list = sys.argv.copy()
+
+    test = args.pop(0) # run.py
+    name = args.pop(0) # name
+
+    cardinal = Cardinal(name=name)
+
+    run_arg = args.pop(0)
+
+    if run_arg == "setup":
+        print("Setting up database...")
+        cardinal.setup()
+    else:
+        cardinal.run()
+    #endif
 #endif
-
-
-
-# import os
-# import importlib
-# from flask import Flask
-
-# app = Flask(__name__)
-
-# def addBlueprint(bp, prefix):
-#     print("addBlueprint called")
-#     app.register_blueprint(bp, url_prefix=prefix)
-# #enddef
-
-# @app.route('/')
-# def hello():
-#     return 'Hello, World!'
-# #enddef
-
-# # Dynamically import all route files in the 'routes' directory
-# app_dir = 'app'
-# for folder in os.listdir(app_dir):
-#     folder_path = os.path.join(app_dir, folder)
-#     if os.path.isdir(folder_path):
-#         routes_file = os.path.join(folder_path, 'routes.py')
-#         if os.path.isfile(routes_file):
-#             module_name = os.path.splitext(os.path.basename(routes_file))[0]
-#             module = importlib.import_module(f'{app_dir}.{folder}.{module_name}')
-#             bp = getattr(module, module_name)
-#             addBlueprint(bp, f'/{folder}')
-#         #endif
-#     #endif
-# #endfor
-
-# if __name__ == '__main__':
-#     app.run()
-# #endif
-
