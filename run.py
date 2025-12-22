@@ -1,17 +1,24 @@
-from core.system import cardinal
+
+from core.system.cardinal import Cardinal
 import sys
 
-possible_args = ["setup", ]
-
+from core.configs import *
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        arg = sys.argv.pop()
-        print(arg)
-        if arg == "setup":
-            print("Setting up database...")
-            cardinal.setup()
-        #endif
+
+    args: list = sys.argv.copy()
+
+    test = args.pop(0) # run.py
+    name = args.pop(0) # name
+
+    cardinal = Cardinal(name=name)
+
+    run_arg = args.pop(0)
+
+    if run_arg == "setup":
+        print("Setting up database...")
+        cardinal.setup()
+    else:
+        cardinal.run()
     #endif
-    cardinal.run()
 #endif
