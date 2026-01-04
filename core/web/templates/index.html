@@ -17,22 +17,22 @@
             and the sidebar to be one above each other -->
             <div class="vertical-container">
 
-                <div class="header-container">
-                    <div class="project-info">
-
+                <div class="project-info-container">
+                    <div class="project-title-container">
+                        <span class="project-title">Movie Catalog</span>
                     </div>
                 </div>
 
                 <div class="menu-container">
+                    {% for menu_item in menu_items %}
+                        <div class="menu-item-image">
+                            <img src="" alt="" class="menu-item-img">
 
-                    <div class="menu-item">
-                        <img src="" alt="" class="menu-item-img">
-
-                        <span class="">
-
-                        </span>
-                    </div>
-
+                            <span class="menu-item-title">
+                                {{menu_item.name}}
+                            </span>
+                        </div>
+                    {% endfor %}
                 </div>
 
                 <div class="version-container">
@@ -60,7 +60,6 @@
 
                     <div class="header-account-container">
                         <span class="header-username-text">{{logged_user}}</span>
-                        
                     </div>
                 </div>
             </div>

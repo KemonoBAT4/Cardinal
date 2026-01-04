@@ -97,8 +97,11 @@ class Cardinal:
         self._port = port if port is not None else self._port
 
         if (self._name != "cardinal"):
-            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, "/example")
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/{self._name}")
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/{self._name}/api/v{self._config.get('Cardinal', 'api')}")
         #endif
+
+        # print(self._app.url_map)
 
         welcome_text = f"""
 
@@ -255,8 +258,7 @@ class Cardinal:
     #enddef
 
     def _getAllPaths(self):
-        # TODO: see if this is correct
-        return self._app.url_map.iter_rules()
+        return self._app.url_map
     #enddef
     #endregion ##
 
