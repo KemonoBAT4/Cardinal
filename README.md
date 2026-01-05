@@ -12,7 +12,7 @@ and selecting the starting file, cardinal then will be able to download the proj
 - download the application with the command on a terminal "`git clone https://github.com/KemonoBAT4/Cardinal`"
 - enter the folder with "`cd Cardinal`"
 - create a python environment and activate it
-- install all the dependencies with the command "`pip install -r requirements.txt`" -->ù
+- install all the dependencies with the command "`pip install -r requirements.txt`" -->
 
 
 
