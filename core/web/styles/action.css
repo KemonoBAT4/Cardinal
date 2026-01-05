@@ -1,0 +1,44 @@
+/* define CSS variables */
+:root {
+    --text-scale: 1.25;
+}
+
+/* action container */
+.action-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    text-align: flex-start;
+    align-items: flex-start;
+}
+
+/* action icon image */
+.action-image {
+    width: 10%;
+    height: 70%;
+}
+
+/* action text */
+.action-text {
+    margin-left: 20px;
+    height: 70%;
+     
+    font-weight: bold;
+    font-size: large;
+    text-decoration: none;
+    color: black;
+
+    transition: transform 0.15s ease-in-out;
+    transform-origin: left top;
+}
+
+/* action text hover effect */
+.action-text:hover {
+    cursor: pointer;
+
+    transform: sacle(1.15);   
+}

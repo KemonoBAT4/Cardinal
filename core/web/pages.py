@@ -8,6 +8,7 @@ from typing import Any
 # other imports
 import os
 from json import *
+import typing
 
 # core imports
 from core.configs import config
@@ -20,24 +21,38 @@ config.read("application.cfg")
 
 class Action:
 
-    _name: str
+    _title: str
     _type: str
     _url: str
     _icon: str
 
+    _template: str
+
     def __init__(
             self,
-            name,
-            action_type,
-            url,
-            icon=None
+            title: str               = "",
+            action_type: typing.Any = None,
+            url: str                = "#",
+            icon: typing.Any        = None,
+
+            _template: str = "action.html"
         ) -> "Action":
 
-        self._name = name
+        self._title = title
         self._type = action_type
         self._url = url
         self._icon = icon
     # #enddef __init__
+
+    def render(self):
+        return render_template(
+            self._template,
+            title = self._title,
+            type = self._type,
+            url  = self._url,
+            icon = self._url
+        )
+    # #enddef render
 # #endclass
 
 class Section:
@@ -49,8 +64,8 @@ class Section:
 
     _template: str
     _section_html: str
-    _type: SectionTypeEnum
 
+    _type: SectionTypeEnum
     _attributes: dict
 
     def __init__(
@@ -75,12 +90,12 @@ class Section:
         ) -> None:
 
         self._type = SectionTypeEnum.TABLE
+        self._attributes = {"url": url}
 
-        self._attributes = {
-            "url": url
-        }
-
-        self._section_html = "/sections/table.html"
+        self._section_html = render_template(
+            "sections/table.html",
+            url=url
+        )
     # #enddef table
 
     def addAction(self, action):
@@ -101,25 +116,14 @@ class Section:
         #endfor
     # #enddef addActions
 
-    def render(self):
-        if (self._type == SectionTypeEnum.TABLE):
-            return render_template(
-                self._template,
-                section_html=self._section_html,
-                title=self._title,
-                subtitle=self._subtitle,
-                url=self._attributes["url"],
-                actions=[action.html() for action in self._actions]
-            )
-        elif (self._type == SectionTypeEnum.GRID):
-            return render_template(
-                self._template,
-                section_html=self._section_html,
-                title=self._title,
-                subtitle=self._subtitle,
-                actions=[action.html() for action in self._actions]
-            )
-        # #endif
+    def render(self):        
+        return render_template(
+            self._template,
+            section_html=self._section_html,
+            title=self._title,
+            subtitle=self._subtitle,
+            actions=[action.html() for action in self._actions]
+        )
     # #enddef render
 # #endclass
 
@@ -254,13 +258,13 @@ class Page:
     def render(self):
         return render_template(
             self._template,
-            icon=self._icon,
-            website_title=self._page_title,
-            page_title=self._title,
-            logged_user=self._logged_user,
-            cards=[card.render() for card in self._cards],
-            menu_items=
-            cardinal_version=config.get("Cardinal", "version")
+            icon             = self._icon,
+            website_title    = self._page_title,
+            page_title       = self._title,
+            logged_user      = self._logged_user,
+            cards            = [card.render() for card in self._cards],
+            menu_items       = [],
+            cardinal_version = config.get("Cardinal", "version")
         )
     # #enddef render
 # #endclass
