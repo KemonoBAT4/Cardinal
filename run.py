@@ -1,5 +1,6 @@
 
-from core.system.cardinal import Cardinal
+# from core.system.cardinal import Cardinal
+from core.system import cardinal
 import sys
 
 from core.configs import *
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     test = args.pop(0) # run.py
     name = args.pop(0) # name
 
-    cardinal = Cardinal(name=name)
+    cardinal.reload(name=name)
 
     run_arg = args.pop(0)
 
