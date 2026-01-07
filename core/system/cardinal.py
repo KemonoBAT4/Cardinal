@@ -40,31 +40,16 @@ class Cardinal:
 
     def __init__(self, name: str = "cardinal"):
 
-        # , static_folder='../web/static'
-        self._app = Flask(__name__, template_folder='../web/templates')
+        # sets the name
         self._name = name
-        # self._config = _config
 
-        # gets the configuration
-        self._getApplicationConfig()
-
-        cors = CORS(self._app)
-
-        self._db = db
-        self._app_context = self._app.app_context()
-        self._app_context.push()
-
-        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
-        self._db.init_app(self._app)
-
-        self._host = str(self._config.get("Cardinal", "host"))
-        self._port = int(self._config.get("Cardinal", "port"))
-
-        self._addBlueprint(routes, "/")
-        self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
-        self._addBlueprint(users, "/access")
+        # init the application
+        self._initApplication()
     #enddef
 
+    ##################
+    # PUBLIC METHODS #
+    #region ##########
     def setup(self):
         """
         #### DESCRIPTION:
@@ -130,9 +115,73 @@ class Cardinal:
         self._app.run(debug=True, host=self._host, port=self._port)
     #enddef
 
+    def reload(self, name: str):
+        """
+        #### DESCRIPTION:
+        Reloads the application. This re-creates the application based
+        on the new configuration name given (the "name" is the name of the application folder in the "app" folder).
+
+        #### PARAMETERS:
+        - name: The name of the application folder in the "app" folder
+
+        #### RETURN:
+        - no return
+        """
+
+        # sets the name
+        self._name = name
+
+        # init the application
+        self._initApplication()
+    # #enddef
+    #endregion #######
+
+    ##############
+    # PROPERTIES #
+    #region ######
+    @property
+    def app(self):
+        return self._app
+    # #enddef
+    #endregion ###
+
     #############
     # UTILITIES #
     #region #####
+    def _initApplication(self):
+        """
+        #### DESCRIPTION:
+        Initializes the application in the same Cardinal instance, overwriting the previous one.
+
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - no return
+        """
+
+        # , static_folder='../web/static'
+        self._app = Flask(__name__, template_folder='../web/templates')
+
+        # gets the configuration
+        self._getApplicationConfig()
+
+        cors = CORS(self._app)
+
+        self._db = db
+        self._app_context = self._app.app_context()
+        self._app_context.push()
+
+        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
+        self._db.init_app(self._app)
+
+        self._host = str(self._config.get("Cardinal", "host"))
+        self._port = int(self._config.get("Cardinal", "port"))
+
+        self._addBlueprint(routes, "/")
+        self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
+        self._addBlueprint(users, "/access")
+    # #enddef
 
     def _getApplicationConfig(self):
         """
@@ -151,13 +200,13 @@ class Cardinal:
         if (self._name != "cardinal"):
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')
         else:
-            config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'application.cfg')
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'application.cfg')
             # config_path = "application.cfg"
         #endif
 
         config.read(config_path)
         self._config = config
-    #enddef
+    # #enddef
 
     def _resetDatabase(self) -> bool:
         """
@@ -185,7 +234,7 @@ class Cardinal:
             print(f"Error resetting the database: {e}")
         #endtry
         return False
-    #enddef
+    # #enddef
 
     def _importModels(self) -> list:
         """
@@ -234,7 +283,7 @@ class Cardinal:
         #endfor
 
         return imported_models
-    #enddef
+    # #enddef
 
     def _addBlueprint(self, bluprint, prefix):
         """
@@ -255,18 +304,18 @@ class Cardinal:
         except Exception as e:
             return False
         #endtry
-    #enddef
+    # #enddef
 
     def _getAllPaths(self):
         return self._app.url_map
-    #enddef
+    # #enddef
     #endregion ##
 
     def __del__(self):
         self._app_context.pop()
-    #enddef
+    # #enddef
 
     def __repr__(self):
         return f"<Cardinal {self._config.get('Cardinal', 'version')}>"
-    #enddef
+    # #enddef
 #endclass
