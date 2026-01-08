@@ -1,6 +1,6 @@
 
 # from core.system.cardinal import Cardinal
-from core.system import cardinal
+from core.system import *
 import sys
 
 from core.configs import *
@@ -23,3 +23,4 @@ if __name__ == '__main__':
         cardinal.run()
     #endif
 #endif
+    
