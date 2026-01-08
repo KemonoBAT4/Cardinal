@@ -18,6 +18,7 @@ import pkgutil
 
 # local imports
 from core.models.base import BaseModel, db
+from core.configs import config, ARGUMENTS_LIST
 
 # web blueprint imports
 from core.web.routes import routes
@@ -136,6 +137,7 @@ class Cardinal:
     # #enddef
     #endregion #######
 
+
     ##############
     # PROPERTIES #
     #region ######
@@ -145,9 +147,49 @@ class Cardinal:
     # #enddef
     #endregion ###
 
+
     #############
     # UTILITIES #
     #region #####
+
+    def handle(self, argument: str) -> None:
+        argument = argument.lower()
+        # help argument
+        if (argument == "--help" or argument == "help"):
+            print("Available arguments:")
+            for key, argument in ARGUMENTS_LIST:
+                print(f" - {key}: {argument['description']}")
+            #endfor
+
+        elif (argument == "--version" or argument == "version"):
+            print(f"Cardinal Version: {self._config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}")
+
+        elif (argument == "--info" or argument == "info"):
+            # booting now . . .
+            welcome_text = f"""
+
+            #######################
+            # WELCOME TO CARDINAL #
+            #######################
+
+            # --- SYSTEM INFORMATIONS --- #
+            - current system version: {self._config.get('Cardinal', 'version')}
+            - author: {self._config.get('Cardinal', 'author')}
+            - source code: {self._config.get('Cardinal', 'source')}
+            - current database version: {self._config.get('Cardinal', 'version')}
+
+            # --- SYSTEM CONFIGURATIONS --- #
+            - host: {self._host}
+            - port: {self._port}
+
+            # --- CONFIGURED PATHS --- #
+            - cardinal dashboard base path: '/cardinal'
+            - cardinal authentication base path: '/access'
+
+            """
+        # #endif
+    # #enddef
+
     def _initApplication(self):
         """
         #### DESCRIPTION:
@@ -196,6 +238,8 @@ class Cardinal:
         """
 
         config = configparser.ConfigParser()
+
+        breakpoint()
 
         if (self._name != "cardinal"):
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')

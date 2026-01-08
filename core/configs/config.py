@@ -19,7 +19,6 @@ ARGUMENTS_LIST = [
 
     "--help",
     "help",
-
 ]
 #endregion ######
 
