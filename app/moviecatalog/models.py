@@ -38,7 +38,7 @@ class Example(BaseModel):
 
 class Person(BaseModel):
 
-    __tablename__ = "author"
+    __tablename__ = "person"
     _classname = "Person"
 
     name = db.Column(db.String(255),    unique=False, nullable=False, info={ "classname": _classname, "label": "Nome"   , "description": "" })
@@ -49,7 +49,7 @@ class Person(BaseModel):
     person_type = db.relationship('PersonType', backref=db.backref('peoples', lazy=True))
 
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
-    movie = db.relationship('Movie', backref=db.backref('peoples', lazy=True))
+    movie = db.relationship('Movie', backref=db.backref('movies', lazy=True))
 # #endclass
 
 class PersonType(BaseModel):
@@ -79,7 +79,7 @@ class MoviePersons(BaseModel):
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
     movie = db.relationship('Movie', backref=db.backref('movie_persons', lazy=True))
 
-    person_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
+    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
     person = db.relationship('Person', backref=db.backref('movie_persons', lazy=True))
 
     person_type_id = db.Column(db.Integer, db.ForeignKey('person_type.id'), nullable=False)

@@ -12,9 +12,9 @@ from core.configs import config
 from core.web import *
 
 # local imports
-from ._common import *
+# from ._common import project_name
 
-routes = Blueprint(f'{project_name}_routes', __name__)
+routes = Blueprint(f'moviecatalog_routes', __name__)
 
 @routes.route("/", methods=['GET'])
 def index():
