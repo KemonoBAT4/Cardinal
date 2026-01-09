@@ -8,13 +8,16 @@ and selecting the starting file, cardinal then will be able to download the proj
 
 ## Getting Started
 ### How to run Cardinal
-<!-- In this first version of Cardinal the first way to start as development an application is the following:
-- download the application with the command on a terminal "`git clone https://github.com/KemonoBAT4/Cardinal`"
-- enter the folder with "`cd Cardinal`"
-- create a python environment and activate it
-- install all the dependencies with the command "`pip install -r requirements.txt`" -->
+In this first version of Cardinal the first way to start as development an application is the following:
 
-
+- download the application with the command on a terminal `git clone https://github.com/KemonoBAT4/Cardinal`
+- enter the folder with `cd Cardinal`
+- create a python environment and activate it ( see how you can activate a virtual environment  [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Environment.md) )
+- install all the dependencies with the command `pip install -r requirements.txt`
+- now its possible to run Cardinal, for a list of arguments possible run `python run.py help`
+- for a list of all the possible applications run the command `python run.py list`
+- for a simple setup of an application, before running it, do `python run.py <application name> setup`
+- now its possible to run the command `python run.py <application name> run`
 
 <!--  (- install all the requirements with `pip install -r requirements.txt`) -->
 <!--  (- run cardinal with `python run.py`) -->
