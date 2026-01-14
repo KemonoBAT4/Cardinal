@@ -12,7 +12,7 @@ from core.configs import config
 from core.web import *
 
 # local imports
-# from ._common import project_name
+from .models import *
 
 routes = Blueprint(f'moviecatalog_routes', __name__)
 
@@ -50,3 +50,34 @@ def movie_list():
 
     return page.render()
 # #enddef
+
+@routes.route("/configuration/movie/add", methods=['GET'])
+@routes.route("/configuration/movie/edit/<int:movie_id>", methods=['GET'])
+def movie_edit(movie_id: str = None):
+
+    movie: Movie = None
+
+    if (movie_id is None):
+        movie = Movie()
+    else:
+        movie = Movie.query.get(movie_id)
+    # #endif
+
+    form = MovieForm
+
+    page = Page(title="Modifica Film")
+    card = Card("Modifica Film")
+
+    form_section = Section().form(
+        formtype = form,
+        object = movie,
+        redir="moviecatalog_routes.movie_list"
+    )
+
+    card.addSection(form_section)
+    page.addCard(card)
+
+    return page.render()
+
+# #enddef
+
