@@ -11,10 +11,10 @@ from flask import current_app
 # other imports
 from pathlib import Path
 import configparser
-import json
 import os
 import importlib
-import pkgutil
+import secrets
+import typing
 
 # local imports
 from core.models.base import BaseModel, db
@@ -39,6 +39,8 @@ class Cardinal:
 
     _reference_app: str = None
 
+    _secret: str = None
+
     def __init__(self, name: str = "cardinal"):
 
         # sets the name
@@ -51,7 +53,7 @@ class Cardinal:
     ##################
     # PUBLIC METHODS #
     #region ##########
-    def setup(self):
+    def setup(self) -> bool:
         """
         #### DESCRIPTION:
         Sets up the database and creates all tables.
@@ -66,7 +68,7 @@ class Cardinal:
         return self._resetDatabase()
     #enddef
 
-    def run(self, host=None, port=None):
+    def run(self, host=None, port=None) -> None:
         """
         #### DESCRIPTION:
         Runs the application.
@@ -116,7 +118,7 @@ class Cardinal:
         self._app.run(debug=True, host=self._host, port=self._port)
     #enddef
 
-    def reload(self, name: str):
+    def reload(self, name: str) -> None:
         """
         #### DESCRIPTION:
         Reloads the application. This re-creates the application based
@@ -142,8 +144,13 @@ class Cardinal:
     # PROPERTIES #
     #region ######
     @property
-    def app(self):
+    def app(self) -> Flask:
         return self._app
+    # #enddef
+
+    @property
+    def secret(self) -> str:
+        return self._secret if self._secret is not None else self._generateSecretKey()
     # #enddef
     #endregion ###
 
@@ -190,7 +197,7 @@ class Cardinal:
         # #endif
     # #enddef
 
-    def _initApplication(self):
+    def _initApplication(self) -> None:
         """
         #### DESCRIPTION:
         Initializes the application in the same Cardinal instance, overwriting the previous one.
@@ -206,9 +213,13 @@ class Cardinal:
         self._app = Flask(__name__, template_folder='../web/templates')
 
         # gets the configuration
-        self._getApplicationConfig()
+        self._setupApplicationConfig()
 
         cors = CORS(self._app)
+
+        # csrf
+        self._app.config["SECRET_KEY"] = self._generateSecretKey()
+
 
         self._db = db
         self._app_context = self._app.app_context()
@@ -225,7 +236,25 @@ class Cardinal:
         self._addBlueprint(users, "/access")
     # #enddef
 
-    def _getApplicationConfig(self):
+    def _generateSecretKey(self) -> str:
+        """
+        #### DESCRIPTION:
+        Generates a secret key for the application.
+
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - no return
+        """
+
+        secret = secrets.token_hex(32)
+
+        self._secret = secret
+        return self._secret
+    # #enddef
+
+    def _setupApplicationConfig(self) -> None:
         """
         #### DESCRIPTION:
         Returns the application configuration.
@@ -239,13 +268,11 @@ class Cardinal:
 
         config = configparser.ConfigParser()
 
-        breakpoint()
-
         if (self._name != "cardinal"):
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')
         else:
+            # cardinal
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'application.cfg')
-            # config_path = "application.cfg"
         #endif
 
         config.read(config_path)
@@ -329,7 +356,7 @@ class Cardinal:
         return imported_models
     # #enddef
 
-    def _addBlueprint(self, bluprint, prefix):
+    def _addBlueprint(self, bluprint, prefix) -> bool:
         """
         #### DESCRIPTION:
         Adds a blueprint to the application.
@@ -350,16 +377,17 @@ class Cardinal:
         #endtry
     # #enddef
 
-    def _getAllPaths(self):
+    def _getAllPaths(self) -> typing.Any:
         return self._app.url_map
     # #enddef
+
     #endregion ##
 
     def __del__(self):
         self._app_context.pop()
     # #enddef
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Cardinal {self._config.get('Cardinal', 'version')}>"
     # #enddef
 #endclass
