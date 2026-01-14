@@ -159,8 +159,25 @@ class Cardinal:
     # UTILITIES #
     #region #####
 
-    def handle(self, argument: str) -> None:
-        argument = argument.lower()
+    # TODO: complete this function
+    def handle(self, arguments: list[str]) -> None:
+        """
+        #### DESCRIPTION:
+        Handles the command line arguments.
+
+        #### PARAMETERS:
+        - arguments: The command line arguments
+
+        #### RETURN:
+        - no return
+        """
+
+
+        # NOTE: this is a temporary solution, need to find a better way to
+        # handle all the commands, including --help on specific commands
+        # also need to implement a way to show all the commands (rewrite the _buildCommandText function)
+
+        argument = arguments.pop(0).lower()
         # help argument
         if (argument == "--help" or argument == "help"):
             print("Available arguments:")
@@ -194,8 +211,32 @@ class Cardinal:
             - cardinal authentication base path: '/access'
 
             """
+
+        elif (argument == "setup"):
+            self.setup()
+
+        elif (argument == "run"):
+
+            try:
+                argument = arguments.pop(0)
+            except IndexError:
+                argument = ""
+            # #endtry
+
+            if (argument == "--help" or argument == "help"):
+                print(
+                    self._buildCommandText(
+                        name = "run",
+                        description = "Runs the application (if no arguments rather than the name are given, the default host and port wil be used)",
+                        options = "{name} {host} {port}",
+                        example = "python run.py example 127.0.0.1"
+                    )
+                )
+            else:
+                self.run()
+            # #endif
         # #endif
-    # #enddef
+    # #enddef handle
 
     def _initApplication(self) -> None:
         """
@@ -379,6 +420,29 @@ class Cardinal:
 
     def _getAllPaths(self) -> typing.Any:
         return self._app.url_map
+    # #enddef
+
+    def _buildCommandText(
+        self,
+        name: str,
+        description: str,
+        options: str,
+        example: str
+    ) -> str:
+
+        return f"""
+        command: {name}
+        -------------------------------------
+
+        Description: {description}
+        -------------------------------------
+
+        Options: {options}
+        -------------------------------------
+
+        Example: {example}
+        -------------------------------------
+        """
     # #enddef
 
     #endregion ##
