@@ -1,0 +1,26 @@
+
+
+<div class="form-container">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="form-row">
+            {% for field in form %}
+                {% if field.type not in ['SubmitField', 'CSRFTokenField'] %}
+                    <div class="form-group">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="form-submit">
+            {%for field in form %}
+                {% if field.type == 'SubmitField' %}
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </form>
+</div>
