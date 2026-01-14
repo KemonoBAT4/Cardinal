@@ -69,25 +69,27 @@ class Section:
     _attributes: dict
 
     def __init__(
-            self,
-            title: str = "",
-            subtitle: str = "",
+        self,
+        title: str = "",
+        subtitle: str = "",
 
-            _template: str = "section.html",
-            _fullscreen: bool = False
-        ) -> "Section":
+        _template: str = "section.html",
+        _fullscreen: bool = False
+    ) -> "Section":
 
         self._title = title
         self._subtitle = subtitle
+
+        self._actions = []
 
         self._template = _template
         self._fullscreen = _fullscreen
     # #enddef __init__
 
     def table(
-            self,
-            url: str
-        ) -> None:
+        self,
+        url: str
+    ) -> "Section":
 
         self._type = SectionTypeEnum.TABLE
         self._attributes = {"url": url}
@@ -96,7 +98,41 @@ class Section:
             "sections/table.html",
             url=url
         )
+
+        return self
     # #enddef table
+
+    def form(
+        self,
+        formtype: typing.Any,
+        object: typing.Any,
+        formsave: typing.Callable = None,
+        redir: str = None
+    ) -> "Section":
+
+        self._type = SectionTypeEnum.FORM
+
+        form = formtype(obj = object)
+
+        if (form.validate_on_submit()):
+
+            if (formsave != None):
+                formsave(form, object)
+            else:
+                form.saveForm(object)
+            # #endif
+
+            return redirect(url_for(redir))
+        # #endif
+
+        self._section_html = render_template(
+            "sections/form.html",
+            form=form,
+            redirect=redirect
+        )
+
+        return self
+    # #enddef form
 
     def addAction(self, action):
         if isinstance(action, Action):
@@ -116,7 +152,7 @@ class Section:
         #endfor
     # #enddef addActions
 
-    def render(self):        
+    def render(self):
         return render_template(
             self._template,
             section_html=self._section_html,
