@@ -3,12 +3,14 @@
 Cardinal/                                           - THE MAIN FOLDER
 ├── app/                                            - THE APPLICATION FOLDER
 |    └── .../
+|         ├── _common.py                            - A COMMMON IMPORT FOR THE PROJECT
 |         ├── api.py                                - ONLY API SCRIPT
 │         ├── application.cfg                       - APPLICATION CONFIG
 │         ├── forms.py                              - THE APPLICATIONS FORMS
 │         ├── handlers.py                           - FUNCTIONS
 │         ├── menu.json                             - THE LEFT MENU
 │         ├── models.py                             - THE MODELS FOR THE DATA
+│         ├── README.md                             - THE APPLICAITON'S DOCUMENTATION
 │         └── routes.py                             - MAIN ROUTES
 ├── core/                                           - THE CORE (not to touch)
 |    ├── configs/                                   - THE CARDINAL CONFIGS
@@ -24,13 +26,18 @@ Cardinal/                                           - THE MAIN FOLDER
 |    |    |    ├── Using Cardinal.md
 |    |    |    └── temp-models.json
 |    |    ├── example/                              - AN EXAMPLE FOR SETUP
+|    |    |    ├── _common.py
 |    |    |    ├── api.py
-|    |    |    ├── application.cfg
-|    |    |    ├── forms.py
-|    |    |    ├── handlers.py
-|    |    |    ├── models.py
-|    |    |    └── routes.py
-|    |    └── Structure.md                          - THE APP STRUCTURE
+|    │    │    ├── application.cfg
+|    │    │    ├── forms.py
+|    │    │    ├── handlers.py
+|    │    │    ├── menu.json
+|    │    │    ├── models.py
+|    │    │    ├── README.md
+|    │    │    ├── routes.py
+|    |    |    └── Structure.md
+|    |    ├── Environment.md                        - HOW TO SETUP A ENVIRONMENT
+|    |    └── Structure.md                          - THE STRUCTURE FILE
 |    ├── handlers/                                  - CARDINAL HANDLERS FOLDER
 |    |    └── handlers.py                           - THE HANDLERS
 |    ├── models/                                    - CARDINAL MODELS FOLDER
@@ -51,6 +58,11 @@ Cardinal/                                           - THE MAIN FOLDER
 │         │    ├── index - old.css
 │         │    └── index.css                        - THE PAGE COMPON. CSS
 |         ├── templates/                            - ALL THE HTML TEMPLATES
+│         │    ├── sections/                        - THE SECTIONS HTML
+|         │    │    ├── form.html                   - FORM SECTION HTML
+|         │    │    ├── grid.html                   - GRID SECTION HTML
+|         |    |    └── table.html                  - TABLE SECTION HTML
+│         │    ├── action.html                      - THE ACTION TEMPLATE
 │         │    ├── card.html                        - THE CARD TEMPLATE
 │         │    ├── index - old.html
 │         │    ├── index.html                       - THE MAIN PAGE TEMPLATE
