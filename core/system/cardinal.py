@@ -18,13 +18,12 @@ import typing
 
 # local imports
 from core.models.base import BaseModel, db
-from core.configs import config, ARGUMENTS_LIST
+from core import configs # ARGUMENTS_LIST, HELP_COMMANDS_LIST, INFO_COMMANDS_LIST, name
 
 # web blueprint imports
 from core.web.routes import routes
 from core.web.api import api
 from core.web.users import users
-
 
 class Cardinal:
 
@@ -137,6 +136,89 @@ class Cardinal:
         # init the application
         self._initApplication()
     # #enddef
+
+    def handle(self) -> None:
+        """
+        #### DESCRIPTION:
+        Handles the command line arguments.
+
+        #### PARAMETERS:
+        - arguments: The command line arguments
+
+        #### RETURN:
+        - no return
+        """
+
+        # NOTE: this is a temporary solution, need to find a better way to
+        # handle all the commands, including --help on specific commands
+        # also need to implement a way to show all the commands (rewrite the _buildCommandText function)
+
+        ARGUMENTS_LIST = {
+            "setup"   : { "description": "Sets up the selected application", "callable": self.setup  , "example": "python run.py <application name> setup"   },
+            "run"     : { "description": "Runs the selected application"   , "callable": self.run    , "example": "python run.py <application name> run"     },
+            "build"   : { "description": "Builds the selected application" , "callable": self.build  , "example": "python run.py <application name> build"   },
+            "deploy"  : { "description": " - Not implemented yet"          , "callable": self.deploy , "example": "python run.py <application name> deploy"  },
+            "migrate" : { "description": "Migrates the database"           , "callable": self.migrate, "example": "python run.py <application name> migrate" },
+        }
+
+        INFO_COMMANDS_LIST = [
+            "--info",
+            "--i",
+            "-info",
+            "-i",
+            "info"
+        ]
+
+        HELP_COMMANDS_LIST = [
+            "--help",
+            "--h"
+            "-help",
+            "-h",
+            "help",
+        ]
+
+        args: list = configs.args
+        name   = configs.name
+
+        if (name in HELP_COMMANDS_LIST):
+            print("Available commands:")
+            for key, argument in ARGUMENTS_LIST.items():
+                print(f" - {key}: {argument['description']}")
+            # #endfor
+
+            print("")
+
+            print("Available info commands:")
+            for command in INFO_COMMANDS_LIST:
+                print(f" - {command}")
+            # #endfor
+            return None
+        # #endif
+
+        self.reload(name=name)
+        command: str = str(args.pop(0)).lower()
+
+
+        if (command in INFO_COMMANDS_LIST):
+            print(configs.getCardinalText(cardinal=self))
+
+        elif (command in ARGUMENTS_LIST.keys()):
+            callable_function = ARGUMENTS_LIST[command]["callable"]
+            callable_function()
+        # #endif
+    # #enddef
+
+    def build(self):
+        print("Function not implemented yet.")
+    # #enddef
+
+    def deploy(self):
+        print("Function not implemented yet.")
+    # #enddef
+
+    def migrate(self):
+        print("Function not implemented yet.")
+    # #enddef
     #endregion #######
 
 
@@ -152,92 +234,17 @@ class Cardinal:
     def secret(self) -> str:
         return self._secret if self._secret is not None else self._generateSecretKey()
     # #enddef
+
+    @property
+    def version(self) -> str:
+        return f"{self. _config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}"
+    # #enddef
     #endregion ###
 
 
     #############
     # UTILITIES #
     #region #####
-
-    # TODO: complete this function
-    def handle(self, arguments: list[str]) -> None:
-        """
-        #### DESCRIPTION:
-        Handles the command line arguments.
-
-        #### PARAMETERS:
-        - arguments: The command line arguments
-
-        #### RETURN:
-        - no return
-        """
-
-
-        # NOTE: this is a temporary solution, need to find a better way to
-        # handle all the commands, including --help on specific commands
-        # also need to implement a way to show all the commands (rewrite the _buildCommandText function)
-
-        argument = arguments.pop(0).lower()
-        # help argument
-        if (argument == "--help" or argument == "help"):
-            print("Available arguments:")
-            for key, argument in ARGUMENTS_LIST:
-                print(f" - {key}: {argument['description']}")
-            #endfor
-
-        elif (argument == "--version" or argument == "version"):
-            print(f"Cardinal Version: {self._config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}")
-
-        elif (argument == "--info" or argument == "info"):
-            # booting now . . .
-            welcome_text = f"""
-
-            #######################
-            # WELCOME TO CARDINAL #
-            #######################
-
-            # --- SYSTEM INFORMATIONS --- #
-            - current system version: {self._config.get('Cardinal', 'version')}
-            - author: {self._config.get('Cardinal', 'author')}
-            - source code: {self._config.get('Cardinal', 'source')}
-            - current database version: {self._config.get('Cardinal', 'version')}
-
-            # --- SYSTEM CONFIGURATIONS --- #
-            - host: {self._host}
-            - port: {self._port}
-
-            # --- CONFIGURED PATHS --- #
-            - cardinal dashboard base path: '/cardinal'
-            - cardinal authentication base path: '/access'
-
-            """
-
-        elif (argument == "setup"):
-            self.setup()
-
-        elif (argument == "run"):
-
-            try:
-                argument = arguments.pop(0)
-            except IndexError:
-                argument = ""
-            # #endtry
-
-            if (argument == "--help" or argument == "help"):
-                print(
-                    self._buildCommandText(
-                        name = "run",
-                        description = "Runs the application (if no arguments rather than the name are given, the default host and port wil be used)",
-                        options = "{name} {host} {port}",
-                        example = "python run.py example 127.0.0.1"
-                    )
-                )
-            else:
-                self.run()
-            # #endif
-        # #endif
-    # #enddef handle
-
     def _initApplication(self) -> None:
         """
         #### DESCRIPTION:
@@ -444,7 +451,6 @@ class Cardinal:
         -------------------------------------
         """
     # #enddef
-
     #endregion ##
 
     def __del__(self):

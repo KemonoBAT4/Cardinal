@@ -8,7 +8,6 @@ from pathlib import Path
 from flask import current_app
 
 from core.models.base import BaseModel
-from core.configs import config, ARGUMENTS_LIST
 
 from .cardinal import *
 
