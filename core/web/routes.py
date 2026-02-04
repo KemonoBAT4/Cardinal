@@ -3,7 +3,7 @@ import os
 
 # flask imports
 from flask import Blueprint, redirect, url_for
-from flask import render_template, send_from_directory
+from flask import render_template, jsonify, send_from_directory
 
 # local imports
 from core.models.base import db
@@ -35,6 +35,14 @@ def home():
     return page.render()
 #enddef
 
+@routes.route("/data")
+def get_data():
+    data = [
+        {"id": 1, "nome": "Mario", "eta": 30, "citta": "Roma"},
+        {"id": 2, "nome": "Luigi", "eta": 28, "citta": "Milano"},
+        {"id": 3, "nome": "Anna", "eta": 35, "citta": "Torino"},
+    ]
+    return jsonify(data)
 ##################
 # ABOUT CARDINAL #
 #region ##########

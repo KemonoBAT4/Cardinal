@@ -58,6 +58,12 @@
                         <span class="header-username-text">{{logged_user}}</span>
                     </div>
                 </div>
+
+                <div class="content-container">
+                    {% for card in cards %}
+                        {{ card }}
+                    {% endfor %}
+                </div>
             </div>
         </div>
 

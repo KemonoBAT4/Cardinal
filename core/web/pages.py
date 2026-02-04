@@ -134,25 +134,25 @@ class Section:
         return self
     # #enddef form
 
-    def addAction(self, action):
+    def addAction(self, action) -> None:
         if isinstance(action, Action):
             self._actions.append(action)
         else:
             raise TypeError("action must be an instance of Action")
-        #endif
+        # #endif
     # #enddef addAction
 
-    def addActions(self, actions):
+    def addActions(self, actions) -> None:
         for action in actions:
             if isinstance(action, Action):
                 self.addAction(action)
             else:
                 raise TypeError("action must be an instance of Action")
-            #endif
-        #endfor
+            # #endif
+        # #endfor
     # #enddef addActions
 
-    def render(self):
+    def render(self) -> str:
         return render_template(
             self._template,
             section_html=self._section_html,

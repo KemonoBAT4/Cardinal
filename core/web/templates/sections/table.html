@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+
+        <!-- DataTables -->
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+        <!-- Buttons -->
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+        <!-- JS -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+        <!-- Buttons + Export -->
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    </head>
+
+    <body>
+
+    <table id="myTable" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Età</th>
+                <th>Città</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            ajax: '/data',
+            columns: [
+                { data: 'id' },
+                { data: 'nome' },
+                { data: 'eta' },
+                { data: 'citta' }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'excelHtml5',
+                'pdfHtml5'
+            ],
+            language: {
+                search: "Cerca:",
+                lengthMenu: "Mostra _MENU_ righe",
+                info: "Mostro _START_ - _END_ di _TOTAL_",
+                paginate: {
+                    next: "Avanti",
+                    previous: "Indietro"
+                }
+            }
+        });
+    });
+    </script>
+
+    </body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            const url = "{{url}}";
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const table = document.createElement('table');
+                const headersRow = document.createElement('tr');
+                const headers = Object.keys(data[0]);
+                headers.forEach(header => {
+                    const headerCell = document.createElement('th');
+                    headerCell.innerText = header;
+                    headersRow.appendChild(headerCell);
+                });
+                table.appendChild(headersRow);
+                data.forEach(row => {
+                    const rowElement = document.createElement('tr');
+                    Object.values(row).forEach(cell => {
+                        const cellElement = document.createElement('td');
+                        cellElement.innerText = cell;
+                        rowElement.appendChild(cellElement);
+                    });
+                    table.appendChild(rowElement);
+                });
+                document.body.appendChild(table);
+            });
+        </script>
+    </body>
+</html> -->
