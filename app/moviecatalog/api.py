@@ -1,6 +1,9 @@
 
-from ._common import *
+# from ._common import *
 from flask import Blueprint
+from core.models import *
+
+from .models import *
 
 api = Blueprint('moviecatalog_api', __name__)
 
