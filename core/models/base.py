@@ -22,12 +22,12 @@ class BaseModel(db.Model):
         def __init__(self, status, message):
             self.status = status
             self.message = message
-        #enddef
+        # #enddef __init__
 
         def __repr__(self) -> tuple:
             return self.status, self.message
-        #enddef
-    #endclass
+        # #enddef __repr__
+    # #endclass Result
 
     def save(self) -> tuple:
         """
@@ -49,7 +49,7 @@ class BaseModel(db.Model):
                 self.updated_at = db.func.current_timestamp()
             else:
                 self.updated_at = db.func.current_timestamp()
-            #endif
+            # #endif
 
             db.session.add(self)
             db.session.commit()
@@ -62,8 +62,8 @@ class BaseModel(db.Model):
             response.message = f"Error while saving object: {str(e)}"
 
             return response
-        #endtry
-    #enddef
+        # #endtry
+    # #enddef save
 
     def delete(self) -> tuple:
         """
@@ -85,17 +85,17 @@ class BaseModel(db.Model):
             else:
                 response.status = False
                 response.message = "Object ID is None, cannot delete"
-            #endif
+            # #endif
         except Exception as e:
             db.session.rollback()
 
             response.status = False
             response.message = (f"Error while deleting object: {str(e)}")
-        #endtry
+        # #endtry
         db.session.commit()
 
         return response
-    #enddef
+    # #enddef delete
 
     def update(self, object: any) -> tuple:
         """
@@ -115,29 +115,29 @@ class BaseModel(db.Model):
             response.status = False
             response.message = "Object type mismatch"
             return response
-        #endif
+        # #endif
 
         try:
             for attr in dir(object):
                 if not attr.startswith('_') and attr not in ['id', 'creation_date']:
                     setattr(self, attr, getattr(object, attr))
-                #endif
-            #endfor
+                # #endif
+            # #endfor
 
             status, message = self.save()
 
             if status == False:
                 response.status = False
                 response.message = message
-            #endif
+            # #endif
 
         except Exception as e:
             response.status = False
             response.message = f'Error: {str(e)}'
-        #endtry
+        # #endtry
 
         return response
-    #enddef
+    # #enddef update
 
     def to_dict(self) -> dict:
         """
@@ -161,16 +161,16 @@ class BaseModel(db.Model):
         for key, value in vars(self).items():
             if not callable(getattr(self, key)) and not key.startswith('_'):
                 result[key] = value
-            #endif
-        #endfor
+            # #endif
+        # #endfor
 
         return result
-    #enddef
+    # #enddef to_dict
 
     def __repr__(self) -> str:
         return f"<{self._class__.__name__} {self.id}>"
-    #enddef
-#endclass
+    # #enddef
+# #endclass BaseModel
 
 class BaseUser(BaseModel):
 
@@ -182,7 +182,7 @@ class BaseUser(BaseModel):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.LargeBinary, nullable=False)
 
-    def addUser(self, password: str):
+    def register(self, password: str):
         """
         DESCRIPTION:
         Adds a new user with the provided password.
@@ -206,7 +206,7 @@ class BaseUser(BaseModel):
         return self.save()
     #enddef
 
-    @staticmethod
+    @classmethod
     def login(cls, mail: str, password: str):
 
         # TODO: implement this function
@@ -217,4 +217,15 @@ class BaseUser(BaseModel):
 
         return bcrypt.checkpw(password.encode("utf-8"), user.password_hash)
     #enddef
+
+    def save(self) -> tuple:
+        
+        if (self.password_hash == None):
+            self.password_hash = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
+        #endif
+        
+        
+        
+        self.super().save()
+
 #endclass

@@ -1,11 +1,17 @@
 
+# from ._common import *
 from flask import Blueprint
-from .handlers import *
+from core.models import *
 
-api = Blueprint('example_api', __name__)
+from .models import *
 
-@api.route('/exmaple')
-def apiTest():
+api = Blueprint('moviecatalog_api', __name__)
 
-    return {"exmaple": "example"}
+@api.route("/movie/list", methods=['GET', 'POST'])
+def table_movie_list():
+
+    movie_list = Movie.query.all()
+
+    return {"movies": [movie.to_dict() for movie in movie_list]}
 #enddef
+

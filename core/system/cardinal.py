@@ -11,19 +11,19 @@ from flask import current_app
 # other imports
 from pathlib import Path
 import configparser
-import json
 import os
 import importlib
-import pkgutil
+import secrets
+import typing
 
 # local imports
 from core.models.base import BaseModel, db
+from core import configs # ARGUMENTS_LIST, HELP_COMMANDS_LIST, INFO_COMMANDS_LIST, name
 
 # web blueprint imports
 from core.web.routes import routes
 from core.web.api import api
 from core.web.users import users
-
 
 class Cardinal:
 
@@ -38,34 +38,21 @@ class Cardinal:
 
     _reference_app: str = None
 
+    _secret: str = None
+
     def __init__(self, name: str = "cardinal"):
 
-        # , static_folder='../web/static'
-        self._app = Flask(__name__, template_folder='../web/templates')
+        # sets the name
         self._name = name
-        # self._config = _config
 
-        # gets the configuration
-        self._getApplicationConfig()
-
-        cors = CORS(self._app)
-
-        self._db = db
-        self._app_context = self._app.app_context()
-        self._app_context.push()
-
-        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
-        self._db.init_app(self._app)
-
-        self._host = str(self._config.get("Cardinal", "host"))
-        self._port = int(self._config.get("Cardinal", "port"))
-
-        self._addBlueprint(routes, "/")
-        self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
-        self._addBlueprint(users, "/access")
+        # init the application
+        self._initApplication()
     #enddef
 
-    def setup(self):
+    ##################
+    # PUBLIC METHODS #
+    #region ##########
+    def setup(self) -> bool:
         """
         #### DESCRIPTION:
         Sets up the database and creates all tables.
@@ -80,7 +67,7 @@ class Cardinal:
         return self._resetDatabase()
     #enddef
 
-    def run(self, host=None, port=None):
+    def run(self, host=None, port=None) -> None:
         """
         #### DESCRIPTION:
         Runs the application.
@@ -97,8 +84,11 @@ class Cardinal:
         self._port = port if port is not None else self._port
 
         if (self._name != "cardinal"):
-            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, "/example")
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/{self._name}")
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/{self._name}/api/v{self._config.get('Cardinal', 'api')}")
         #endif
+
+        # print(self._app.url_map)
 
         welcome_text = f"""
 
@@ -127,11 +117,192 @@ class Cardinal:
         self._app.run(debug=True, host=self._host, port=self._port)
     #enddef
 
+    def reload(self, name: str) -> None:
+        """
+        #### DESCRIPTION:
+        Reloads the application. This re-creates the application based
+        on the new configuration name given (the "name" is the name of the application folder in the "app" folder).
+
+        #### PARAMETERS:
+        - name: The name of the application folder in the "app" folder
+
+        #### RETURN:
+        - no return
+        """
+
+        # sets the name
+        self._name = name
+
+        # init the application
+        self._initApplication()
+    # #enddef
+
+    def handle(self) -> None:
+        """
+        #### DESCRIPTION:
+        Handles the command line arguments.
+
+        #### PARAMETERS:
+        - arguments: The command line arguments
+
+        #### RETURN:
+        - no return
+        """
+
+        # NOTE: this is a temporary solution, need to find a better way to
+        # handle all the commands, including --help on specific commands
+        # also need to implement a way to show all the commands (rewrite the _buildCommandText function)
+
+        ARGUMENTS_LIST = {
+            "setup"   : { "description": "Sets up the selected application", "callable": self.setup  , "example": "python run.py <application name> setup"   },
+            "run"     : { "description": "Runs the selected application"   , "callable": self.run    , "example": "python run.py <application name> run"     },
+            "build"   : { "description": "Builds the selected application" , "callable": self.build  , "example": "python run.py <application name> build"   },
+            "deploy"  : { "description": " - Not implemented yet"          , "callable": self.deploy , "example": "python run.py <application name> deploy"  },
+            "migrate" : { "description": "Migrates the database"           , "callable": self.migrate, "example": "python run.py <application name> migrate" },
+        }
+
+        INFO_COMMANDS_LIST = [
+            "--info",
+            "--i",
+            "-info",
+            "-i",
+            "info"
+        ]
+
+        HELP_COMMANDS_LIST = [
+            "--help",
+            "--h"
+            "-help",
+            "-h",
+            "help",
+        ]
+
+        args: list = configs.args
+        name   = configs.name
+
+        if (name in HELP_COMMANDS_LIST):
+            print("Available commands:")
+            for key, argument in ARGUMENTS_LIST.items():
+                print(f" - {key}: {argument['description']}")
+            # #endfor
+
+            print("")
+
+            print("Available info commands:")
+            for command in INFO_COMMANDS_LIST:
+                print(f" - {command}")
+            # #endfor
+            return None
+        # #endif
+
+        self.reload(name=name)
+        command: str = str(args.pop(0)).lower()
+
+
+        if (command in INFO_COMMANDS_LIST):
+            print(configs.getCardinalText(cardinal=self))
+
+        elif (command in ARGUMENTS_LIST.keys()):
+            callable_function = ARGUMENTS_LIST[command]["callable"]
+            callable_function()
+        # #endif
+    # #enddef
+
+    def build(self):
+        print("Function not implemented yet.")
+    # #enddef
+
+    def deploy(self):
+        print("Function not implemented yet.")
+    # #enddef
+
+    def migrate(self):
+        print("Function not implemented yet.")
+    # #enddef
+    #endregion #######
+
+
+    ##############
+    # PROPERTIES #
+    #region ######
+    @property
+    def app(self) -> Flask:
+        return self._app
+    # #enddef
+
+    @property
+    def secret(self) -> str:
+        return self._secret if self._secret is not None else self._generateSecretKey()
+    # #enddef
+
+    @property
+    def version(self) -> str:
+        return f"{self. _config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}"
+    # #enddef
+    #endregion ###
+
+
     #############
     # UTILITIES #
     #region #####
+    def _initApplication(self) -> None:
+        """
+        #### DESCRIPTION:
+        Initializes the application in the same Cardinal instance, overwriting the previous one.
 
-    def _getApplicationConfig(self):
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - no return
+        """
+
+        # , static_folder='../web/static'
+        self._app = Flask(__name__, template_folder='../web/templates')
+
+        # gets the configuration
+        self._setupApplicationConfig()
+
+        cors = CORS(self._app)
+
+        # csrf
+        self._app.config["SECRET_KEY"] = self._generateSecretKey()
+
+
+        self._db = db
+        self._app_context = self._app.app_context()
+        self._app_context.push()
+
+        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
+        self._db.init_app(self._app)
+
+        self._host = str(self._config.get("Cardinal", "host"))
+        self._port = int(self._config.get("Cardinal", "port"))
+
+        self._addBlueprint(routes, "/")
+        self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
+        self._addBlueprint(users, "/access")
+    # #enddef
+
+    def _generateSecretKey(self) -> str:
+        """
+        #### DESCRIPTION:
+        Generates a secret key for the application.
+
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - no return
+        """
+
+        secret = secrets.token_hex(32)
+
+        self._secret = secret
+        return self._secret
+    # #enddef
+
+    def _setupApplicationConfig(self) -> None:
         """
         #### DESCRIPTION:
         Returns the application configuration.
@@ -148,13 +319,13 @@ class Cardinal:
         if (self._name != "cardinal"):
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')
         else:
-            config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'application.cfg')
-            # config_path = "application.cfg"
+            # cardinal
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'application.cfg')
         #endif
 
         config.read(config_path)
         self._config = config
-    #enddef
+    # #enddef
 
     def _resetDatabase(self) -> bool:
         """
@@ -182,7 +353,7 @@ class Cardinal:
             print(f"Error resetting the database: {e}")
         #endtry
         return False
-    #enddef
+    # #enddef
 
     def _importModels(self) -> list:
         """
@@ -231,9 +402,9 @@ class Cardinal:
         #endfor
 
         return imported_models
-    #enddef
+    # #enddef
 
-    def _addBlueprint(self, bluprint, prefix):
+    def _addBlueprint(self, bluprint, prefix) -> bool:
         """
         #### DESCRIPTION:
         Adds a blueprint to the application.
@@ -252,19 +423,41 @@ class Cardinal:
         except Exception as e:
             return False
         #endtry
-    #enddef
+    # #enddef
 
-    def _getAllPaths(self):
-        # TODO: see if this is correct
-        return self._app.url_map.iter_rules()
-    #enddef
+    def _getAllPaths(self) -> typing.Any:
+        return self._app.url_map
+    # #enddef
+
+    def _buildCommandText(
+        self,
+        name: str,
+        description: str,
+        options: str,
+        example: str
+    ) -> str:
+
+        return f"""
+        command: {name}
+        -------------------------------------
+
+        Description: {description}
+        -------------------------------------
+
+        Options: {options}
+        -------------------------------------
+
+        Example: {example}
+        -------------------------------------
+        """
+    # #enddef
     #endregion ##
 
     def __del__(self):
         self._app_context.pop()
-    #enddef
+    # #enddef
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Cardinal {self._config.get('Cardinal', 'version')}>"
-    #enddef
+    # #enddef
 #endclass

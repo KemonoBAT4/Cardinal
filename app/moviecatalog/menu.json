@@ -1,32 +1,21 @@
 [
     {
-        "name": "Example menu section 1",
-        "activateon": "/example/1/**",
+        "name": "Configurazione",
+        "activateon": "/configuration/**",
         "items": [
             {
-                "name": "Example menu section 1 item 1",
-                "url": "/example/1/1",
+                "name": "Film",
+                "url": "/configuration/movie/**",
                 "icon": "fas fa-home"
             },
             {
-                "name": "Example menu section 1 item 2",
-                "url": "/example/1/2",
-                "icon": "fas fa-home"
-            }
-        ]
-    },
-    {
-        "name": "Example menu section 2",
-        "activateon": "/example/2/**",
-        "items": [
-            {
-                "name": "Example menu section 2 item 1",
-                "url": "/example/2/1",
+                "name": "Attori",
+                "url": "/configuration/person/actor/**",
                 "icon": "fas fa-home"
             },
             {
-                "name": "Example menu section 2 item 2",
-                "url": "/example/2/2",
+                "name": "Cast",
+                "url": "/configuration/person/cast/**",
                 "icon": "fas fa-home"
             }
         ]

@@ -4,3 +4,6 @@ from .api import *
 from .handlers import *
 from .menu import *
 from .pages import *
+
+# widget import
+from .widgets import *
