@@ -31,4 +31,7 @@ If you have access to this repository you are free to fork the dev branch to hel
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made
 
 ### Structure
-[Here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md)'s the structure of the
+A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility
+
+### Ideas & Suggestions
+A complete list of ideas that its currently in development / considered can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Ideas.md) and in its related Issues (only for W.I.P. ideas)
