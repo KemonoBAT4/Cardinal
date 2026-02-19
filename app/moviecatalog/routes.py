@@ -1,25 +1,11 @@
-# other imports
-import os
-
-# flask imports
-from flask import Blueprint, redirect, url_for
-from flask import render_template, send_from_directory
-
-# core imports
-from core.models.base import db
-from core.models.models import *
-from core.configs import config
-from core.web import *
 
 # local imports
+from ._common import *
 from .models import *
 
-# other imports
-from typing import Final
+MEDIA_FOLDER: typing.Final[str] = "/"
 
-MEDIA_FOLDER: Final[str] = "/"
-
-routes = Blueprint(f'moviecatalog_routes', __name__)
+routes = Blueprint(f'{project_name}_routes', __name__)
 
 @routes.route("/", methods=['GET'])
 def index():

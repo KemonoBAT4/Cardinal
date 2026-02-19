@@ -1,11 +1,9 @@
 
-# from ._common import *
-from flask import Blueprint
-from core.models import *
-
+# local imports
+from ._common import *
 from .models import *
 
-api = Blueprint('moviecatalog_api', __name__)
+api = Blueprint('{project_name}_api', __name__)
 
 @api.route("/movie/list", methods=['GET', 'POST'])
 def table_movie_list():
@@ -14,4 +12,3 @@ def table_movie_list():
 
     return {"movies": [movie.to_dict() for movie in movie_list]}
 #enddef
-
