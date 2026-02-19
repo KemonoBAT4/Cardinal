@@ -14,6 +14,11 @@ from core.web import *
 # local imports
 from .models import *
 
+# other imports
+from typing import Final
+
+MEDIA_FOLDER: Final[str] = "/"
+
 routes = Blueprint(f'moviecatalog_routes', __name__)
 
 @routes.route("/", methods=['GET'])
@@ -22,7 +27,7 @@ def index():
     Redirects to the homepage
     """
     return redirect(url_for('moviecatalog_routes.home'))
-# #enddef
+# #enddef index
 
 @routes.route("/home", methods=['GET'])
 def home():
@@ -35,7 +40,7 @@ def home():
 
     page.addCard(card)
     return page.render()
-# #enddef
+# #enddef home
 
 @routes.route("/configuration/movie/list", methods=['GET'])
 def movie_list():
@@ -49,7 +54,7 @@ def movie_list():
     page.addCard(card)
 
     return page.render()
-# #enddef
+# #enddef movie_list
 
 @routes.route("/configuration/movie/add", methods=['GET'])
 @routes.route("/configuration/movie/edit/<int:movie_id>", methods=['GET'])
@@ -78,6 +83,14 @@ def movie_edit(movie_id: str = None):
     page.addCard(card)
 
     return page.render()
+# #enddef movie_edit
 
-# #enddef
-
+# NOTE: develop this function
+@routes.route("/stream/<path:filename>", methods=["GET", "POST"])
+def stream(filename: str):
+    try:
+        return send_from_directory(MEDIA_FOLDER, filenmae)
+    except FileNotFoundError:
+        abort(404)
+    # #endtry
+# #enddef stream
