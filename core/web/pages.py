@@ -9,6 +9,7 @@ from typing import Any
 import os
 from json import *
 import typing
+from types import NoneType
 
 # core imports
 from core.configs import config
@@ -30,10 +31,10 @@ class Action:
 
     def __init__(
             self,
-            title: str               = "",
+            title: str = "",
             action_type: typing.Any = None,
-            url: str                = "#",
-            icon: typing.Any        = None,
+            url: str = "#",
+            icon: typing.Any = None,
 
             _template: str = "action.html"
         ) -> "Action":
@@ -176,7 +177,7 @@ class Card:
             self,
             title: str = "",
             subtitle: str = "",
-            sections: list[Section] = [],
+            sections: list[Section] | None = None,
 
             _template: str = "card.html"
         ) -> "Card":
@@ -185,6 +186,10 @@ class Card:
         self._subtitle = subtitle
 
         self._template = _template
+
+        if isinstance(sections, NoneType):
+            sections = []
+        # #endif
 
         if isinstance(sections, Section):
             self._sections = [sections]
@@ -243,16 +248,24 @@ class Page:
             page_title: str = "",
             title: str = "",
             subtitle: str = "",
-            cards: list[Card] = [],
+            cards: list[Card] | None = None,
 
             _icon: Any = "/icons/cardinal/favicon.ico",
             _template: str = "index.html",
-            _sections: list[Section] = [],
+            _sections: list[Section] | None = None,
         ) -> "Page":
 
         self._page_title = page_title
         self._title = title
         self._subtitle = subtitle
+
+        if isinstance(cards, NoneType):
+            cards = []
+        # #endif
+
+        if isinstance(_sections, NoneType):
+            _sections = []
+        # #endif
 
         # template & and icon settings
         self._icon = _icon
