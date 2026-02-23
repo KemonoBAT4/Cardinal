@@ -8,7 +8,8 @@ from flask_login import login_required
 from core.models import *
 from core.configs import *
 from core.web import *
-from core.mail import *
+# from core.mail import *
+from core.system import *
 
 # other imports
 import os
