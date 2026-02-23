@@ -30,10 +30,10 @@ from core.models.models import User
 class Cardinal:
 
     _config: "configparser.ConfigParser"
-    _name = None
+    _name: "str | None" = None
 
     _app: "Flask"
-    _app_context = None
+    _app_context: "typing.Any"
 
     _host: str = "0.0.0.0"
     _port: int = 23104
@@ -347,7 +347,7 @@ class Cardinal:
         config = configparser.ConfigParser()
 
         if (self._name != "cardinal"):
-            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg') # type: ignore
         else:
             # cardinal
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'application.cfg')

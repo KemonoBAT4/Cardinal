@@ -29,14 +29,14 @@ class Action:
     _template: str
 
     def __init__(
-            self,
-            title: str = "",
-            action_type: typing.Any = None,
-            url: str = "#",
-            icon: typing.Any = None,
+        self,
+        title: str = "",
+        action_type: typing.Any = None,
+        url: str = "#",
+        icon: typing.Any = None,
 
-            _template: str = "action.html"
-        ) -> "Action":
+        _template: str = "action.html"
+    ) -> "None":
 
         self._title = title
         self._type = action_type
@@ -75,7 +75,7 @@ class Section:
 
         _template: str = "section.html",
         _fullscreen: bool = False
-    ) -> "Section":
+    ) -> "None":
 
         self._title = title
         self._subtitle = subtitle
@@ -106,14 +106,16 @@ class Section:
         self,
         formtype: typing.Any,
         object: typing.Any,
-        formsave: typing.Callable = None,
-        redir: str = None
+        formsave: "typing.Callable | None" = None,
+        redir: "str | None" = None
     ) -> "Section":
 
         self._type = SectionTypeEnum.FORM
 
         form = formtype(obj = object)
 
+        # NOTE: fix this function
+        # try to implement a funciton to save the form
         if (form.validate_on_submit()):
 
             if (formsave != None):
@@ -122,7 +124,7 @@ class Section:
                 form.saveForm(object)
             # #endif
 
-            return redirect(url_for(redir))
+            # return redirect(url_for(redir))
         # #endif
 
         self._section_html = render_template(
@@ -158,7 +160,7 @@ class Section:
             section_html=self._section_html,
             title=self._title,
             subtitle=self._subtitle,
-            actions=[action.html() for action in self._actions]
+            actions=[action.render() for action in self._actions]
         )
     # #enddef render
 # #endclass
@@ -179,7 +181,7 @@ class Card:
         sections: "list[Section] | None" = None,
 
         _template: str = "card.html"
-    ) -> "Card":
+    ) -> "None":
 
         self._title = title
         self._subtitle = subtitle
@@ -252,7 +254,7 @@ class Page:
         _icon: Any = "/icons/cardinal/favicon.ico",
         _template: str = "index.html",
         _sections: "list[Section] | None" = None,
-    ) -> "Page":
+    ) -> "None":
 
         self._page_title = page_title
         self._title = title
@@ -283,7 +285,7 @@ class Page:
         # #endif
 
         # NOTE: the result on the html is "<flask_login.mixins.AnonymousUserMixin object at 0x000001E1FCC57550>" not something like "not logged in" or "AnonymousUser"
-        self._logged_user = current_user.username if (current_user.is_authenticated) else "Not Logged In"
+        self._logged_user = current_user.username if (current_user.is_authenticated) else "Not Logged In" # type: ignore
     # #enddef __init__
 
     def addCard(self, card: Card):

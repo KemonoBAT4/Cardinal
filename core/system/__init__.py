@@ -12,4 +12,4 @@ from core.models.base import BaseModel
 from .cardinal import *
 
 cardinal = Cardinal(name="cardinal")
-mail: Mail | None = cardinal.mail
+mail: "Mail | None" = cardinal.mail
