@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail, Message
 from flask import current_app
 
 # other imports
@@ -24,21 +25,22 @@ from core import configs # ARGUMENTS_LIST, HELP_COMMANDS_LIST, INFO_COMMANDS_LIS
 from core.web.routes import routes
 from core.web.api import api
 from core.web.users import users
+from core.models.models import User
 
 class Cardinal:
 
-    _config = None
+    _config: "configparser.ConfigParser"
     _name = None
 
-    _app: Flask = None
+    _app: "Flask"
     _app_context = None
 
     _host: str = "0.0.0.0"
     _port: int = 23104
 
-    _reference_app: str = None
+    _secret: "str | None" = None
+    _mail: "Mail | None" = None
 
-    _secret: str = None
 
     def __init__(self, name: str = "cardinal"):
 
@@ -239,6 +241,11 @@ class Cardinal:
     def version(self) -> str:
         return f"{self. _config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}"
     # #enddef
+
+    @property
+    def mail(self) -> "Mail | None":
+        return self._mail
+    # #enddef
     #endregion ###
 
 
@@ -265,10 +272,31 @@ class Cardinal:
 
         cors = CORS(self._app)
 
+        # login
+        login_manager = LoginManager()
+
+        login_manager.init_app(self._app)
+        login_manager.login_view = "access.login" # type: ignore
+
+        @login_manager.user_loader
+        def load_user(user_id: int) -> User:
+            return User.query.get(int(user_id)) # type: ignore
+        # #enddef load_user
+
+        # mail server
+        self._app.config["MAIL_SERVER"] = str(self._config.get("Cardinal Mail", "MAIL_SERVER"))
+        self._app.config["MAIL_PORT"] = str(self._config.get("Cardinal Mail", "MAIL_PORT"))
+        self._app.config["MAIL_USE_TLS"] = str(self._config.get("Cardinal Mail", "MAIL_USE_TLS"))
+        self._app.config["MAIL_USERNAME"] = str(self._config.get("Cardinal Mail", "MAIL_USERNAME"))
+        self._app.config["MAIL_PASSWORD"] = str(self._config.get("Cardinal Mail", "MAIL_PASSWORD"))
+        self._app.config["MAIL_DEFAULT_SENDER"] = str(self._config.get("Cardinal Mail", "MAIL_DEFAULT_SENDER"))
+
+        self._mail = Mail(self._app)
+
         # csrf
         self._app.config["SECRET_KEY"] = self._generateSecretKey()
 
-
+        # app context & database
         self._db = db
         self._app_context = self._app.app_context()
         self._app_context.push()
@@ -276,13 +304,15 @@ class Cardinal:
         self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
         self._db.init_app(self._app)
 
+        # gets the host and port
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
 
+        # core blueprints setup for the application
         self._addBlueprint(routes, "/")
         self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
         self._addBlueprint(users, "/access")
-    # #enddef
+    # #enddef _initApplication
 
     def _generateSecretKey(self) -> str:
         """
@@ -300,7 +330,7 @@ class Cardinal:
 
         self._secret = secret
         return self._secret
-    # #enddef
+    # #enddef _generateSecretKey
 
     def _setupApplicationConfig(self) -> None:
         """
@@ -325,7 +355,7 @@ class Cardinal:
 
         config.read(config_path)
         self._config = config
-    # #enddef
+    # #enddef _setupApplicationConfig
 
     def _resetDatabase(self) -> bool:
         """
@@ -353,7 +383,7 @@ class Cardinal:
             print(f"Error resetting the database: {e}")
         #endtry
         return False
-    # #enddef
+    # #enddef _resetDatabase
 
     def _importModels(self) -> list:
         """
@@ -371,7 +401,7 @@ class Cardinal:
             raise RuntimeError("No Flask application context available.")
         #endif
 
-        apps_root = os.path.join(self._app.root_path, "..", "..", "app", self._name)
+        apps_root = os.path.join(self._app.root_path, "..", "..", "app", self._name) # type: ignore
 
         imported_models = []
 
@@ -402,7 +432,7 @@ class Cardinal:
         #endfor
 
         return imported_models
-    # #enddef
+    # #enddef _importModels
 
     def _addBlueprint(self, bluprint, prefix) -> bool:
         """
@@ -423,11 +453,11 @@ class Cardinal:
         except Exception as e:
             return False
         #endtry
-    # #enddef
+    # #enddef _addBlueprint
 
     def _getAllPaths(self) -> typing.Any:
         return self._app.url_map
-    # #enddef
+    # #enddef _getAllPaths
 
     def _buildCommandText(
         self,
@@ -450,7 +480,7 @@ class Cardinal:
         Example: {example}
         -------------------------------------
         """
-    # #enddef
+    # #enddef _buildCommandText
     #endregion ##
 
     def __del__(self):

@@ -5,15 +5,18 @@ import configparser
 import sys
 import typing
 
+
 #################
 # CONFIGURATION #
 #region #########
 
 config = configparser.ConfigParser()
 
-args: list = sys.argv.copy()
+args: list  = sys.argv.copy()
 runner: str = args.pop(0) # run.py
-name: str = args.pop(0) # name
+name: str   = args.pop(0) # name
+
+NoneType = type(None)
 
 def getCardinalText(cardinal: "Cardinal") -> str:
     return f"""
@@ -41,10 +44,5 @@ def getCardinalText(cardinal: "Cardinal") -> str:
     - cardinal authentication base path: '/access'
 
     """
-# #enddef
+# #enddef getCardinalText
 #endregion ######
-
-
-# from bcrypt import hashpw, gensalt, checkpw
-
-# class JsonWebToken:
