@@ -4,3 +4,6 @@
 
 # Python
 __pycache__
+
+# code editors
+.vscode
