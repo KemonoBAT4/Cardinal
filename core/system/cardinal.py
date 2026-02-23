@@ -33,7 +33,7 @@ class Cardinal:
     _name: "str | None" = None
 
     _app: "Flask"
-    _app_context: "typing.Any"
+    _app_context =  None
 
     _host: str = "0.0.0.0"
     _port: int = 23104
@@ -49,11 +49,12 @@ class Cardinal:
 
         # init the application
         self._initApplication()
-    #enddef
+    # #enddef __init__
 
     ##################
     # PUBLIC METHODS #
     #region ##########
+
     def setup(self) -> bool:
         """
         #### DESCRIPTION:
@@ -265,6 +266,7 @@ class Cardinal:
         """
 
         # , static_folder='../web/static'
+        # NOTE: change the template folder to the application templates folder
         self._app = Flask(__name__, template_folder='../web/templates')
 
         # gets the configuration
@@ -284,12 +286,18 @@ class Cardinal:
         # #enddef load_user
 
         # mail server
-        self._app.config["MAIL_SERVER"] = str(self._config.get("Cardinal Mail", "MAIL_SERVER"))
-        self._app.config["MAIL_PORT"] = str(self._config.get("Cardinal Mail", "MAIL_PORT"))
-        self._app.config["MAIL_USE_TLS"] = str(self._config.get("Cardinal Mail", "MAIL_USE_TLS"))
-        self._app.config["MAIL_USERNAME"] = str(self._config.get("Cardinal Mail", "MAIL_USERNAME"))
-        self._app.config["MAIL_PASSWORD"] = str(self._config.get("Cardinal Mail", "MAIL_PASSWORD"))
-        self._app.config["MAIL_DEFAULT_SENDER"] = str(self._config.get("Cardinal Mail", "MAIL_DEFAULT_SENDER"))
+        try:
+            self._app.config["MAIL_SERVER"] = str(self._config.get("Cardinal Mail", "MAIL_SERVER"))
+            self._app.config["MAIL_PORT"] = str(self._config.get("Cardinal Mail", "MAIL_PORT"))
+            self._app.config["MAIL_USE_TLS"] = str(self._config.get("Cardinal Mail", "MAIL_USE_TLS"))
+            self._app.config["MAIL_USERNAME"] = str(self._config.get("Cardinal Mail", "MAIL_USERNAME"))
+            self._app.config["MAIL_PASSWORD"] = str(self._config.get("Cardinal Mail", "MAIL_PASSWORD"))
+            self._app.config["MAIL_DEFAULT_SENDER"] = str(self._config.get("Cardinal Mail", "MAIL_DEFAULT_SENDER"))
+        except Exception as e:
+            pass
+            # print(self.logger.info("Errors during mail setup ... skipping"))
+            # print(self.logger.error(f"[Mail Error] - {e}"))
+        # #endtry
 
         self._mail = Mail(self._app)
 
@@ -305,6 +313,7 @@ class Cardinal:
         self._db.init_app(self._app)
 
         # gets the host and port
+
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
 
@@ -481,10 +490,15 @@ class Cardinal:
         -------------------------------------
         """
     # #enddef _buildCommandText
+
+    def _ports(self) -> str:
+        pass
+    # #enddef _ports
+
     #endregion ##
 
     def __del__(self):
-        self._app_context.pop()
+        self._app_context.pop() # type: ignore
     # #enddef
 
     def __repr__(self) -> str:

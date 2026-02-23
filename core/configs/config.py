@@ -45,4 +45,5 @@ def getCardinalText(cardinal: "Cardinal") -> str:
 
     """
 # #enddef getCardinalText
+
 #endregion ######
