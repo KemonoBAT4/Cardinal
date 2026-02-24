@@ -20,6 +20,7 @@ import typing
 # local imports
 from core.models.base import BaseModel, db
 from core import configs # ARGUMENTS_LIST, HELP_COMMANDS_LIST, INFO_COMMANDS_LIST, name
+from core.handlers import *
 
 # web blueprint imports
 from core.web.routes import routes
@@ -40,7 +41,6 @@ class Cardinal:
 
     _secret: "str | None" = None
     _mail: "Mail | None" = None
-
 
     def __init__(self, name: str = "cardinal"):
 
@@ -68,7 +68,7 @@ class Cardinal:
         """
         print("Setting up database...")
         return self._resetDatabase()
-    #enddef
+    # #enddef setup
 
     def run(self, host=None, port=None) -> None:
         """
@@ -118,7 +118,7 @@ class Cardinal:
         """
 
         self._app.run(debug=True, host=self._host, port=self._port)
-    #enddef
+    # #enddef run
 
     def reload(self, name: str) -> None:
         """
@@ -138,7 +138,7 @@ class Cardinal:
 
         # init the application
         self._initApplication()
-    # #enddef
+    # #enddef reload
 
     def handle(self) -> None:
         """
@@ -209,25 +209,28 @@ class Cardinal:
             callable_function = ARGUMENTS_LIST[command]["callable"]
             callable_function()
         # #endif
-    # #enddef
+    # #enddef handle
 
     def build(self):
         print("Function not implemented yet.")
-    # #enddef
+    # #enddef build
 
     def deploy(self):
         print("Function not implemented yet.")
-    # #enddef
+    # #enddef deploy
 
     def migrate(self):
         print("Function not implemented yet.")
-    # #enddef
+    # #enddef migrate
     #endregion #######
+
+
 
 
     ##############
     # PROPERTIES #
     #region ######
+
     @property
     def app(self) -> Flask:
         return self._app
@@ -247,12 +250,14 @@ class Cardinal:
     def mail(self) -> "Mail | None":
         return self._mail
     # #enddef
+
     #endregion ###
 
 
     #############
     # UTILITIES #
     #region #####
+
     def _initApplication(self) -> None:
         """
         #### DESCRIPTION:

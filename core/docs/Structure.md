@@ -1,4 +1,4 @@
-
+# Cardinal's Structure (W.I.P.)
 ```
 Cardinal/                                           - THE MAIN FOLDER
 ├── app/                                            - THE APPLICATION FOLDER
@@ -84,3 +84,4 @@ Cardinal/                                           - THE MAIN FOLDER
 ├── requirements.txt
 └── run.py                                          - MAIN RUNNER
 ```
+#
