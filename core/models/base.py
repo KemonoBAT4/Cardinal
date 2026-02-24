@@ -1,11 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
 
+from core.handlers import get_class_repr
+
 db = SQLAlchemy()
 
 class BaseModel(db.Model):
     """
-    DESCRIPTION:
+    #### DESCRIPTION:
     Base model class for all database models in the application.
     """
     __abstract__ = True
@@ -16,29 +18,37 @@ class BaseModel(db.Model):
 
     class Result:
 
-        status = False
-        message = ""
+        status: bool = False
+        message: str = ""
 
-        def __init__(self, status, message):
+        def __init__(
+            self,
+            status: bool,
+            message: str
+        ) -> "None":
             self.status = status
             self.message = message
         # #enddef __init__
 
-        def __repr__(self) -> tuple:
+        def result(self) -> tuple:
             return self.status, self.message
+        # #enddef result
+
+        def __repr__(self) -> str:
+            return get_class_repr( classobject = self.__class__, description = "None" )
         # #enddef __repr__
     # #endclass Result
 
     def save(self) -> tuple:
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Saves the model instance to the database.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - no parameters required
 
-        RETURN:
-        - no return
+        #### RETURN:
+        - tuple: A tuple containing the status and message of the operation.
         """
 
         response = self.Result(True, "Object saved successfully")
@@ -54,27 +64,26 @@ class BaseModel(db.Model):
             db.session.add(self)
             db.session.commit()
 
-            return response
         except Exception as e:
             db.session.rollback()
 
             response.status = False
             response.message = f"Error while saving object: {str(e)}"
-
-            return response
         # #endtry
+
+        return response.result()
     # #enddef save
 
     def delete(self) -> tuple:
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Deletes the model instance from the database.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - no parameters required
 
-        RETURN:
-        - no return
+        #### RETURN:
+        - tuple: A tuple containing the status and message of the operation.
         """
 
         response = self.Result(True, "Object deleted successfully")
@@ -94,7 +103,7 @@ class BaseModel(db.Model):
         # #endtry
         db.session.commit()
 
-        return response
+        return response.result()
     # #enddef delete
 
     def update(self, object: any) -> tuple:

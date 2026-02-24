@@ -34,7 +34,7 @@ class Cardinal:
     _name: "str | None" = None
 
     _app: "Flask"
-    _app_context =  None
+    _app_context: "Flask"
 
     _host: str = "0.0.0.0"
     _port: int = 23104
@@ -201,7 +201,6 @@ class Cardinal:
         self.reload(name=name)
         command: str = str(args.pop(0)).lower()
 
-
         if (command in INFO_COMMANDS_LIST):
             print(configs.getCardinalText(cardinal=self))
 
@@ -225,8 +224,6 @@ class Cardinal:
     #endregion #######
 
 
-
-
     ##############
     # PROPERTIES #
     #region ######
@@ -234,22 +231,22 @@ class Cardinal:
     @property
     def app(self) -> Flask:
         return self._app
-    # #enddef
+    # #enddef app
 
     @property
     def secret(self) -> str:
         return self._secret if self._secret is not None else self._generateSecretKey()
-    # #enddef
+    # #enddef secret
 
     @property
     def version(self) -> str:
         return f"{self. _config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}"
-    # #enddef
+    # #enddef version
 
     @property
     def mail(self) -> "Mail | None":
         return self._mail
-    # #enddef
+    # #enddef mail
 
     #endregion ###
 

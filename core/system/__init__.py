@@ -1,3 +1,4 @@
+
 import configparser
 import os
 import importlib
@@ -13,3 +14,4 @@ from .cardinal import *
 
 cardinal = Cardinal(name="cardinal")
 mail: "Mail | None" = cardinal.mail
+app: "Flask" = cardinal.app
