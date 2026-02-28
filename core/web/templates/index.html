@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{website_title}}</title>
+        <title>{{page.page_title}}</title>
 
         <link rel="icon" type="image/png" href="favicon.ico">
         <link rel="stylesheet" href="/styles/cardinal/index.css">
@@ -51,7 +51,7 @@
                 <!-- header container -->
                 <div class="header-container">
                     <div class="header-title-container">
-                        <span class="header-page-title">{{page_title}}</span>
+                        <span class="header-page-title">{{page.page_title}}</span>
                     </div>
 
                     <div class="header-account-container">
@@ -60,14 +60,14 @@
                 </div>
 
                 <div class="content-container">
-                    {% for card in cards %}
-                        {{ card }}
+                    {% for card in page.cards %}
+                        {{ card.render() | safe }}
                     {% endfor %}
                 </div>
             </div>
         </div>
 
-        <script src="/scripts/cardinal/action.html"></script>
+        <script src="/scripts/cardinal/action.js"></script>
         <script src="/scripts/cardinal/section.js"></script>
         <script src="/scripts/cardinal/card.js"></script>
         <script src="/scripts/cardinal/index.js"></script>

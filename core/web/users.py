@@ -5,6 +5,7 @@ import configparser
 # flask imports
 from flask import Blueprint, redirect, url_for, request
 from flask import render_template, send_from_directory
+from flask_login import login_required
 
 # local imports
 from .pages import *

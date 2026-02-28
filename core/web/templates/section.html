@@ -1,20 +1,19 @@
 <div class="section-container">
 
     <div class="section-title-container">
-        <span class="section-title-text">{{title}}</span>
+        <span class="section-title-text">{{section.title}}</span>
     </div>
 
     <div class="section-content-container">
-        {{section_html}}
+        {% include section.template %}
     </div>
 </div>
 
-
-
-
+<!--
 {% block scripts %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 {% endblock %}
+ -->

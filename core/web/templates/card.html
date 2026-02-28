@@ -1,11 +1,11 @@
 <div class="card-container">
-    <div class="card-title-container">
-        <span class="card-title-text">{{title}}</span>
+    <div class="card-header-container">
+        <span class="card-title-text">{{card.title}}</span>
     </div>
 
     <div class="card-content-container">
-        {% for section in sections %}
-            {{ section }}
+        {% for section in card.sections %}
+            {{ section.render() | safe }}
         {% endfor %}
     </div>
 </div>

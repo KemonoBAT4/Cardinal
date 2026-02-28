@@ -1,16 +1,16 @@
 
 # flask imports
-from flask import Blueprint, redirect, url_for
-from flask import render_template, send_from_directory
-
-from typing import Any
+from flask import Blueprint, redirect, url_for          # type: ignore
+from flask import render_template, send_from_directory  # type: ignore
 
 # other imports
 import os
-from json import *
+import json
 import typing
 
 # core imports
+import core.system as system
+
 from core.configs import *
 from core.handlers.handlers import *
 from core.models import User
@@ -21,36 +21,28 @@ config.read("application.cfg")
 
 class Action:
 
-    _title: str
-    _type: str
-    _url: str
-    _icon: str
-
-    _template: str
+    title: str
+    type: str
+    url: str
+    icon: str
 
     def __init__(
         self,
-        title: str = "",
+        title: str              = "",
         action_type: typing.Any = None,
-        url: str = "#",
-        icon: typing.Any = None,
-
-        _template: str = "action.html"
+        url: str                = "#",
+        icon: typing.Any        = None
     ) -> "None":
-
-        self._title = title
-        self._type = action_type
-        self._url = url
-        self._icon = icon
+        self.title = title
+        self.type  = action_type
+        self.url   = url
+        self.icon  = icon
     # #enddef __init__
 
     def render(self):
         return render_template(
-            self._template,
-            title = self._title,
-            type = self._type,
-            url  = self._url,
-            icon = self._url
+            "action.html",
+            action=self
         )
     # #enddef render
 # #endclass
@@ -58,80 +50,76 @@ class Action:
 class Section:
     _actions: list[Action]
 
-    _title: str
-    _subtitle: str
-    _fullscreen: bool
+    title: str
+    subtitle: str
+    fullscreen: bool
 
-    _template: str
-    _section_html: str
+    template: "str | None"
+    section_html: str
 
     _type: SectionTypeEnum
-    _attributes: dict
+    context: dict
+
+    _actions: list[Action]
 
     def __init__(
         self,
         title: str = "",
         subtitle: str = "",
-
-        _template: str = "section.html",
-        _fullscreen: bool = False
     ) -> "None":
-
-        self._title = title
-        self._subtitle = subtitle
+        self.title = title
+        self.subtitle = subtitle
+        self.template = None
+        self.context = {}
+        self.requires_datatables = False
 
         self._actions = []
-
-        self._template = _template
-        self._fullscreen = _fullscreen
     # #enddef __init__
 
     def table(
         self,
         url: str
     ) -> "Section":
-
         self._type = SectionTypeEnum.TABLE
-        self._attributes = {"url": url}
-
-        self._section_html = render_template(
-            "sections/table.html",
-            url=url
-        )
+        self.template = "sections/table.html"
+        self.context = {"url": url}
 
         return self
     # #enddef table
 
     def form(
         self,
-        formtype: typing.Any,
-        object: typing.Any,
-        formsave: "typing.Callable | None" = None,
-        redir: "str | None" = None
+        form
+        # formtype: typing.Any,
+        # object: typing.Any,
+        # formsave: "typing.Callable | None" = None,
+        # redir: "str | None" = None
     ) -> "Section":
+        self.template = "sections/form.html"
+        self.context = {"form": form}
 
-        self._type = SectionTypeEnum.FORM
+        # self._type = SectionTypeEnum.FORM
 
-        form = formtype(obj = object)
+        # form = formtype(obj = object)
 
-        # NOTE: fix this function
-        # try to implement a funciton to save the form
-        if (form.validate_on_submit()):
+        # # NOTE: fix this function
+        # # try to implement a funciton to save the form
+        # if (form.validate_on_submit()):
 
-            if (formsave != None):
-                formsave(form, object)
-            else:
-                form.saveForm(object)
-            # #endif
+        #     if (formsave != None):
+        #         formsave(form, object)
+        #     else:
+        #         form.saveForm(object)
+        #     # #endif
 
-            # return redirect(url_for(redir))
-        # #endif
+        #     # return redirect(url_for(redir))
+        # # #endif
 
-        self._section_html = render_template(
-            "sections/form.html",
-            form=form,
-            redirect=redirect
-        )
+        # self._section_html = render_template(
+        #     "sections/form.html",
+        #     form=form,
+        #     redirect=redirect
+        # )
 
         return self
     # #enddef form
@@ -156,11 +144,8 @@ class Section:
 
     def render(self) -> str:
         return render_template(
-            self._template,
-            section_html=self._section_html,
-            title=self._title,
-            subtitle=self._subtitle,
-            actions=[action.render() for action in self._actions]
+            "section.html",
+            section=self
         )
     # #enddef render
 # #endclass
@@ -168,40 +153,38 @@ class Section:
 class Card:
 
     # all the sections of the card
-    _sections: list[Section]
+    sections: list[Section]
 
     # card attributes
-    _title: str
-    _subtitle: str
+    title: str
+    subtitle: str
 
     def __init__(
         self,
         title: str = "",
         subtitle: str = "",
         sections: "list[Section] | None" = None,
-
-        _template: str = "card.html"
     ) -> "None":
 
-        self._title = title
-        self._subtitle = subtitle
-
-        self._template = _template
+        self.title = title
+        self.subtitle = subtitle
 
         if isinstance(sections, NoneType):
             sections = []
         # #endif
 
         if isinstance(sections, Section):
-            self._sections = [sections]
+            self.sections = [sections]
         elif isinstance(sections, list):
-            self._sections = sections
+            self.sections = sections
+        else:
+            self.sections = []
         # #endif
     # #enddef __init__
 
     def addSection(self, section: Section):
         if isinstance(section, Section):
-            self._sections.append(section)
+            self.sections.append(section)
         else:
             raise TypeError("section must be an instance of Section")
         # #endif
@@ -219,10 +202,8 @@ class Card:
 
     def render(self):
         return render_template(
-            self._template,
-            title=self._title,
-            subtitle=self._subtitle,
-            sections=[section.render() for section in self._sections]
+            "card.html",
+            card=self
         )
     # #enddef render
 # #endclass
@@ -230,67 +211,40 @@ class Card:
 class Page:
 
     # all the cards of the page
-    _cards: list[Card]
+    cards: list[Card]
 
     # page title
-    _title: str
-    _page_title: str
-    _subtitle: str
+    title: str
+    page_title: str
+    subtitle: str
 
     # template items
-    _template: str
-    _icon: str
+    template: str
+    icon: str
 
     # FIXME: temporary
-    _logged_user: User
+    logged_user: User
 
     def __init__(
         self,
         page_title: str = "",
         title: str = "",
         subtitle: str = "",
-        cards: "list[Card] | None" = None,
 
-        _icon: Any = "/icons/cardinal/favicon.ico",
-        _template: str = "index.html",
-        _sections: "list[Section] | None" = None,
+        _icon: typing.Any = "/icons/cardinal/favicon.ico",
     ) -> "None":
 
-        self._page_title = page_title
-        self._title = title
-        self._subtitle = subtitle
+        self.page_title = page_title
+        self.title = title
+        self.subtitle = subtitle
 
-        if isinstance(cards, NoneType):
-            cards = []
-        # #endif
-
-        if isinstance(_sections, NoneType):
-            _sections = []
-        # #endif
-
-        # template & and icon settings
-        self._icon = _icon
-        self._template = _template
-
-        if isinstance(cards, Card):
-            self._cards = [cards]
-        elif isinstance(cards, list):
-            self._cards = cards
-        # #endif
-
-        if isinstance(_sections, Section):
-            self._sections = [_sections]
-        elif isinstance(_sections, list):
-            self._sections = _sections
-        # #endif
-
-        # NOTE: the result on the html is "<flask_login.mixins.AnonymousUserMixin object at 0x000001E1FCC57550>" not something like "not logged in" or "AnonymousUser"
-        self._logged_user = current_user.username if (current_user.is_authenticated) else "Not Logged In" # type: ignore
+        self.cards = []
+        self.icon = _icon
     # #enddef __init__
 
     def addCard(self, card: Card):
         if isinstance(card, Card):
-            self._cards.append(card)
+            self.cards.append(card)
         else:
             raise TypeError("card must be an instance of Card")
         # #endif
@@ -305,17 +259,27 @@ class Page:
             # #endif
         # #endfor
     # #enddef addCards
+    
+    def _get_menu_items(self):
+
+        menu_items = []
+
+        print(system.cardinal)
+
+
+        # with open(f'./../../app/{cardinal._name}menu.json') as f:
+        #     menu_items = json.load(f)
+
+        return []
+    # #enddef _get_menu_items
 
     def render(self):
         return render_template(
-            self._template,
-            icon             = self._icon,
-            website_title    = self._page_title,
-            page_title       = self._title,
-            logged_user      = self._logged_user,
-            cards            = [card.render() for card in self._cards],
-            menu_items       = [],
-            cardinal_version = config.get("Cardinal", "version")
+            "index.html",
+            page = self,
+            logged_user = logged_user(),
+            cardinal_version = config.get("Cardinal", "version"),
+            menu_items = self._get_menu_items()
         )
     # #enddef render
 # #endclass
