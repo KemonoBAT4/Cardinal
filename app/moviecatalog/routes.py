@@ -72,11 +72,28 @@ def movie_edit(movie_id: str = None):
 # #enddef movie_edit
 
 # NOTE: develop this function
-@routes.route("/stream/<path:filename>", methods=["GET", "POST"])
-def stream(filename: str):
-    try:
-        return send_from_directory(MEDIA_FOLDER, filenmae)
-    except FileNotFoundError:
-        abort(404)
-    # #endtry
-# #enddef stream
+# @routes.route("/stream/<path:filename>", methods=["GET", "POST"])
+# def stream(filename: str):
+#     try:
+#         return send_from_directory(MEDIA_FOLDER, filenmae)
+#     except FileNotFoundError:
+#         abort(404)
+#     # #endtry
+# # #enddef stream
+
+
+@routes.route("/test/components", methods=['GET'])
+def test_components():
+    page = Page(title="Test Components")
+
+    card = Card("Test Components 1")
+    page.addCard(card)
+
+    card2 = Card("Test Components 2")
+    page.addCard(card2)
+
+    card3 = Card("Test Components 3")
+    page.addCard(card3)
+
+    return page.render()
+# #enddef
