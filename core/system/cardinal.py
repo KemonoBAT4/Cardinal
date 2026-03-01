@@ -1,13 +1,13 @@
 
 # flask imports
-from flask import Flask, jsonify, redirect, url_for
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
-from flask import current_app
+from flask import Flask, jsonify, redirect, url_for                                                                 # type: ignore
+from flask_cors import CORS                                                                                         # type: ignore
+from flask_sqlalchemy import SQLAlchemy                                                                             # type: ignore
+from flask_migrate import Migrate                                                                                   # type: ignore
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user              # type: ignore
+from flask_bcrypt import Bcrypt                                                                                     # type: ignore
+from flask_mail import Mail, Message                                                                                # type: ignore
+from flask import current_app                                                                                       # type: ignore
 
 # other imports
 from pathlib import Path
@@ -34,7 +34,7 @@ class Cardinal:
     _name: "str | None" = None
 
     _app: "Flask"
-    _app_context: "Flask"
+    _app_context: "typing.Any"
 
     _host: str = "0.0.0.0"
     _port: int = 23104
@@ -221,6 +221,41 @@ class Cardinal:
     def migrate(self):
         print("Function not implemented yet.")
     # #enddef migrate
+
+    def send_mail(
+        self,
+        subject: str,
+        sender: str,
+        recipients: "str | list[str | tuple[str, str]]",
+        text_body: str,
+        html_body: str,
+        attachments: typing.Any = None
+    ) -> "typing.Any":
+
+        if isinstance(recipients, str):
+            recipients = [recipients]
+        # #endif
+
+        message = Message(subject, sender=sender, recipients=recipients)
+
+        message.body = text_body
+        message.html = html_body
+
+        if attachments is not None:
+            message.attachments = attachments
+        # #endif
+
+        response: str = ""
+
+        if (self._mail is not None):
+            pass
+            # response = self._mail.send(message)
+        # #endif
+
+        return response
+    # #enddef send_mail
+
+
     #endregion #######
 
 
@@ -266,10 +301,21 @@ class Cardinal:
         #### RETURN:
         - no return
         """
+        template_folder = "../web/templates"
 
-        # , static_folder='../web/static'
         # NOTE: change the template folder to the application templates folder
-        self._app = Flask(__name__, template_folder='../web/templates')
+        # TODO: later implementation needed
+        # , static_folder='../web/static'
+        # if (self._name != "cardinal"):
+        #     template_folder = f"../../app/{self._name}/templates"
+        # # #endif
+
+        # NOTE: change the template folder to the application templates folder
+        self._app = Flask(
+            __name__,
+            template_folder=template_folder,
+            # static_folder=f"../../app/{self._name}/static" # TODO: later implementation needed
+        )
 
         # gets the configuration
         self._setupApplicationConfig()
@@ -280,11 +326,11 @@ class Cardinal:
         login_manager = LoginManager()
 
         login_manager.init_app(self._app)
-        login_manager.login_view = "access.login" # type: ignore
+        login_manager.login_view = "access.login"
 
         @login_manager.user_loader
         def load_user(user_id: int) -> User:
-            return User.query.get(int(user_id)) # type: ignore
+            return User.query.get(int(user_id))
         # #enddef load_user
 
         # mail server
@@ -495,6 +541,7 @@ class Cardinal:
 
     def _ports(self) -> str:
         pass
+        return "Not Implemented Yet"
     # #enddef _ports
 
     #endregion ##
@@ -504,6 +551,6 @@ class Cardinal:
     # #enddef
 
     def __repr__(self) -> str:
-        return f"<Cardinal {self._config.get('Cardinal', 'version')}>"
-    # #enddef
+        return get_class_repr(classobject=self.__class__, description=self._config.get('Cardinal', 'version'))
+    # #enddef __repr__
 #endclass
