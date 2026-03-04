@@ -67,7 +67,15 @@ class Cardinal:
         - True if the database was set up successfully, False otherwise
         """
         print("Setting up database...")
-        return self._resetDatabase()
+        is_resetted = self._resetDatabase()
+
+        if is_resetted:
+            cli_module = importlib.import_module(f'app.{self._name}.cli')
+            application_setup_function = getattr(cli_module, 'setup')
+            application_setup_function()
+        # #endif
+
+        return is_resetted
     # #enddef setup
 
     def run(self, host=None, port=None) -> None:
