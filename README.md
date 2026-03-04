@@ -1,4 +1,4 @@
-# Cardinal
+# Cardinal - Alpha 0.1.2
 
 ### What is the Cardinl System
 The idea of cardinal is to create a program that can handle, learn and automate from simple to complex tasks like managing websites, bots or even
