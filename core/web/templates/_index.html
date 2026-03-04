@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <title>Tabella Moderna</title>
+
+        <!-- DataTables CSS -->
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+        <!-- Buttons CSS -->
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+        <!-- jQuery + DataTables JS -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+        <!-- Buttons + Export -->
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+        <!-- CSS personalizzato -->
+        <style>
+            body {
+                font-family: 'Segoe UI', sans-serif;
+                background: #f4f6fb;
+                margin: 0;
+                padding: 0;
+            }
+
+            .table-table-container {
+                width: 95%;
+                margin: 40px auto;
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow:
+                    0px 2px 6px rgba(0,0,0,0.08),
+                    0px 12px 30px rgba(0,0,0,0.06);
+            }
+
+            table.dataTable thead {
+                background-color: #4964d8;
+                color: white;
+            }
+
+            table.dataTable thead th {
+                border-bottom: none;
+                font-weight: 600;
+            }
+
+            table.dataTable tbody tr {
+                transition: background-color 0.2s ease;
+            }
+
+            table.dataTable tbody tr:hover {
+                background-color: rgba(73, 100, 216, 0.08);
+            }
+
+            .dt-button {
+                background: #4964d8 !important;
+                color: white !important;
+                border: none !important;
+                border-radius: 6px !important;
+                padding: 6px 14px !important;
+                transition: background 0.2s ease;
+            }
+
+            .dt-button:hover {
+                background: #3549a8 !important;
+            }
+            .dataTables_filter input {
+
+                border-radius: 6px;
+                border: 1px solid #ddd;
+                padding: 6px 10px;
+                outline: none;
+                transition: border 0.2s ease;
+            }
+
+            .dataTables_filter input:focus {
+                border: 1px solid #4964d8;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="table-table-container">
+            <table id="myTable" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Età</th>
+                        <th>Città</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <!-- JS per DataTable -->
+        <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                ajax: '/moviecatalog/api/v1/movie/list',  // aggiorna con la tua API
+                columns: [
+                    { data: 'id' },
+                    { data: 'nome' },
+                    { data: 'eta' },
+                    { data: 'citta' }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+                    'pdfHtml5'
+                ],
+                language: {
+                    search: "Cerca:",
+                    lengthMenu: "Mostra _MENU_ righe",
+                    info: "_START_ - _END_ di _TOTAL_",
+                    paginate: {
+                        next: "Avanti",
+                        previous: "Indietro"
+                    }
+                }
+            });
+        });
+        </script>
+
+    </body>
+</html>
