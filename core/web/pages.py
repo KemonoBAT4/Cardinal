@@ -7,6 +7,7 @@ from flask import render_template, send_from_directory  # type: ignore
 import os
 import json
 import typing
+import importlib
 
 # core imports
 import core.system as system
@@ -259,12 +260,16 @@ class Page:
             # #endif
         # #endfor
     # #enddef addCards
-    
+
     def _get_menu_items(self):
 
         menu_items = []
 
-        print(system.cardinal)
+        # with open(f'./../../app/{system.cardinal._name}/menu.json') as f:
+        #     menu_items = json.load(f)
+        # # #enddef
+
+        # TODO: render the menu
 
 
         # with open(f'./../../app/{cardinal._name}menu.json') as f:
@@ -272,6 +277,9 @@ class Page:
 
         return []
     # #enddef _get_menu_items
+
+
+
 
     def render(self):
         return render_template(
