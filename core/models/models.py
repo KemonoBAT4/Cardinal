@@ -3,7 +3,7 @@ from sqlalchemy.orm import backref, relationship
 
 from .base import BaseModel, BaseUser, db
 
-class User(BaseUser):
+class User(BaseModel):
 
     __tablename__ = "users"
 
