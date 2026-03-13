@@ -3,8 +3,9 @@
 from ._common import *
 from .models import *
 
-print(config)
-MEDIA_FOLDER: typing.Final[str] = "D:\documents\projects\moviecatalog"# config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")
+# "D:\documents\projects\moviecatalog"
+MEDIA_FOLDER: typing.Final[str] = cardinal.config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")
+
 routes = Blueprint(f'{project_name}_routes', __name__)
 
 @routes.route("/", methods=['GET'])
@@ -42,6 +43,7 @@ def movie_list():
     return page.render()
 # #enddef movie_list
 
+#region ---
 # @routes.route("/configuration/movie/add", methods=['GET'])
 # @routes.route("/configuration/movie/edit/<int:movie_id>", methods=['GET'])
 # def movie_edit(movie_id: "str | None" = None):
@@ -70,9 +72,10 @@ def movie_list():
 
 #     return page.render()
 # # #enddef movie_edit
+#endregion ---
 
 # NOTE: develop this function
-@routes.route("/stream/<path:filename>", methods=["GET", "POST"])
+@routes.route("/stream/<path:filename>", methods=["GET", "POST"]) # type: ignore
 def stream(filename: str):
     # NOTE: this is currently working
     # use this snippet
@@ -98,20 +101,3 @@ def stream(filename: str):
         pass
     # #endtry
 # #enddef stream
-
-
-@routes.route("/test/components", methods=['GET'])
-def test_components():
-    page = Page(title="Test Components")
-
-    card = Card("Test Components 1")
-    page.addCard(card)
-
-    card2 = Card("Test Components 2")
-    page.addCard(card2)
-
-    card3 = Card("Test Components 3")
-    page.addCard(card3)
-
-    return page.render()
-# #enddef

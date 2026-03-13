@@ -6,7 +6,7 @@ from .models import *
 api = Blueprint(f'{project_name}_api', __name__)
 
 @api.route("/movie/list", methods=['GET', 'POST'])
-def table_movie_list() -> "jsonify":
+def table_movie_list():
     """
     #### DESCRIPTION:
     returns the list of all the movies
