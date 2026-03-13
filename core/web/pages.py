@@ -16,7 +16,8 @@ from core.configs import *
 from core.handlers.handlers import *
 from core.models import User
 from core.web.handlers import *
-import typing
+
+from core.web.widgets import *
 
 config.read("application.cfg")
 
@@ -49,7 +50,6 @@ class Action:
 # #endclass
 
 class Section:
-    _actions: list[Action]
 
     title: str
     subtitle: str
@@ -61,8 +61,6 @@ class Section:
     _type: SectionTypeEnum
     context: dict
 
-    _actions: list[Action]
-
     def __init__(
         self,
         title: str = "",
@@ -73,17 +71,27 @@ class Section:
         self.template = None
         self.context = {}
         self.requires_datatables = False
-
-        self._actions = []
     # #enddef __init__
 
     def table(
         self,
-        url: str
+        url     : "str",
+        config  : "dict[str, typing.Any]",
+        click   : "str | typing.Callable | None" = None,
+        buttons : "dict | None" = None
     ) -> "Section":
+
         self._type = SectionTypeEnum.TABLE
         self.template = "sections/table.html"
-        self.context = {"url": url}
+        self.context = { "url": url }
+
+        table = CardinalDataTable(
+            url     = url,
+            config  = config,
+            click   = click,
+            buttons = buttons
+        )
+
 
         return self
     # #enddef table
@@ -124,24 +132,6 @@ class Section:
 
         return self
     # #enddef form
-
-    def addAction(self, action) -> None:
-        if isinstance(action, Action):
-            self._actions.append(action)
-        else:
-            raise TypeError("action must be an instance of Action")
-        # #endif
-    # #enddef addAction
-
-    def addActions(self, actions) -> None:
-        for action in actions:
-            if isinstance(action, Action):
-                self.addAction(action)
-            else:
-                raise TypeError("action must be an instance of Action")
-            # #endif
-        # #endfor
-    # #enddef addActions
 
     def render(self) -> str:
         return render_template(

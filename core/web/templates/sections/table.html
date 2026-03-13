@@ -28,11 +28,9 @@
             <table id="myTable" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th>CREATO IL</th>
-                        <th>TITOLO</th>
-                        <th>AGGIORNATO IL</th>
-                        <th>DESCRIZIONE</th>
                         <th>ID</th>
+                        <th>TITOLO</th>
+                        <th>DESCRIZIONE</th>
                     </tr>
                 </thead>
             </table>
@@ -45,11 +43,9 @@
         $('#myTable').DataTable({
             ajax: '/moviecatalog/api/v1/movie/list',
             columns: [
-                { data: 'created_at' },
-                { data: 'title' },
-                { data: 'updated_at' },
-                { data: 'description' },
                 { data: 'id' },
+                { data: 'title' },
+                { data: 'description' },
             ],
             dom: 'Bfrtip',
             buttons: [
