@@ -66,6 +66,7 @@ class Cardinal:
         #### RETURN:
         - True if the database was set up successfully, False otherwise
         """
+
         print("Setting up database...")
         is_resetted = self._resetDatabase()
 
@@ -182,7 +183,7 @@ class Cardinal:
 
         HELP_COMMANDS_LIST = [
             "--help",
-            "--h"
+            "--h",
             "-help",
             "-h",
             "help",
@@ -263,7 +264,6 @@ class Cardinal:
         return response
     # #enddef send_mail
 
-
     #endregion #######
 
 
@@ -290,6 +290,11 @@ class Cardinal:
     def mail(self) -> "Mail | None":
         return self._mail
     # #enddef mail
+
+    @property
+    def config(self) -> "configparser.ConfigParser":
+        return self._config
+    # #enddef config
 
     #endregion ###
 
@@ -334,10 +339,10 @@ class Cardinal:
         login_manager = LoginManager()
 
         login_manager.init_app(self._app)
-        login_manager.login_view = "access.login"
+        login_manager.login_view = "access.login" # type: ignore
 
         @login_manager.user_loader
-        def load_user(user_id: int) -> User:
+        def load_user(user_id: int) -> "User | None":
             return User.query.get(int(user_id))
         # #enddef load_user
 

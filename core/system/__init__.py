@@ -9,9 +9,8 @@ from pathlib import Path
 from flask import current_app
 
 from core.models.base import BaseModel
-
 from .cardinal import *
 
 cardinal: "Cardinal" = Cardinal(name="cardinal")
-mail: "Mail | None" = cardinal.mail
-app: "Flask" = cardinal.app
+mail: "Mail | None"  = cardinal.mail
+app: "Flask"         = cardinal.app
