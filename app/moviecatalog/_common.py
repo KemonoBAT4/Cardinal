@@ -17,3 +17,6 @@ import typing
 from enum import Enum
 
 project_name: str = os.path.dirname(os.path.abspath(__file__))
+
+# "D:\documents\projects\moviecatalog"
+MEDIA_FOLDER: typing.Final[str] = cardinal.config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")

@@ -3,9 +3,6 @@
 from ._common import *
 from .models import *
 
-# "D:\documents\projects\moviecatalog"
-MEDIA_FOLDER: typing.Final[str] = cardinal.config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")
-
 routes = Blueprint(f'{project_name}_routes', __name__)
 
 @routes.route("/", methods=['GET'])
@@ -35,7 +32,41 @@ def movie_list():
     page = Page(title="Lista Film")
     card = Card("Lista di tutti i Film")
 
-    movie_list_section = Section().table(url="/movie/list")
+    movie_list_section = Section().table(
+        url = "/moviecatalog/api/v1/movie/list",
+        config = {
+            "columns": {
+                "id": {"title": "ID"},
+                "title": {"title": "Titolo"},
+                "description": {"title": "Descrizione"}
+            }
+        },
+        click = ""
+    )
+
+    card.addSection(movie_list_section)
+    page.addCard(card)
+
+    return page.render()
+# #enddef movie_list
+
+@routes.route("/new/configuration/movie/list", methods=['GET'])
+def new_movie_list():
+
+    page = Page(title="Lista Film")
+    card = Card("Lista di tutti i Film")
+
+    movie_list_section = Section()._new_table(
+        url = "/moviecatalog/api/v1/movie/list",
+        config = {
+            "columns": {
+                "id": {"title": "ID"},
+                "title": {"title": "Titolo"},
+                "description": {"title": "Descrizione"}
+            }
+        },
+        click = ""
+    )
 
     card.addSection(movie_list_section)
     page.addCard(card)
