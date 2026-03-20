@@ -55,7 +55,7 @@ class Section:
     subtitle: str
     fullscreen: bool
 
-    template: "str | None"
+    template: "CardinalDataTable | str | None"
     section_html: str
 
     _type: SectionTypeEnum
@@ -73,6 +73,28 @@ class Section:
         self.requires_datatables = False
     # #enddef __init__
 
+    def _new_table(
+        self,
+        url     : "str",
+        config  : "dict[str, typing.Any]",
+        click   : "str | typing.Callable | None" = None,
+        buttons : "dict | None" = None
+    ) -> "Section":
+
+        self._type = SectionTypeEnum.TABLE
+        # self.template = "sections/table.html"
+        self.context = { "url": url }
+
+        self.template = CardinalDataTable(
+            data_structure_or_url = url,
+            config  = config,
+            click   = click,
+            buttons = buttons
+        ).__cardinal__()
+
+        return self
+    # #enddef table
+
     def table(
         self,
         url     : "str",
@@ -84,14 +106,6 @@ class Section:
         self._type = SectionTypeEnum.TABLE
         self.template = "sections/table.html"
         self.context = { "url": url }
-
-        table = CardinalDataTable(
-            url     = url,
-            config  = config,
-            click   = click,
-            buttons = buttons
-        )
-
 
         return self
     # #enddef table
