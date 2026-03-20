@@ -4,6 +4,8 @@ import pandas as pd
 import typing
 import uuid
 import json
+# import requests
 
 # core imports
-from core.configs import *
+from core import configs
+
