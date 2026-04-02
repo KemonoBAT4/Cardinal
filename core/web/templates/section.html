@@ -5,7 +5,13 @@
     </div>
 
     <div class="section-content-container">
-        {% include section.template %}
+        {% if section.template == "sections/table.html" %}
+            {% include section.template %}
+        {% endif %}
+
+        {% if section.template != "sections/table.html" %}
+            {{ section.template | safe }}
+        {% endif %}
     </div>
 </div>
 
