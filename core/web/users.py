@@ -5,6 +5,7 @@ import configparser
 # flask imports
 from flask import Blueprint, redirect, url_for, request
 from flask import render_template, send_from_directory
+from flask_login import login_required
 
 # local imports
 from .pages import *
@@ -20,7 +21,7 @@ users = Blueprint('access', __name__)
 @users.route("/", methods=['GET'])
 def index():
     return redirect(url_for('access.me'))
-#enddef
+# #enddef index
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
@@ -31,8 +32,8 @@ def login():
     else:
         page = Page(page_title="The Cardinal System", title="Cardinal: Login")
         return page.render()
-    #endif
-#enddef
+    # #endif
+# #enddef login
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
@@ -43,10 +44,11 @@ def register():
     else:
         page = Page(page_title="The Cardinal System", title="Cardinal: Register")
         return page.render()
-    #endif
-#enddef
+    # #endif
+# #enddef register
 
 @users.route("/me", methods=['GET'])
+@login_required
 def me():
 
     # TODO: really check if the user is logged in
@@ -57,8 +59,8 @@ def me():
     else:
         page = Page(page_title="The Cardinal System", title="Cardinal: Me")
         return page.render()
-    #endif
-#enddef
+    # #endif
+# #enddef me
 
 @users.route("/logout", methods=['GET'])
 def logout():

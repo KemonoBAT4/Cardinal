@@ -1,11 +1,15 @@
 from flask_sqlalchemy import SQLAlchemy
+
 import bcrypt
+import typing
+
+from core.handlers import get_class_repr
 
 db = SQLAlchemy()
 
 class BaseModel(db.Model):
     """
-    DESCRIPTION:
+    #### DESCRIPTION:
     Base model class for all database models in the application.
     """
     __abstract__ = True
@@ -16,29 +20,39 @@ class BaseModel(db.Model):
 
     class Result:
 
-        status = False
-        message = ""
+        status: bool = False
+        message: str = ""
 
-        def __init__(self, status, message):
+        def __init__(
+            self,
+            status: bool,
+            message: str
+        ) -> "None":
+            super().__init__()
+
             self.status = status
             self.message = message
         # #enddef __init__
 
-        def __repr__(self) -> tuple:
+        def result(self) -> tuple:
             return self.status, self.message
+        # #enddef result
+
+        def __repr__(self) -> str:
+            return get_class_repr( classobject = self.__class__, description = "None" )
         # #enddef __repr__
     # #endclass Result
 
     def save(self) -> tuple:
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Saves the model instance to the database.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - no parameters required
 
-        RETURN:
-        - no return
+        #### RETURN:
+        - tuple: A tuple containing the status and message of the operation.
         """
 
         response = self.Result(True, "Object saved successfully")
@@ -54,27 +68,26 @@ class BaseModel(db.Model):
             db.session.add(self)
             db.session.commit()
 
-            return response
         except Exception as e:
             db.session.rollback()
 
             response.status = False
             response.message = f"Error while saving object: {str(e)}"
-
-            return response
         # #endtry
+
+        return response.result()
     # #enddef save
 
     def delete(self) -> tuple:
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Deletes the model instance from the database.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - no parameters required
 
-        RETURN:
-        - no return
+        #### RETURN:
+        - tuple: A tuple containing the status and message of the operation.
         """
 
         response = self.Result(True, "Object deleted successfully")
@@ -94,18 +107,18 @@ class BaseModel(db.Model):
         # #endtry
         db.session.commit()
 
-        return response
+        return response.result()
     # #enddef delete
 
-    def update(self, object: any) -> tuple:
+    def update(self, object: typing.Any) -> tuple:
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Updates the model instance with the new object's values without changing the id.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - object (any): The object to update the model instance with (must be of the same type).
 
-        RETURN:
+        #### RETURN:
         - dict: A dictionary containing the status and message.
         """
 
@@ -114,7 +127,7 @@ class BaseModel(db.Model):
         if not isinstance(object, self.__class__):
             response.status = False
             response.message = "Object type mismatch"
-            return response
+            return response.result()
         # #endif
 
         try:
@@ -136,18 +149,18 @@ class BaseModel(db.Model):
             response.message = f'Error: {str(e)}'
         # #endtry
 
-        return response
+        return response.result()
     # #enddef update
 
     def to_dict(self) -> dict:
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Converts the model instance to a dictionary representation.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - no parameters required
 
-        RETURN:
+        #### RETURN:
         - dict: A dictionary representation of the model instance.
         """
         result = { }
@@ -168,7 +181,7 @@ class BaseModel(db.Model):
     # #enddef to_dict
 
     def __repr__(self) -> str:
-        return f"<{self._class__.__name__} {self.id}>"
+        return f"<{self.__class__.__name__} {self.id}>"
     # #enddef
 # #endclass BaseModel
 
@@ -184,13 +197,13 @@ class BaseUser(BaseModel):
 
     def register(self, password: str):
         """
-        DESCRIPTION:
+        #### DESCRIPTION:
         Adds a new user with the provided password.
 
-        PARAMETERS:
+        #### PARAMETERS:
         - password (str): The password to set for the user.
 
-        RETURN:
+        #### RETURN:
         - tuple: A tuple containing the status and message of the operation.
         """
 
@@ -218,14 +231,22 @@ class BaseUser(BaseModel):
         return bcrypt.checkpw(password.encode("utf-8"), user.password_hash)
     #enddef
 
+    # TODO: complete implementation
     def save(self) -> tuple:
-        
-        if (self.password_hash == None):
-            self.password_hash = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
-        #endif
-        
-        
-        
-        self.super().save()
 
+        if (self.password_hash == None):
+            # FIXME: finish
+            self.password_hash = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt()) # type: ignore
+        #endif
+
+        response = self.Result(True, "Object saved successfully")
+
+        # NOTE: remove this lines of code once the function is implemented
+        response.status = False
+        response.message = "Not implemented yet"
+
+        super().save()
+
+        return response.result()
+    # #enddef save
 #endclass

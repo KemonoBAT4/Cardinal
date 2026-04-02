@@ -4,6 +4,7 @@ import os
 # flask imports
 from flask import Blueprint, redirect, url_for
 from flask import render_template, jsonify, send_from_directory
+from flask_login import login_required
 
 # local imports
 from core.models.base import db
@@ -21,7 +22,9 @@ def index():
     """
     return redirect(url_for('main.home'))
 #enddef
+
 @routes.route("/home", methods=['GET'])
+@login_required
 def home():
     current_version = config.get("Cardinal", "version")
     page_title = "The Cardinal System"

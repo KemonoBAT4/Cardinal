@@ -1,12 +1,13 @@
 
 # flask imports
-from flask import Flask, jsonify, redirect, url_for
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_bcrypt import Bcrypt
-from flask import current_app
+from flask import Flask, jsonify, redirect, url_for                                                                 # type: ignore
+from flask_cors import CORS                                                                                         # type: ignore
+from flask_sqlalchemy import SQLAlchemy                                                                             # type: ignore
+from flask_migrate import Migrate                                                                                   # type: ignore
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user              # type: ignore
+from flask_bcrypt import Bcrypt                                                                                     # type: ignore
+from flask_mail import Mail, Message                                                                                # type: ignore
+from flask import current_app                                                                                       # type: ignore
 
 # other imports
 from pathlib import Path
@@ -19,26 +20,27 @@ import typing
 # local imports
 from core.models.base import BaseModel, db
 from core import configs # ARGUMENTS_LIST, HELP_COMMANDS_LIST, INFO_COMMANDS_LIST, name
+from core.handlers import *
 
 # web blueprint imports
 from core.web.routes import routes
 from core.web.api import api
 from core.web.users import users
+from core.models.models import User
 
 class Cardinal:
 
-    _config = None
-    _name = None
+    _config: "configparser.ConfigParser"
+    _name: "str | None" = None
 
-    _app: Flask = None
-    _app_context = None
+    _app: "Flask"
+    _app_context: "typing.Any"
 
     _host: str = "0.0.0.0"
     _port: int = 23104
 
-    _reference_app: str = None
-
-    _secret: str = None
+    _secret: "str | None" = None
+    _mail: "Mail | None" = None
 
     def __init__(self, name: str = "cardinal"):
 
@@ -47,11 +49,12 @@ class Cardinal:
 
         # init the application
         self._initApplication()
-    #enddef
+    # #enddef __init__
 
     ##################
     # PUBLIC METHODS #
     #region ##########
+
     def setup(self) -> bool:
         """
         #### DESCRIPTION:
@@ -63,9 +66,18 @@ class Cardinal:
         #### RETURN:
         - True if the database was set up successfully, False otherwise
         """
+
         print("Setting up database...")
-        return self._resetDatabase()
-    #enddef
+        is_resetted = self._resetDatabase()
+
+        if is_resetted:
+            cli_module = importlib.import_module(f'app.{self._name}.cli')
+            application_setup_function = getattr(cli_module, 'setup')
+            application_setup_function()
+        # #endif
+
+        return is_resetted
+    # #enddef setup
 
     def run(self, host=None, port=None) -> None:
         """
@@ -115,7 +127,7 @@ class Cardinal:
         """
 
         self._app.run(debug=True, host=self._host, port=self._port)
-    #enddef
+    # #enddef run
 
     def reload(self, name: str) -> None:
         """
@@ -135,7 +147,7 @@ class Cardinal:
 
         # init the application
         self._initApplication()
-    # #enddef
+    # #enddef reload
 
     def handle(self) -> None:
         """
@@ -171,7 +183,7 @@ class Cardinal:
 
         HELP_COMMANDS_LIST = [
             "--help",
-            "--h"
+            "--h",
             "-help",
             "-h",
             "help",
@@ -198,7 +210,6 @@ class Cardinal:
         self.reload(name=name)
         command: str = str(args.pop(0)).lower()
 
-
         if (command in INFO_COMMANDS_LIST):
             print(configs.getCardinalText(cardinal=self))
 
@@ -206,45 +217,92 @@ class Cardinal:
             callable_function = ARGUMENTS_LIST[command]["callable"]
             callable_function()
         # #endif
-    # #enddef
+    # #enddef handle
 
     def build(self):
         print("Function not implemented yet.")
-    # #enddef
+    # #enddef build
 
     def deploy(self):
         print("Function not implemented yet.")
-    # #enddef
+    # #enddef deploy
 
     def migrate(self):
         print("Function not implemented yet.")
-    # #enddef
+    # #enddef migrate
+
+    def send_mail(
+        self,
+        subject: str,
+        sender: str,
+        recipients: "str | list[str | tuple[str, str]]",
+        text_body: str,
+        html_body: str,
+        attachments: typing.Any = None
+    ) -> "typing.Any":
+
+        if isinstance(recipients, str):
+            recipients = [recipients]
+        # #endif
+
+        message = Message(subject, sender=sender, recipients=recipients)
+
+        message.body = text_body
+        message.html = html_body
+
+        if attachments is not None:
+            message.attachments = attachments
+        # #endif
+
+        response: str = ""
+
+        if (self._mail is not None):
+            pass
+            # response = self._mail.send(message)
+        # #endif
+
+        return response
+    # #enddef send_mail
+
     #endregion #######
 
 
     ##############
     # PROPERTIES #
     #region ######
+
     @property
     def app(self) -> Flask:
         return self._app
-    # #enddef
+    # #enddef app
 
     @property
     def secret(self) -> str:
         return self._secret if self._secret is not None else self._generateSecretKey()
-    # #enddef
+    # #enddef secret
 
     @property
     def version(self) -> str:
         return f"{self. _config.get('Cardinal', 'version_type')} {self._config.get('Cardinal', 'version')}"
-    # #enddef
+    # #enddef version
+
+    @property
+    def mail(self) -> "Mail | None":
+        return self._mail
+    # #enddef mail
+
+    @property
+    def config(self) -> "configparser.ConfigParser":
+        return self._config
+    # #enddef config
+
     #endregion ###
 
 
     #############
     # UTILITIES #
     #region #####
+
     def _initApplication(self) -> None:
         """
         #### DESCRIPTION:
@@ -256,19 +314,58 @@ class Cardinal:
         #### RETURN:
         - no return
         """
+        template_folder = "../web/templates"
 
+        # NOTE: change the template folder to the application templates folder
+        # TODO: later implementation needed
         # , static_folder='../web/static'
-        self._app = Flask(__name__, template_folder='../web/templates')
+        # if (self._name != "cardinal"):
+        #     template_folder = f"../../app/{self._name}/templates"
+        # # #endif
+
+        # NOTE: change the template folder to the application templates folder
+        self._app = Flask(
+            __name__,
+            template_folder=template_folder,
+            # static_folder=f"../../app/{self._name}/static" # TODO: later implementation needed
+        )
 
         # gets the configuration
         self._setupApplicationConfig()
 
         cors = CORS(self._app)
 
+        # login
+        login_manager = LoginManager()
+
+        login_manager.init_app(self._app)
+        login_manager.login_view = "access.login" # type: ignore
+
+        @login_manager.user_loader
+        def load_user(user_id: int) -> "User | None":
+            return User.query.get(int(user_id))
+        # #enddef load_user
+
+        # mail server
+        try:
+            self._app.config["MAIL_SERVER"] = str(self._config.get("Cardinal Mail", "MAIL_SERVER"))
+            self._app.config["MAIL_PORT"] = str(self._config.get("Cardinal Mail", "MAIL_PORT"))
+            self._app.config["MAIL_USE_TLS"] = str(self._config.get("Cardinal Mail", "MAIL_USE_TLS"))
+            self._app.config["MAIL_USERNAME"] = str(self._config.get("Cardinal Mail", "MAIL_USERNAME"))
+            self._app.config["MAIL_PASSWORD"] = str(self._config.get("Cardinal Mail", "MAIL_PASSWORD"))
+            self._app.config["MAIL_DEFAULT_SENDER"] = str(self._config.get("Cardinal Mail", "MAIL_DEFAULT_SENDER"))
+        except Exception as e:
+            pass
+            # print(self.logger.info("Errors during mail setup ... skipping"))
+            # print(self.logger.error(f"[Mail Error] - {e}"))
+        # #endtry
+
+        self._mail = Mail(self._app)
+
         # csrf
         self._app.config["SECRET_KEY"] = self._generateSecretKey()
 
-
+        # app context & database
         self._db = db
         self._app_context = self._app.app_context()
         self._app_context.push()
@@ -276,13 +373,16 @@ class Cardinal:
         self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
         self._db.init_app(self._app)
 
+        # gets the host and port
+
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
 
+        # core blueprints setup for the application
         self._addBlueprint(routes, "/")
         self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
         self._addBlueprint(users, "/access")
-    # #enddef
+    # #enddef _initApplication
 
     def _generateSecretKey(self) -> str:
         """
@@ -300,7 +400,7 @@ class Cardinal:
 
         self._secret = secret
         return self._secret
-    # #enddef
+    # #enddef _generateSecretKey
 
     def _setupApplicationConfig(self) -> None:
         """
@@ -317,7 +417,7 @@ class Cardinal:
         config = configparser.ConfigParser()
 
         if (self._name != "cardinal"):
-            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg')
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'app', self._name, 'application.cfg') # type: ignore
         else:
             # cardinal
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'application.cfg')
@@ -325,7 +425,7 @@ class Cardinal:
 
         config.read(config_path)
         self._config = config
-    # #enddef
+    # #enddef _setupApplicationConfig
 
     def _resetDatabase(self) -> bool:
         """
@@ -353,7 +453,7 @@ class Cardinal:
             print(f"Error resetting the database: {e}")
         #endtry
         return False
-    # #enddef
+    # #enddef _resetDatabase
 
     def _importModels(self) -> list:
         """
@@ -371,7 +471,7 @@ class Cardinal:
             raise RuntimeError("No Flask application context available.")
         #endif
 
-        apps_root = os.path.join(self._app.root_path, "..", "..", "app", self._name)
+        apps_root = os.path.join(self._app.root_path, "..", "..", "app", self._name) # type: ignore
 
         imported_models = []
 
@@ -402,7 +502,7 @@ class Cardinal:
         #endfor
 
         return imported_models
-    # #enddef
+    # #enddef _importModels
 
     def _addBlueprint(self, bluprint, prefix) -> bool:
         """
@@ -423,11 +523,11 @@ class Cardinal:
         except Exception as e:
             return False
         #endtry
-    # #enddef
+    # #enddef _addBlueprint
 
     def _getAllPaths(self) -> typing.Any:
         return self._app.url_map
-    # #enddef
+    # #enddef _getAllPaths
 
     def _buildCommandText(
         self,
@@ -450,14 +550,20 @@ class Cardinal:
         Example: {example}
         -------------------------------------
         """
-    # #enddef
+    # #enddef _buildCommandText
+
+    def _ports(self) -> str:
+        pass
+        return "Not Implemented Yet"
+    # #enddef _ports
+
     #endregion ##
 
     def __del__(self):
-        self._app_context.pop()
+        self._app_context.pop() # type: ignore
     # #enddef
 
     def __repr__(self) -> str:
-        return f"<Cardinal {self._config.get('Cardinal', 'version')}>"
-    # #enddef
+        return get_class_repr(classobject=self.__class__, description=self._config.get('Cardinal', 'version'))
+    # #enddef __repr__
 #endclass

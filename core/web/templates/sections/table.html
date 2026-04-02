@@ -24,27 +24,28 @@
     </head>
 
     <body>
+        <div class="table-table-container">
+            <table id="myTable" class="display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>TITOLO</th>
+                        <th>DESCRIZIONE</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </body>
+</html>
 
-    <table id="myTable" class="display nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Età</th>
-                <th>Città</th>
-            </tr>
-        </thead>
-    </table>
-
-    <script>
+<script>
     $(document).ready(function () {
         $('#myTable').DataTable({
-            ajax: '/data',
+            ajax: '/moviecatalog/api/v1/movie/list',
             columns: [
                 { data: 'id' },
-                { data: 'nome' },
-                { data: 'eta' },
-                { data: 'citta' }
+                { data: 'title' },
+                { data: 'description' },
             ],
             dom: 'Bfrtip',
             buttons: [
@@ -52,9 +53,9 @@
                 'pdfHtml5'
             ],
             language: {
-                search: "Cerca:",
+                search: "",
                 lengthMenu: "Mostra _MENU_ righe",
-                info: "Mostro _START_ - _END_ di _TOTAL_",
+                info: "_START_ - _END_ di _TOTAL_",
                 paginate: {
                     next: "Avanti",
                     previous: "Indietro"
@@ -62,13 +63,52 @@
             }
         });
     });
-    </script>
 
-    </body>
-</html>
+    // NOTE: make this work
+    // // seta a placeholder
+    // $('.dataTables_filter input').attr("placeholder", "🔍 Cerca...");
+</script>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<table id="table-{{ section.title|replace(' ','-') }}">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Year</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+$(document).ready(function() {
+    $('#table-{{ section.title|replace(" ","-") }}').DataTable({
+        ajax: "{{ section.context.url }}",
+        columns: [
+            { data: "id" },
+            { data: "name" },
+            { data: "year" }
+        ]
+    });
+});
+</script> -->
 
 
 <!-- <!DOCTYPE html>
