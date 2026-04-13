@@ -1,8 +1,8 @@
 
 # flask imports
-from flask import Blueprint, redirect, url_for
-from flask import render_template, send_from_directory
-from flask_login import login_required
+from flask import Blueprint, redirect, url_for                                  # type: ignore
+from flask import render_template, send_from_directory                          # type: ignore
+from flask_login import login_required                                          # type: ignore
 
 # core imports
 from core.models import *
@@ -19,4 +19,4 @@ from enum import Enum
 project_name: str = os.path.dirname(os.path.abspath(__file__))
 
 # "D:\documents\projects\moviecatalog"
-MEDIA_FOLDER: typing.Final[str] = cardinal.config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")
+MEDIA_FOLDER: str = cardinal.config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")

@@ -1,7 +1,7 @@
 
 
 from wtforms import Form, StringField, PasswordField, validators, SubmitField
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm                                                             # type: ignore
 
 # local imports
 from ._common import *

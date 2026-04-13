@@ -5,6 +5,8 @@ from .models import *
 
 routes = Blueprint(f'{project_name}_routes', __name__)
 
+#region ------------------------- DASHBOARD ROUTES ------------------------- #
+
 @routes.route("/", methods=['GET'])
 def index():
     """
@@ -73,6 +75,12 @@ def new_movie_list():
 
     return page.render()
 # #enddef movie_list
+
+#endregion ---------------------- DASHBOARD ROUTES ------------------------- #
+
+#region ------------------------- APP ROUTES ------------------------- #
+#endregion ---------------------- APP ROUTES ------------------------- #
+
 
 #region ---
 # @routes.route("/configuration/movie/add", methods=['GET'])
