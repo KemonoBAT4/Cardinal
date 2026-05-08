@@ -12,7 +12,7 @@ def index():
     """
     Redirects to the homepage
     """
-    return redirect(url_for('moviecatalog_routes.home'))
+    return redirect(url_for(f'{project_name}_routes.home'))
 # #enddef index
 
 @routes.route("/home", methods=['GET'])
@@ -58,13 +58,14 @@ def new_movie_list():
     page = Page(title="Lista Film")
     card = Card("Lista di tutti i Film")
 
-    movie_list_section = Section()._new_table(
+    movie_list_section = Section(title = "Lista di tutti i Film Presenti")._new_table(
         url = "/moviecatalog/api/v1/movie/list",
         config = {
             "columns": {
-                "id": {"title": "ID"},
-                "title": {"title": "Titolo"},
-                "description": {"title": "Descrizione"}
+                "id"             : { "title": "ID"          },
+                "title"          : { "title": "Titolo"      },
+                "description"    : { "title": "Descrizione" },
+                "movie_file_name": { "title": "Nome File"   },
             }
         },
         click = ""
