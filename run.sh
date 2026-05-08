@@ -1,4 +1,3 @@
-# TODO: implement this script
 
 # NOTE: when using this script, it can execute any application in the "app" folder
 # the name of the wanted application must be passed as the first argument
