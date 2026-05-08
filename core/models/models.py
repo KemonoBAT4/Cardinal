@@ -28,3 +28,6 @@ class Application(BaseModel):
 
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 #endclass
+
+class CardinalSystem(BaseModel):
+    pass
