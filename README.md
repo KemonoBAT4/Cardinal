@@ -24,16 +24,16 @@ In this first version of Cardinal the first way to start as development an appli
 <!--  (- run cardinal with `python run.py`) -->
 <!--  (- visit the dashboard page `/cardinal/dashboard` to see the dashboard) -->
 
-### Contribute the project 📋
+## Contribute the project 📋
 If you have access to this repository you are free to fork the dev branch to help the project.
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made. A complete guide on how to make a standard pull request can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Contributing.md).
 
-### Structure 📂
+## Structure 📂
 A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility.
 
-### Versions 🗄️
+## Versions 🗄️
 Right now, Cardinal's version is `Alpha 0.1.2`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
 [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Versions.md).
 
-### Ideas & Suggestions 💡
+## Ideas & Suggestions 💡
 A complete list of ideas that its currently in development / considered can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Ideas.md) and in its related Issues (only for W.I.P. ideas).
