@@ -1,4 +1,4 @@
-# Cardinal - Alpha 0.1.2
+# Cardinal System
 
 ### What is Cardinal 🔭
 The idea of cardinal is to create a program that can help creating a backend structure with a complete dashboard to handle taks, manage possible webistes, bots or handle different datas.
