@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="/styles/cardinal/card.css">
         <link rel="stylesheet" href="/styles/cardinal/section.css">
         <link rel="stylesheet" href="/styles/cardinal/action.css">
+        <link rel="stylesheet" href="/styles/cardinal/menu_item.css">
     </head>
     <body>
         <!-- page container -->
@@ -26,9 +27,9 @@
                 </div>
 
                 <div class="menu-container">
-                    {% for menu_item in menu_items %}
-                        {{ menu_item }}
-                    {% endfor %}
+                    <div class="menu-container">
+                        {% include "menu_item.html" %}
+                    </div>
                 </div>
 
                 <div class="version-container">
@@ -49,7 +50,7 @@
             <div class="main-container">
 
                 <!-- header container -->
-                <div class="header-container">
+                <!-- <div class="header-container">
                     <div class="header-title-container">
                         <span class="header-page-title">{{page.page_title}}</span>
                     </div>
@@ -57,7 +58,23 @@
                     <div class="header-account-container">
                         <span class="header-username-text">{{logged_user}}</span>
                     </div>
+                </div> -->
+
+                <div class="header-container">
+                    <div class="header-title-container">
+                        <button class="hamburger" id="hamburger" aria-label="Menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <span class="header-page-title">{{page.page_title}}</span>
+                    </div>
+                    <div class="header-account-container">
+                        <span class="header-username-text">{{logged_user}}</span>
+                    </div>
                 </div>
+
+                <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
                 <div class="content-container">
                     {% for card in page.cards %}

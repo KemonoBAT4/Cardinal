@@ -1,6 +1,4 @@
-/* ═══════════════════════
-   SECTION
-═══════════════════════ */
+
 .section-container {
     display: flex;
     flex-direction: column;
@@ -30,9 +28,6 @@
     padding: 1rem;
 }
 
-/* ═══════════════════════
-   FORM
-═══════════════════════ */
 .form-container {
     display: flex;
     flex-direction: column;
@@ -115,9 +110,6 @@
     transform: translateY(0);
 }
 
-/* ═══════════════════════
-   TABLE
-═══════════════════════ */
 .table-table-container {
     width: 99%;
     margin: 0 auto;

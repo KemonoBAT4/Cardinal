@@ -1,4 +1,4 @@
-/* ── Card container ── */
+
 .card-container {
     width: calc(100% - 50px);
     min-height: 300px;
@@ -21,7 +21,6 @@
     min-height: unset;
 }
 
-/* ── Header ── */
 .card-header-container {
     width: 100%;
     height: 50px;
@@ -43,7 +42,6 @@
     text-transform: uppercase;
 }
 
-/* ── Content ── */
 .card-content-container {
     width: 100%;
     flex: 1;
