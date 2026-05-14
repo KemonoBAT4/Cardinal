@@ -559,6 +559,7 @@ class Cardinal:
 
     #endregion ##
 
+
     def __del__(self):
         self._app_context.pop() # type: ignore
     # #enddef
