@@ -16,6 +16,8 @@ args: list  = sys.argv.copy()
 runner: str = args.pop(0) # run.py
 name: str   = args.pop(0) # name
 
+ROOT_PATH: str = os.path.join((os.path.dirname(os.path.abspath(__file__))), "..", "..")
+
 NoneType = type(None)
 
 def getCardinalText(cardinal: "Cardinal") -> str:
