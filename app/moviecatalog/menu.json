@@ -1,8 +1,17 @@
 [
     {
+        "name": "Catalogo",
+        "activateon": "/catalog/**"
+    },
+    {
+        "name": "Favourites",
+        "url" : "/favourites",
+        "icon": "fas fa-home"
+    },
+    {
         "name": "Configurazione",
         "activateon": "/configuration/**",
-        "items": [
+        "children": [
             {
                 "name": "Film",
                 "url": "/configuration/movie/**",
