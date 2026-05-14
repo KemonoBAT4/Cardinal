@@ -266,24 +266,14 @@ class Page:
     # #enddef addCards
 
     def _get_menu_items(self):
-
         menu_items = []
 
-        # with open(f'./../../app/{system.cardinal._name}/menu.json') as f:
-        #     menu_items = json.load(f)
-        # # #enddef
+        with open(f'{ROOT_PATH}/app/{system.cardinal._name}/menu.json') as f:
+            menu_items = json.load(f)
+        # #enddef
 
-        # TODO: render the menu
-
-
-        # with open(f'./../../app/{cardinal._name}menu.json') as f:
-        #     menu_items = json.load(f)
-
-        return []
+        return menu_items
     # #enddef _get_menu_items
-
-
-
 
     def render(self):
         return render_template(
