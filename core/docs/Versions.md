@@ -1,10 +1,12 @@
 # Versions in Cardinal
 Here's an explenation of the versions and patches of Cardinal with all the features developed for a specific version or patch
 
-# Alpha 0.1.3:
+## Alpha 0.1.3:
 Updated cardinal scripts, with new functionalities:
 - made a small refactor of cardinal by rebuilding the structure with more organized scripts
-- added the possibility to add arguments for 
+- added the possibility to add arguments for customize the runners / setup / deploy & migrate commands
+- updated the user dashboard with new widgets being implemented and multiple adjustments on the pages style
+- updated some test projects with new implemented features
 
 ## Alpha 0.1.2:
 Updated cardinal scripts, with new functionalities:
