@@ -34,30 +34,6 @@ def movie_list():
     page = Page(title="Lista Film")
     card = Card("Lista di tutti i Film")
 
-    movie_list_section = Section().table(
-        url = "/moviecatalog/api/v1/movie/list",
-        config = {
-            "columns": {
-                "id": {"title": "ID"},
-                "title": {"title": "Titolo"},
-                "description": {"title": "Descrizione"}
-            }
-        },
-        click = ""
-    )
-
-    card.addSection(movie_list_section)
-    page.addCard(card)
-
-    return page.render()
-# #enddef movie_list
-
-@routes.route("/new/configuration/movie/list", methods=['GET'])
-def new_movie_list():
-
-    page = Page(title="Lista Film")
-    card = Card("Lista di tutti i Film")
-
     movie_list_section = Section(title = "Lista di tutti i Film Presenti")._new_table(
         url = "/moviecatalog/api/v1/movie/list",
         config = {
