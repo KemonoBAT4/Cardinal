@@ -73,7 +73,7 @@ class Section:
         self.requires_datatables = False
     # #enddef __init__
 
-    def _new_table(
+    def table(
         self,
         url     : "str",
         config  : "dict[str, typing.Any]",
@@ -91,21 +91,6 @@ class Section:
             click   = click,
             buttons = buttons
         ).__cardinal__()
-
-        return self
-    # #enddef table
-
-    def table(
-        self,
-        url     : "str",
-        config  : "dict[str, typing.Any]",
-        click   : "str | typing.Callable | None" = None,
-        buttons : "dict | None" = None
-    ) -> "Section":
-
-        self._type = SectionTypeEnum.TABLE
-        self.template = "sections/table.html"
-        self.context = { "url": url }
 
         return self
     # #enddef table
