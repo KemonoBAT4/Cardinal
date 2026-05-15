@@ -4,6 +4,7 @@ import os
 import configparser
 import sys
 import typing
+import uuid
 
 
 #################
@@ -20,7 +21,11 @@ ROOT_PATH: str = os.path.join((os.path.dirname(os.path.abspath(__file__))), ".."
 
 NoneType = type(None)
 
-def getCardinalText(cardinal: "Cardinal") -> str:
+def generate_uuid() -> str:
+    return uuid.uuid4().hex
+# #enddef generate_uuid
+
+def get_cardinal_text(cardinal: "Cardinal") -> str:
     return f"""
 
     #######################
@@ -46,6 +51,6 @@ def getCardinalText(cardinal: "Cardinal") -> str:
     - cardinal authentication base path: '/access'
 
     """
-# #enddef getCardinalText
+# #enddef get_cardinal_text
 
 #endregion ######
