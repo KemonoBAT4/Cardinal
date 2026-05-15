@@ -26,7 +26,7 @@ class CardinalDataTable:
     _dataframe: "pd.DataFrame | None" = None
 
     _config: dict
-    _click: "str | typing.Callable | None"
+    _click: "str" # TODO: implement typing.Callable"
     _buttons: "dict | None"
     _searchbar: bool
 
@@ -61,11 +61,11 @@ class CardinalDataTable:
         elif isinstance(data_structure_or_url, pd.DataFrame):
             self._dataframe = data_structure_or_url
         else:
-            raise CardinalException(message = f"Data structure must be a type of {type(str)} or {type(pd.DataFrame)}, not {type(_data_structure_or_url)}")
+            raise configs.CardinalException(message = f"Data structure must be a type of {type(str)} or {type(pd.DataFrame)}, not {type(_data_structure_or_url)}")
         # #endif
 
         self._config    = config
-        self._click     = click
+        self.click      = click
         self._buttons   = buttons
         self._searchbar = searchbar
     # #enddef __init__
@@ -80,6 +80,19 @@ class CardinalDataTable:
     @property
     def click(self) -> "str | typing.Callable | None":
         return self._click
+    # #enddef click
+
+    @click.setter
+    def click(self, value: "str | typing.Callable | None") -> "None":
+
+        if (value is None):
+            value = ""
+        elif (callable(value)):
+            value = ""
+            pass # TODO: implement the click event with the function
+        # #endif
+
+        self._click = value
     # #enddef click
 
     @property
@@ -385,70 +398,18 @@ class CardinalDataTable:
                                 next:     "Avanti →",
                                 previous: "← Indietro"
                             }
+                        },
+                        rowCallback: function(row, data) {
+                            $(row).css('cursor', 'pointer');
+                            $(row).on('click', function() {
+                                let redirect_url = '""" + self._click.replace("{id}", "' + data.id + '") + """';
+                                window.location.href = redirect_url;
+                            });
                         }
                     });
                 });
             </script>
         """
-
-        # template = """
-
-        # <head>
-        #     <!-- DataTables -->
-        #     <link rel="stylesheet"
-        #         href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
-        #     <!-- Buttons -->
-        #     <link rel="stylesheet"
-        #         href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-
-        #     <!-- JS -->
-        #     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-        #     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-        #     <!-- Buttons + Export -->
-        #     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-        #     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-        #     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-        #     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-        #     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-        # <head>
-
-        # <table id=""" + self._uuid + """ class="display nowrap" style="width:100%">
-        #     <thead>
-        #         <tr>
-        #             """ + header_text + """
-        #         </tr>
-        #     </thead>
-        # </table>
-
-        # <script>
-        #     $(document).ready(function () {
-        #         $('#""" + self._uuid + """').DataTable({
-        #             ajax: '""" + url + """',
-        #             columns:""" +  json.dumps(column_keys) + """,
-        #             dom: 'Bfrtip',
-        #             buttons: [
-        #                 'excelHtml5',
-        #                 'pdfHtml5'
-        #             ],
-        #             language: {
-        #                 search: "",
-        #                 lengthMenu: "Mostra _MENU_ righe",
-        #                 info: "_START_ - _END_ di _TOTAL_",
-        #                 paginate: {
-        #                     next: "Avanti",
-        #                     previous: "Indietro"
-        #                 }
-        #             }
-        #         });
-        #     });
-
-        #     // NOTE: make this work
-        #     // // seta a placeholder
-        #     // $('.dataTables_filter input').attr("placeholder", "🔍 Cerca...");
-        # </script>
-        # """
 
         return template
     # #enddef _get_template_from_url
@@ -479,8 +440,6 @@ class CardinalDataTable:
         elif (self._dataframe is not None):
             template: str = self._get_template_from_dataframe()
         # #endif
-
-        print(template)
 
         return template
     # #enddef __cardinal__

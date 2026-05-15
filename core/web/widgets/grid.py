@@ -26,15 +26,16 @@ class CardinalGrid:
         """
 
         if not isinstance(title, str):
-            raise CardinalException(message = f"Title must be a type of {type(str)}, not {type(items_list)}")
+            raise configs.CardinalException(message = f"Title must be a type of {type(str)}, not {type(items_list)}")
         # #endif
 
         if not isinstance(items_list, list):
-            raise CardinalException(message = f"Items list must be a type of {type(list)}, not {type(items_list)}")
+            raise configs.CardinalException(message = f"Items list must be a type of {type(list)}, not {type(items_list)}")
         # #endif
 
         self._items_list = items_list
     # #enddef __init__
+
 
     #region -------- METHODS -------- #
     def add_item(self, item: "dict[str, str | typing.Any]") -> "None":
@@ -69,7 +70,7 @@ class CardinalGrid:
         """
 
         if not isinstance(items_list, list):
-            raise CardinalException(message = f"Items list must be a type of {type(list)}, not {type(items_list)}")
+            raise configs.CardinalException(message = f"Items list must be a type of {type(list)}, not {type(items_list)}")
         # #endif
 
         _items_list_length : int = len(self._items_list)
@@ -83,10 +84,11 @@ class CardinalGrid:
 
         # NOTE: idk if this is useful
         if ((_items_list_length + _items_length) != len(self._items_list)):
-            raise CardinalException(message = f"An error occured while adding items to the grid, only added {(len(self._items_list) - _items_list_length)} new items instead of {_items_length}")
+            raise configs.CardinalException(message = f"An error occured while adding items to the grid, only added {(len(self._items_list) - _items_list_length)} new items instead of {_items_length}")
         # #endif
     # #enddef add_items
     #endregion ----- METHODS -------- #
+
 
     #region -------- PROPERTIES -------- #
     @property
@@ -94,6 +96,7 @@ class CardinalGrid:
         return self._items_list
     # #enddef items
     #endregion ----- PROPERTIES -------- #
+
 
     def __cardinal__(self) -> "str":
         """
