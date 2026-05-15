@@ -28,13 +28,46 @@ def home():
     return page.render()
 # #enddef home
 
-@routes.route("/configuration/movie/list", methods=['GET'])
+@routes.route("/dashboard/movie/list", methods=['GET'])
 def movie_list():
 
     page = Page(title="Lista Film")
     card = Card("Lista di tutti i Film")
 
-    movie_list_section = Section(title = "Lista di tutti i Film Presenti")._new_table(
+    movie_list_section = Section(title = "Lista di tutti i Film Presenti").table(
+        url = "/moviecatalog/api/v1/movie/list",
+        config = {
+            "columns": {
+                "id"             : { "title": "ID"          },
+                "title"          : { "title": "Titolo"      },
+                "description"    : { "title": "Descrizione" },
+            }
+        },
+        click = "/moviecatalog/dashboard/movie/edit/{id}"
+    )
+
+    card.addSection(movie_list_section)
+    page.addCard(card)
+
+    return page.render()
+# #enddef movie_list
+
+@routes.route("/dashboard/movie/add", methods=['GET'])
+@routes.route("/dashboard/movie/edit/<int:movie_id>", methods=['GET'])
+def movie_edit(movie_id: "str | None" = None):
+
+    page = Page(title="Aggiungi Film")
+
+    return page.render()
+# #enddef movie_edit
+
+@routes.route("/configuration/movie/list", methods=['GET'])
+def configuration_movie_list():
+
+    page = Page(title="Lista Film")
+    card = Card("Lista di tutti i Film")
+
+    movie_list_section = Section(title = "Lista di tutti i Film Presenti").table(
         url = "/moviecatalog/api/v1/movie/list",
         config = {
             "columns": {
