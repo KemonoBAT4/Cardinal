@@ -4,6 +4,7 @@ import bcrypt
 import typing
 
 from core.handlers import get_class_repr
+from core.configs import generate_uuid
 
 db = SQLAlchemy()
 
@@ -14,9 +15,16 @@ class BaseModel(db.Model):
     """
     __abstract__ = True
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    created_at = db.Column(db.DateTime, nullable=False)
-    updated_at = db.Column(db.DateTime, nullable=False)
+    id         = db.Column(db.Integer    , primary_key = True , autoincrement = True )
+    uname      = db.Column(db.String(255), unique      = True , nullable      = False)
+    created_at = db.Column(db.DateTime   , unique      = False, nullable      = False)
+    updated_at = db.Column(db.DateTime   , unique      = False, nullable      = False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.uname = generate_uuid()
+    # #enddef __init__
 
     class Result:
 
@@ -189,13 +197,14 @@ class BaseUser(BaseModel):
 
     __abstract__ = True
 
-    name = db.Column(db.String(80), nullable=False)
-    surname = db.Column(db.String(80), nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    name          = db.Column(db.String(80), nullable=False)
+    surname       = db.Column(db.String(80), nullable=False)
+    username      = db.Column(db.String(80), unique=True, nullable=False)
+    email         = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.LargeBinary, nullable=False)
 
-    def register(self, password: str):
+    @classmethod
+    def register(cls, email: str, username: str, name: str, surname: str, password: str):
         """
         #### DESCRIPTION:
         Adds a new user with the provided password.
@@ -206,6 +215,16 @@ class BaseUser(BaseModel):
         #### RETURN:
         - tuple: A tuple containing the status and message of the operation.
         """
+
+        found_user = cls.query.filter(cls.email == email).first()
+
+        if found_user is not None:
+            return cls.Result(False, "User already exists").result()
+        
+        # #endif
+
+
+
 
         # TODO: implement this function
         return None, "Not implemented yet"
@@ -220,12 +239,12 @@ class BaseUser(BaseModel):
     #enddef
 
     @classmethod
-    def login(cls, mail: str, password: str):
+    def login(cls, email: str, password: str):
 
         # TODO: implement this function
         return None, "Not implemented yet"
 
-        user = cls.query.filter(cls.email == mail).first()
+        user = cls.query.filter(cls.email == email).first()
 
 
         return bcrypt.checkpw(password.encode("utf-8"), user.password_hash)
