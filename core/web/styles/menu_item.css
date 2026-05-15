@@ -2,6 +2,7 @@
 .menu-link {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: .6rem;
     padding: .55rem .75rem;
     border-radius: 6px;
@@ -11,6 +12,7 @@
     text-decoration: none;
     transition: background .15s, color .15s;
     margin: 1px 0;
+    width: 100%;
 }
 
 .menu-link i {
@@ -33,7 +35,6 @@
 .menu-link.active i { opacity: 1; }
 
 .menu-link.sub {
-    padding-left: 2.1rem;
     font-size: .82rem;
 }
 
