@@ -1,13 +1,18 @@
 
 
 from wtforms import Form, StringField, PasswordField, validators, SubmitField
+from flask_wtf import FlaskForm                                                             # type: ignore
 
 # local imports
+from ._common import *
 from .handlers import *
 from .models import *
 
+from core.form import *
+
 # example form
-class ExampleForm(Form):
+class ExampleForm(FlaskForm):
+
     field1 = StringField('Field 1', [validators.DataRequired()])
     field2 = StringField('Field 2', [validators.DataRequired()])
 
@@ -21,3 +26,4 @@ class ExampleForm(Form):
         pass
     #enddef
 #endclass
+

@@ -1,9 +1,8 @@
-/* define CSS variables */
+
 :root {
     --text-scale: 1.25;
 }
 
-/* action container */
 .action-container {
     width: 100%;
     height: 100%;
@@ -16,13 +15,11 @@
     align-items: flex-start;
 }
 
-/* action icon image */
 .action-image {
     width: 10%;
     height: 70%;
 }
 
-/* action text */
 .action-text {
     margin-left: 20px;
     height: 70%;
@@ -36,7 +33,6 @@
     transform-origin: left top;
 }
 
-/* action text hover effect */
 .action-text:hover {
     cursor: pointer;
 

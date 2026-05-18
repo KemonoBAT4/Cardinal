@@ -1,0 +1,32 @@
+{% for item in menu_items %}
+
+    {% if item.url is defined %}
+
+        <a class="menu-link {% if request.path == item.url %}active{% endif %}"
+           href="{{ item.url }}">
+            {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+            <span>{{ item.name }}</span>
+        </a>
+
+    {% elif item.activateon is defined %}
+        <div class="menu-group {% if request.path.startswith(item.activateon.replace('/**','')) %}open{% endif %}">
+            <button class="menu-group-header">
+                <span>{{ item.name }}</span>
+                <svg class="menu-chevron" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5">
+                    <path d="m9 18 6-6-6-6"/>
+                </svg>
+            </button>
+            <div class="menu-group-items">
+                {% for sub in item.children %}
+                    <a class="menu-link sub {% if request.path.startswith(sub.url.replace('/**','')) %}active{% endif %}"
+                       href="{{ sub.url.replace('/**', '') }}">
+                        {% if sub.icon %}<i class="{{ sub.icon }}"></i>{% endif %}
+                        <span>{{ sub.name }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+{% endfor %}

@@ -3,7 +3,7 @@ from sqlalchemy.orm import backref, relationship
 
 from .base import BaseModel, BaseUser, db
 
-class User(BaseModel):
+class User(BaseUser):
 
     __tablename__ = "users"
 
@@ -28,3 +28,6 @@ class Application(BaseModel):
 
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 #endclass
+
+class CardinalSystem(BaseModel):
+    pass

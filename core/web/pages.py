@@ -73,7 +73,7 @@ class Section:
         self.requires_datatables = False
     # #enddef __init__
 
-    def _new_table(
+    def table(
         self,
         url     : "str",
         config  : "dict[str, typing.Any]",
@@ -95,33 +95,20 @@ class Section:
         return self
     # #enddef table
 
-    def table(
-        self,
-        url     : "str",
-        config  : "dict[str, typing.Any]",
-        click   : "str | typing.Callable | None" = None,
-        buttons : "dict | None" = None
-    ) -> "Section":
-
-        self._type = SectionTypeEnum.TABLE
-        self.template = "sections/table.html"
-        self.context = { "url": url }
-
-        return self
-    # #enddef table
-
     def form(
         self,
-        form
+        form,
+        action: str = ""
         # formtype: typing.Any,
         # object: typing.Any,
         # formsave: "typing.Callable | None" = None,
         # redir: "str | None" = None
     ) -> "Section":
-        self.template = "sections/form.html"
         self.context = {"form": form}
+        self._type = SectionTypeEnum.FORM
 
-        # self._type = SectionTypeEnum.FORM
+        self.template = form.render_form(action=action)
+
 
         # form = formtype(obj = object)
 
@@ -266,24 +253,14 @@ class Page:
     # #enddef addCards
 
     def _get_menu_items(self):
-
         menu_items = []
 
-        # with open(f'./../../app/{system.cardinal._name}/menu.json') as f:
-        #     menu_items = json.load(f)
-        # # #enddef
+        with open(f'{ROOT_PATH}/app/{system.cardinal._name}/menu.json') as f:
+            menu_items = json.load(f)
+        # #enddef
 
-        # TODO: render the menu
-
-
-        # with open(f'./../../app/{cardinal._name}menu.json') as f:
-        #     menu_items = json.load(f)
-
-        return []
+        return menu_items
     # #enddef _get_menu_items
-
-
-
 
     def render(self):
         return render_template(

@@ -1,106 +1,220 @@
 
-/* #############
-# FORM SECTION #
-############# */
+.section-container {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+}
+
+.section-container:first-child {
+    border-top: none;
+}
+
+.section-title-container {
+    padding: .6rem 1rem;
+    background: var(--accent-soft);
+    border-bottom: 1px solid var(--border);
+}
+
+.section-title-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.section-content-container {
+    padding: 1rem;
+}
 
 .form-container {
     display: flex;
     flex-direction: column;
+    gap: .75rem;
 }
 
 .form-row {
     display: flex;
     flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
+    gap: .3rem;
+    flex: 1;
+    min-width: 160px;
+}
+
+.form-group label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: .45rem .75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    background: var(--surface);
 }
 
 .form-submit {
     display: flex;
     flex-direction: row;
+    gap: .5rem;
+    padding-top: .25rem;
 }
 
-/* #############
-# FORM SECTION #
-############# */
+.form-submit button,
+.form-submit input[type="submit"] {
+    padding: .45rem 1.2rem;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+}
 
-/* ##############
-# TABLE SECTION #
-############## */
+.form-submit button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.form-submit button:active {
+    transform: translateY(0);
+}
 
 .table-table-container {
     width: 99%;
-    margin: 10px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow:
-        0px 2px 6px rgba(0,0,0,0.08),
-        0px 12px 30px rgba(0,0,0,0.06);
-}
-
-table.dataTable thead {
-    background-color: #4964d8;
-    color: white;
+    margin: 0 auto;
 }
 
 table.dataTable thead th {
-    border-bottom: none;
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-}
-
-table.dataTable tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-table.dataTable tbody tr:hover {
-    background-color: rgba(73, 100, 216, 0.08);
-}
-
-.dt-button {
-    background: #4964d8 !important;
-    color: white !important;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: .85rem 1rem !important;
     border: none !important;
-    border-radius: 6px !important;
-    padding: 6px 14px !important;
-    transition: background 0.2s ease;
 }
 
-.dt-button:hover {
-    background: #3549a8 !important;
+table.dataTable thead th:first-child { border-radius: 8px 0 0 0; }
+table.dataTable thead th:last-child  { border-radius: 0 8px 0 0; }
+
+table.dataTable tbody tr td {
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+    color: var(--text);
+    padding: .75rem 1rem !important;
+    border-bottom: 1px solid var(--border) !important;
+    border-top: none !important;
 }
 
-.dataTables_filter label {
-    font-size: 0;
+table.dataTable tbody tr { transition: background .12s; }
+table.dataTable tbody tr:hover td { background: var(--accent-soft) !important; }
+table.dataTable tbody tr:last-child td { border-bottom: none !important; }
+
+
+.form-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
-.dataTables_filter {
-    margin-bottom: 15px;
-}
-
-.dataTables_filter input {
-    font-size: 14px;
-    width: 220px;
-    padding: 8px 12px;
-    padding-left: 36px;
-
-    border-radius: 20px;
-    border: 1px solid #e0e0e0;
-    background-color: #f8f9fc;
-
+.form-input,
+.form-select {
+    width: 100%;
+    padding: .45rem .75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    color: var(--text);
+    background: var(--bg);
     outline: none;
-    transition: all 0.25s ease;
+    transition: border-color .2s, box-shadow .2s;
 }
 
-.dataTables_filter input:focus {
-    border: 1px solid #4964d8;
-    background-color: white;
-    box-shadow: 0 0 0 3px rgba(73, 100, 216, 0.15);
+.form-input:focus,
+.form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    background: var(--surface);
 }
 
-/* ##############
-# TABLE SECTION #
-############## */
+.form-submit-btn {
+    padding: .45rem 1.2rem;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+}
+
+.form-submit-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.form-error {
+    font-size: .75rem;
+    color: #ef4444;
+    margin-top: .2rem;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    cursor: pointer;
+    font-size: .85rem;
+    color: var(--text);
+}
+
+.form-submit-btn.cancel {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+.form-submit-btn.cancel:hover {
+    background: var(--bg);
+    color: var(--text);
+    transform: none;
+}

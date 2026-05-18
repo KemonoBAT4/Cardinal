@@ -1,13 +1,17 @@
-# Cardinal - Alpha 0.1.2
+# Cardinal System
 
-### What is the Cardinl System
-The idea of cardinal is to create a program that can handle, learn and automate from simple to complex tasks like managing websites, bots or even
-for moderation. The ultimate goal is to merge all the different projects and make them work on a single platform, removing all the problems that
-might generate wrong configurations. Once the core is ultimated and perfectly functioning, to create a new application on cardinal will only require to pass the repository link of a project
-and selecting the starting file, cardinal then will be able to download the project, install all dependecies and create a personalized command for the user to start the application directly from cardinal.
+### What is Cardinal 🔭
+The idea of cardinal is to create a program that can help creating a backend structure with a complete dashboard to handle taks, manage possible webistes, bots or handle different datas.
+Once its core features are completed, Cardinal will be, with some simple commands, able to completely create new applications in the interface, apply some defaults routes, handle users. Once the application is completed, a single Cardinal project installed will be able to run multiple applications simultaneously without, everything with its own database and configurations, but all on the same core.
 
-## Getting Started
-### How to run Cardinal
+### Here's an example of the Dashboard
+![Cardinal Example Dashboard](/core/docs/images/dashboard_example_v-a_0-1-2.png)
+
+## How to install Cardinal 🖥️
+### Production Branch Installation
+There is currently not a production branch with a stable way to install & run Cardinal, since its still in development.
+
+### Development Branch Installation
 In this first version of Cardinal the first way to start as development an application is the following:
 
 - download the application with the command on a terminal `git clone https://github.com/KemonoBAT4/Cardinal`
@@ -23,15 +27,16 @@ In this first version of Cardinal the first way to start as development an appli
 <!--  (- run cardinal with `python run.py`) -->
 <!--  (- visit the dashboard page `/cardinal/dashboard` to see the dashboard) -->
 
-## The idea of Cardinal
-Right now cardinal can create multiple tables on a single database for all the applications + the core, this will be changed so every application has its own sub-core and configuration, making calls to the main cardinal to send analytics data, informations, statuses and other, also the Users will be set in the main Cardinal and redistribuited through the application, without the need to create an account every time, the project will be executed in a small beta with a discord bot made in node js and a old webiste also made in node js and the api that will be used is the cardinal application
-
-### Contribute the project
+## Contribute the project 📋
 If you have access to this repository you are free to fork the dev branch to help the project.
-When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made
+When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made. A complete guide on how to make a standard pull request can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Contributing.md).
 
-### Structure
-A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility
+## Structure 📂
+A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility.
 
-### Ideas & Suggestions
-A complete list of ideas that its currently in development / considered can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Ideas.md) and in its related Issues (only for W.I.P. ideas)
+## Versions 🗄️
+Right now, Cardinal's version is `Alpha 0.1.3`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
+[here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Versions.md).
+
+## Ideas & Suggestions 💡
+A complete list of ideas that its currently in development / considered can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Ideas.md) and in its related Issues (only for W.I.P. ideas).

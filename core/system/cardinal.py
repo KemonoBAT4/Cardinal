@@ -211,7 +211,7 @@ class Cardinal:
         command: str = str(args.pop(0)).lower()
 
         if (command in INFO_COMMANDS_LIST):
-            print(configs.getCardinalText(cardinal=self))
+            print(configs.get_cardinal_text(cardinal=self))
 
         elif (command in ARGUMENTS_LIST.keys()):
             callable_function = ARGUMENTS_LIST[command]["callable"]
@@ -558,6 +558,7 @@ class Cardinal:
     # #enddef _ports
 
     #endregion ##
+
 
     def __del__(self):
         self._app_context.pop() # type: ignore

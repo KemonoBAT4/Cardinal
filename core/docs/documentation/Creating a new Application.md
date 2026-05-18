@@ -21,7 +21,7 @@ This method allows you to create a new application starting from a template and 
 
 #
 
-### Methods Coming Soon:
+## Methods Coming Soon:
 
 ### Assisted creation:
 This method helps you create a new application from scratch by guiding you through a customizable and easy-to-use configuration process for the application. It is also more accessible and easier to integrate compared to the other options.

@@ -1,11 +1,17 @@
 
-from flask import Blueprint
-from .handlers import *
+# local imports
+from ._common import *
+from .models import *
 
-api = Blueprint('example_api', __name__)
+api = Blueprint(f'{project_name}_api', __name__)
 
-@api.route('/exmaple')
-def apiTest():
+@api.route("/example/list", methods=['GET', 'POST'])
+def table_example_list():
+    """
+    #### DESCRIPTION:
+    returns the list of all the movies
+    """
 
-    return {"exmaple": "example"}
-#enddef
+    example_list = Example.query.all()
+    return jsonify({"data": [example.to_dict() for example in example_list]})
+# #enddef table_example_list
