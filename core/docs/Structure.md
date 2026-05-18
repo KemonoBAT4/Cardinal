@@ -3,11 +3,14 @@
 Cardinal/                                           - THE MAIN FOLDER
 ├── app/                                            - THE APPLICATION FOLDER
 |    └── .../
+|         ├── static/                               - STATIC FILES (IMAGES & OTHERS)
+|         ├── templates/                            - TEMPLATES FOLDER
 |         ├── _common.py                            - A COMMMON IMPORT FOR THE PROJECT
 |         ├── api.py                                - ONLY API SCRIPT
 │         ├── application.cfg                       - APPLICATION CONFIG
-│         ├── forms.py                              - THE APPLICATIONS FORMS
-│         ├── handlers.py                           - FUNCTIONS
+│         ├── cli.py                                - THE CLI TO IMPORT DATA
+│         ├── forms.py                              - THE APPLICATION FORMS
+│         ├── handlers.py                           - GENERIC FUNCTIONS
 │         ├── menu.json                             - THE LEFT MENU
 │         ├── models.py                             - THE MODELS FOR THE DATA
 │         ├── README.md                             - THE APPLICAITON'S DOCUMENTATION
@@ -15,17 +18,19 @@ Cardinal/                                           - THE MAIN FOLDER
 ├── core/                                           - THE CORE (not to touch)
 |    ├── configs/                                   - THE CARDINAL CONFIGS
 |    |    ├── __init__.py
-|    |    └── config.py                             - THE ACTUAL CONFIG SCRIPT
-|    ├── database/                                  - THE DATABASE FOLDER
-|    |    └── database.db                           - THE DATABASE ( W.I.P. )
+|    |    ├── config.py                             - THE ACTUAL CONFIG SCRIPT
+|    |    └── exceptions.py                         - SOME CUSTOM EXCEPTIONS
+|    ├── decorators/                                - THE CARDINAL DECORATORS
+|    |    ├── __init__.py
+|    |    └── decorators.py                         - THE ACTUAL DECORATORS SCRIPT
 |    ├── docs/                                      - CARDINAL'S DOCUMENTATION
 |    |    ├── documentation/                        - HOW TO USE CARDINAL
 |    |    |    ├── Creating a new Application.md
 |    |    |    ├── Creating the models.md
+|    |    |    ├── temp-models.json
 |    |    |    ├── Understanding the Commands.md
-|    |    |    ├── Using Cardinal.md
-|    |    |    └── temp-models.json
-|    |    ├── example/                              - AN EXAMPLE FOR SETUP
+|    |    |    └── Using Cardinal.md
+|    |    ├── example/                              - AN EXAMPLE APP (DONT USE)
 |    |    |    ├── _common.py
 |    |    |    ├── api.py
 |    │    │    ├── application.cfg
@@ -36,9 +41,16 @@ Cardinal/                                           - THE MAIN FOLDER
 |    │    │    ├── README.md
 |    │    │    ├── routes.py
 |    |    |    └── Structure.md
-|    |    ├── Environment.md                        - HOW TO SETUP A ENVIRONMENT
-|    |    └── Structure.md                          - THE STRUCTURE FILE
+|    |    ├── images/                               - AN EXAMPLE APP (DONT USE)
+|    |    |    └── dashboard_example_v-a_0-1-2.png  - THE IMAGE FOR README
+|    |    ├── Environment.md                        - HOW TO SETUP ENVIRONMENT
+|    |    ├── Structure.md                          - THE STRUCTURE FILE
+|    |    └── Versions.md                           - INFOS ABOUT THE VERSIONS
+|    ├── forms/                                     - CARDINAL FORMS FOLDER
+|    |    ├── __init__.py
+|    |    └── base.py                               - THE BASE FOR THE APPS
 |    ├── handlers/                                  - CARDINAL HANDLERS FOLDER
+|    |    ├── __init__.py
 |    |    └── handlers.py                           - THE HANDLERS
 |    ├── models/                                    - CARDINAL MODELS FOLDER
 |    |    ├── __init__.py
@@ -55,8 +67,12 @@ Cardinal/                                           - THE MAIN FOLDER
 │         │    ├── index - old.js
 │         │    └── index.js                         - THE PAGE COMPON. SCRIPT
 |         ├── styles/                               - THE STYLES FOLDER
+│         │    ├── action.css                       - THE ACTION PAGE CSS
+│         │    ├── card.css                         - THE CARD PAGE CSS
 │         │    ├── index - old.css
-│         │    └── index.css                        - THE PAGE COMPON. CSS
+│         │    ├── index.css                        - THE PAGE COMPON CSS
+│         │    ├── menu_item.css                    - THE MENU ITEMS CSS
+│         │    └── section.css                      - THE SECTION PAGE CSS
 |         ├── templates/                            - ALL THE HTML TEMPLATES
 │         │    ├── sections/                        - THE SECTIONS HTML
 |         │    │    ├── form.html                   - FORM SECTION HTML
@@ -64,9 +80,14 @@ Cardinal/                                           - THE MAIN FOLDER
 |         |    |    └── table.html                  - TABLE SECTION HTML
 │         │    ├── action.html                      - THE ACTION TEMPLATE
 │         │    ├── card.html                        - THE CARD TEMPLATE
-│         │    ├── index - old.html
 │         │    ├── index.html                       - THE MAIN PAGE TEMPLATE
+│         │    ├── menu_item.html                   - THE MENU ITEMS TEMPLATE
 │         │    └── section.html                     - THE SECTION TEMPLATE
+|         ├── widgets/                              - THE WIDGET FOLDER
+│         │    ├── __init__.py
+│         │    ├── _common.py                       - THE COMMON FILE
+│         │    ├── datatable.py                     - A TABLE WIDGET FOR PAGE
+│         │    └── grid.py                          - THE SECTION TEMPLATE
 |         ├── __init__.py
 |         ├── api.py                                - CARDINAL'S WEB API
 |         ├── handlers.py                           - CARDINAL'S WEB HANDLERS
@@ -77,11 +98,14 @@ Cardinal/                                           - THE MAIN FOLDER
 ├── .gitignore
 ├── application.cfg                                 - CARDINAL DEFAULT CONFIG
 ├── cardinal.log                                    - SIMPLE LOGGER (W.I.P.)
+├── database.sh                                     - DATABASE HANDLER EXEC
+├── deploy.sh                                       - DEPLOY RUNNER EXEC
 ├── docker-compose.yml
 ├── dockerfile
 ├── LICENCE.txt                                     - THE LICENCE
 ├── README.md                                       - MAIN README
 ├── requirements.txt
-└── run.py                                          - MAIN RUNNER
+├── run.py                                          - MAIN RUNNER
+└── run.sh                                          - MAIN RUNNER EXEC
 ```
 #
