@@ -97,16 +97,18 @@ class Section:
 
     def form(
         self,
-        form
+        form,
+        action: str = ""
         # formtype: typing.Any,
         # object: typing.Any,
         # formsave: "typing.Callable | None" = None,
         # redir: "str | None" = None
     ) -> "Section":
-        self.template = "sections/form.html"
         self.context = {"form": form}
+        self._type = SectionTypeEnum.FORM
 
-        # self._type = SectionTypeEnum.FORM
+        self.template = form.render_form(action=action)
+
 
         # form = formtype(obj = object)
 

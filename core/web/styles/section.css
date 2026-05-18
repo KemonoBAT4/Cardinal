@@ -142,3 +142,79 @@ table.dataTable tbody tr td {
 table.dataTable tbody tr { transition: background .12s; }
 table.dataTable tbody tr:hover td { background: var(--accent-soft) !important; }
 table.dataTable tbody tr:last-child td { border-bottom: none !important; }
+
+
+.form-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: .45rem .75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    background: var(--surface);
+}
+
+.form-submit-btn {
+    padding: .45rem 1.2rem;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+}
+
+.form-submit-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.form-error {
+    font-size: .75rem;
+    color: #ef4444;
+    margin-top: .2rem;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    cursor: pointer;
+    font-size: .85rem;
+    color: var(--text);
+}
+
+.form-submit-btn.cancel {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+.form-submit-btn.cancel:hover {
+    background: var(--bg);
+    color: var(--text);
+    transform: none;
+}
