@@ -4,6 +4,9 @@
 The idea of cardinal is to create a program that can help creating a backend structure with a complete dashboard to handle taks, manage possible webistes, bots or handle different datas.
 Once its core features are completed, Cardinal will be, with some simple commands, able to completely create new applications in the interface, apply some defaults routes, handle users. Once the application is completed, a single Cardinal project installed will be able to run multiple applications simultaneously without, everything with its own database and configurations, but all on the same core.
 
+### Here's an example of the Dashboard
+![Cardinal Example Dashboard](/core/docs/images/dashboard_example_v-a_0-1-2.png)
+
 ## How to install Cardinal 🖥️
 ### Production Branch Installation
 There is currently not a production branch with a stable way to install & run Cardinal, since its still in development.
@@ -32,7 +35,7 @@ When you are done developing pls make a pull request [here](https://github.com/K
 A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility.
 
 ## Versions 🗄️
-Right now, Cardinal's version is `Alpha 0.1.2`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
+Right now, Cardinal's version is `Alpha 0.1.3`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
 [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Versions.md).
 
 ## Ideas & Suggestions 💡
