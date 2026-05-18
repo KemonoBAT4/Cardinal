@@ -2,6 +2,7 @@
 # local imports
 from ._common import *
 from .models import *
+from .forms import *
 
 routes = Blueprint(f'{project_name}_routes', __name__)
 
@@ -52,11 +53,31 @@ def movie_list():
     return page.render()
 # #enddef movie_list
 
-@routes.route("/dashboard/movie/add", methods=['GET'])
-@routes.route("/dashboard/movie/edit/<int:movie_id>", methods=['GET'])
+@routes.route("/dashboard/movie/add", methods=['GET', 'POST'])
+@routes.route("/dashboard/movie/edit/<int:movie_id>", methods=['GET', 'POST'])
 def movie_edit(movie_id: "str | None" = None):
 
-    page = Page(title="Aggiungi Film")
+    title: str = "Modifica Film" if movie_id is not None else "Aggiungi Film"
+    movie: Movie = Movie.query.get(movie_id) if movie_id is not None else Movie()
+
+    form = MovieForm(obj = movie)
+    form._obj = movie
+
+    if form.validate_on_submit():
+
+        if "submit" in request.form:
+            form.saveForm(movie)
+        # #endif
+
+        return redirect(url_for(f"{project_name}_routes.movie_list"))
+    # #endif
+
+    page = Page(title=title)
+    card = Card(title)
+    section = Section(title="").form(form, action=request.path)
+
+    card.addSection(section)
+    page.addCard(card)
 
     return page.render()
 # #enddef movie_edit

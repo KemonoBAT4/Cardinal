@@ -8,8 +8,10 @@ from ._common import *
 from .handlers import *
 from .models import *
 
+from core.form import *
+
 # example form
-class ExampleForm(Form):
+class ExampleForm(FlaskForm):
 
     field1 = StringField('Field 1', [validators.DataRequired()])
     field2 = StringField('Field 2', [validators.DataRequired()])
@@ -25,32 +27,17 @@ class ExampleForm(Form):
     #enddef
 #endclass
 
-
-class MovieForm(FlaskForm):
-
-    title = StringField('Title', [validators.DataRequired()])
-    description = StringField('Description', [validators.DataRequired()])
-
-    submit = SubmitField('Submit')
+class MovieForm(BaseForm):
+    title       = StringField('Titolo',      [validators.DataRequired()], render_kw={"size": 6})
+    description = StringField('Descrizione', [validators.DataRequired()], render_kw={"size": 6})
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
     #enddef
 
     def saveForm(self, obj, *args, **kwargs):
-
-        breakpoint()
-
         self.populate_obj(obj)
         obj.save()
-    #enddef
-
-
-    # def saveFom(self, form, obj, *args, **kwargs):
-    #     breakpoint()
-
-    #     form.populate_obj(obj)
-    #     obj.save()
     # #enddef
 #endclass
 
