@@ -1,29 +1,25 @@
-# TODO: make the docker compose for the modular application
-
-
-# ─────────────────────────────────────────────
-#  Cardinal – docker-compose.yml  (MySQL + profiles)
-#
-#  Avviare un'app con il suo DB:
-#    docker compose --profile moviecatalog up -d
-#    docker compose --profile midnight up -d
-#
-#  Avviare tutto:
-#    docker compose --profile moviecatalog --profile midnight up -d
-# ─────────────────────────────────────────────
 
 services:
 
-  # ── moviecatalog ──────────────────────────
   moviecatalog:
+    command: tail -f /dev/null
+
     build:
       context: .
       args:
         APP_NAME: moviecatalog
+
     image: cardinal-moviecatalog
     container_name: cardinal_moviecatalog
     restart: unless-stopped
+
+    working_dir: /app
+
+    volumes:
+      - .:/app
+
     environment:
+      PYTHONUNBUFFERED: 1
       APP_NAME: moviecatalog
       DB_HOST: db_moviecatalog
       DB_PORT: 3306
@@ -31,43 +27,58 @@ services:
       DB_USER: ${MOVIECATALOG_DB_USER:-cardinal}
       DB_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
       SECRET_KEY: ${MOVIECATALOG_SECRET_KEY:-changeme}
+
     ports:
       - "23104:23104"
+
     depends_on:
       db_moviecatalog:
         condition: service_healthy
+
     networks:
       - cardinal_net
-
   db_moviecatalog:
     image: mysql:8.0
     container_name: cardinal_db_moviecatalog
     restart: unless-stopped
+
     environment:
       MYSQL_DATABASE: ${MOVIECATALOG_DB_NAME:-moviecatalog}
       MYSQL_USER: ${MOVIECATALOG_DB_USER:-cardinal}
       MYSQL_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
       MYSQL_ROOT_PASSWORD: ${MOVIECATALOG_ROOT_PASSWORD:-rootchangeme}
+
     volumes:
       - db_moviecatalog_data:/var/lib/mysql
+
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "cardinal", "--password=${MOVIECATALOG_DB_PASSWORD:-changeme}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
     networks:
       - cardinal_net
 
-  # ── midnight ──────────────────────────────
   midnight:
+    command: tail -f /dev/null
+
     build:
       context: .
       args:
         APP_NAME: midnight
+
     image: cardinal-midnight
     container_name: cardinal_midnight
     restart: unless-stopped
+
+    working_dir: /app
+
+    volumes:
+      - .:/app
+
     environment:
+      PYTHONUNBUFFERED: 1
       APP_NAME: midnight
       DB_HOST: db_midnight
       DB_PORT: 3306
@@ -75,11 +86,14 @@ services:
       DB_USER: ${MIDNIGHT_DB_USER:-cardinal}
       DB_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
       SECRET_KEY: ${MIDNIGHT_SECRET_KEY:-changeme}
+
     ports:
       - "23105:23104"
+
     depends_on:
       db_midnight:
         condition: service_healthy
+
     networks:
       - cardinal_net
 
@@ -87,27 +101,29 @@ services:
     image: mysql:8.0
     container_name: cardinal_db_midnight
     restart: unless-stopped
+
     environment:
       MYSQL_DATABASE: ${MIDNIGHT_DB_NAME:-midnight}
       MYSQL_USER: ${MIDNIGHT_DB_USER:-cardinal}
       MYSQL_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
       MYSQL_ROOT_PASSWORD: ${MIDNIGHT_ROOT_PASSWORD:-rootchangeme}
+
     volumes:
       - db_midnight_data:/var/lib/mysql
+
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "cardinal", "--password=${MIDNIGHT_DB_PASSWORD:-changeme}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
     networks:
       - cardinal_net
 
-# ── Volumi ────────────────────────────────────
 volumes:
   db_moviecatalog_data:
   db_midnight_data:
 
-# ── Rete condivisa ────────────────────────────
 networks:
   cardinal_net:
     driver: bridge

@@ -7,3 +7,6 @@ __pycache__
 
 # code editors
 .vscode
+
+# docker images
+**.tar

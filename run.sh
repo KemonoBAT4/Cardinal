@@ -26,14 +26,37 @@ if [[ ! " ${VALID_APPS[@]} " =~ " $1 " ]]; then
 fi
 
 APP_NAME="$1"
+COMMAND="$2"
 DB_SERVICE="db_${APP_NAME}"
 
-if command -v docker &>/dev/null && [ -f "$SCRIPT_DIR/docker-compose.yml" ]; then
-  echo "▶ Avvio container: $APP_NAME + $DB_SERVICE"
-  docker compose -f "$SCRIPT_DIR/docker-compose.yml" up "$APP_NAME" "$DB_SERVICE" -d
-  if [ $? -ne 0 ]; then
-    echo "⚠ docker compose non riuscito, continuo con avvio locale..."
-  fi
+if [ $# -lt 2 ]; then
+  echo "Uso: ./run.sh <app> <command>"
+  exit 1
 fi
 
-python run.py "$@"
+if [ "$COMMAND" == "reset" ]; then
+  echo "🧨 Full DB reset (Docker volume)"
+
+  docker compose down -v
+
+  docker compose up -d "$APP_NAME" "$DB_SERVICE"
+
+  exit 0
+fi
+
+if [ "$COMMAND" == "build" ]; then
+  echo "🔨 Building image for $APP_NAME..."
+
+  docker compose build "$APP_NAME"
+
+  echo "✅ Build completata: cardinal-$APP_NAME"
+
+  docker save cardinal-$APP_NAME > cardinal-$APP_NAME.tar
+
+  exit 0
+fi
+
+echo "▶ Avvio container: $APP_NAME + $DB_SERVICE"
+docker compose -f "$SCRIPT_DIR/docker-compose.yml" up -d "$APP_NAME" "$DB_SERVICE"
+docker compose -f "$SCRIPT_DIR/docker-compose.yml" exec "$APP_NAME" \
+  python run.py "$APP_NAME" "$COMMAND"
