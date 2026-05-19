@@ -370,7 +370,8 @@ class Cardinal:
         self._app_context = self._app.app_context()
         self._app_context.push()
 
-        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
+        self._app.config['SQLALCHEMY_DATABASE_URI'] = configs.build_db_uri(self._config)
+        # self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
         self._db.init_app(self._app)
 
         # gets the host and port
