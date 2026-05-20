@@ -1,22 +1,25 @@
+# ─────────────────────────────────────────────
+#  Cardinal – Dockerfile
+# ─────────────────────────────────────────────
+
 FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /Cardinal
 
+# install deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# copy project
 COPY . .
 
-ARG APP_NAME
+ARG APP_NAME=moviecatalog
 ENV APP_NAME=${APP_NAME}
 
-# default command
 ENTRYPOINT ["python", "run.py"]
 
-# default args (fallback)
 CMD ["moviecatalog", "run"]
