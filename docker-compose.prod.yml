@@ -1,0 +1,117 @@
+services:
+
+  moviecatalog:
+    image: kemonobat4/cardinal-moviecatalog:latest
+    container_name: cardinal_moviecatalog_prod
+    restart: always
+    working_dir: /Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: moviecatalog
+
+      DB_HOST: db_moviecatalog
+      DB_PORT: 3306
+      DB_NAME: ${MOVIECATALOG_DB_NAME:-moviecatalog}
+      DB_USER: ${MOVIECATALOG_DB_USER:-cardinal}
+      DB_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${MOVIECATALOG_SECRET_KEY:-changeme}
+
+    ports:
+      - "23104:23104"
+
+    depends_on:
+      db_moviecatalog:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+
+  db_moviecatalog:
+    image: mysql:8.0
+    container_name: cardinal_db_moviecatalog_prod
+    restart: always
+
+    environment:
+      MYSQL_DATABASE: ${MOVIECATALOG_DB_NAME:-moviecatalog}
+      MYSQL_USER: ${MOVIECATALOG_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MOVIECATALOG_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_moviecatalog_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",
+             "-u", "cardinal", "--password=${MOVIECATALOG_DB_PASSWORD:-changeme}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+
+  midnight:
+    image: kemonobat4/cardinal-midnight:latest
+    container_name: cardinal_midnight_prod
+    restart: always
+    working_dir: /Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: midnight
+
+      DB_HOST: db_midnight
+      DB_PORT: 3306
+      DB_NAME: ${MIDNIGHT_DB_NAME:-midnight}
+      DB_USER: ${MIDNIGHT_DB_USER:-cardinal}
+      DB_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${MIDNIGHT_SECRET_KEY:-changeme}
+
+    ports:
+      - "23105:23104"
+
+    depends_on:
+      db_midnight:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+
+  db_midnight:
+    image: mysql:8.0
+    container_name: cardinal_db_midnight_prod
+    restart: always
+
+    environment:
+      MYSQL_DATABASE: ${MIDNIGHT_DB_NAME:-midnight}
+      MYSQL_USER: ${MIDNIGHT_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MIDNIGHT_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_midnight_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",
+             "-u", "cardinal", "--password=${MIDNIGHT_DB_PASSWORD:-changeme}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+
+volumes:
+  db_moviecatalog_data:
+  db_midnight_data:
+
+networks:
+  cardinal_net:
+    driver: bridge
