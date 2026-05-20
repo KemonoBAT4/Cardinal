@@ -375,7 +375,6 @@ class Cardinal:
         self._db.init_app(self._app)
 
         # gets the host and port
-
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
 
