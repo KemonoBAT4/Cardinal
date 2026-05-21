@@ -1,5 +1,11 @@
 # Versions in Cardinal
 Here's an explenation of the versions and patches of Cardinal with all the features developed for a specific version or patch
+Soon it will be relased a newer patch to introduce new documentation files about how to create a docker production / development environment
+
+## Alpha 0.1.4:
+Updated cardinal scripts, with new functionalities:
+- implemented docker with a `development` and `production` environment
+- all commands are available in the ./run.sh file explanation
 
 ## Alpha 0.1.3:
 Updated cardinal scripts, with new functionalities:
