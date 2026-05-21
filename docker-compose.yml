@@ -49,7 +49,6 @@ services:
     networks:
       - cardinal_net
 
-
   # ─────────────────────────────
   # moviecatalog DB
   # ─────────────────────────────
@@ -90,11 +89,98 @@ services:
       - cardinal_net
 
 
+  # ─────────────────────────────
+  # midnight
+  # ─────────────────────────────
+  midnight:
+    build:
+      context: .
+      args:
+        APP_NAME: midnight
+
+    image: cardinal-midnight
+    container_name: cardinal_midnight
+
+    restart: unless-stopped
+
+    working_dir: /Cardinal
+
+    # container idle in dev
+    entrypoint: ""
+    command: tail -f /dev/null
+
+    volumes:
+      - .:/Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: midnight
+
+      DB_HOST: db_midnight
+      DB_PORT: 3306
+      DB_NAME: ${MIDNIGHT_DB_NAME:-midnight}
+      DB_USER: ${MIDNIGHT_DB_USER:-cardinal}
+      DB_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${MIDNIGHT_SECRET_KEY:-changeme}
+
+    ports:
+      - "23104:23104"
+
+    depends_on:
+      db_midnight:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+
+  # ─────────────────────────────
+  # midnight DB
+  # ─────────────────────────────
+  db_midnight:
+    image: mysql:8.0
+
+    container_name: cardinal_db_midnight
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: ${MIDNIGHT_DB_NAME:-midnight}
+      MYSQL_USER: ${MIDNIGHT_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MIDNIGHT_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_midnight_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "cardinal",
+          "--password=${MIDNIGHT_DB_PASSWORD:-changeme}"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+
 # ─────────────────────────────
 # volumes
 # ─────────────────────────────
 volumes:
   db_moviecatalog_data:
+  db_midnight_data:
 
 
 # ─────────────────────────────
