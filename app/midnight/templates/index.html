@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{website_title}}</title>
+
+        <link rel="icon" type="image/png" href="favicon.ico">
+        <link rel="stylesheet" href="/styles/cardinal/index.css">
+        <link rel="stylesheet" href="/styles/cardinal/card.css">
+        <link rel="stylesheet" href="/styles/cardinal/section.css">
+        <link rel="stylesheet" href="/styles/cardinal/action.css">
+    </head>
+    <body>
+        <!-- page container -->
+        <div class="page">
+
+            <!-- a vertical container for letting the version
+            and the sidebar to be one above each other -->
+            <div class="vertical-container">
+
+                <div class="project-info-container">
+                    <div class="project-title-container">
+                        <span class="project-title">Movie Catalog</span>
+                    </div>
+                </div>
+
+                <div class="menu-container">
+                    {% for menu_item in menu_items %}
+                        {{ menu_item }}
+                    {% endfor %}
+                </div>
+
+                <div class="version-container">
+
+                    <!-- cardinal icon -->
+                    <img style="width: 12%; margin-right: 10px;" src="/icons/cardinal/icon.png" alt="">
+
+                    <!-- clickable text to see what is cardinal -->
+                    <span class="infos-text">Powered by Cardinal</span>
+
+                    <!-- clickable text too see all the cardinal versions -->
+                    <span class="version-text">v {{cardinal_version}}</span>
+                </div>
+
+            </div>
+
+            <!-- the content of the page -->
+            <div class="main-container">
+
+                <!-- header container -->
+                <div class="header-container">
+                    <div class="header-title-container">
+                        <span class="header-page-title">{{page_title}}</span>
+                    </div>
+
+                    <div class="header-account-container">
+                        <span class="header-username-text">{{logged_user}}</span>
+                    </div>
+                </div>
+
+                <div class="content-container">
+                    {% for card in cards %}
+                        {{ card }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <script src="/scripts/cardinal/action.html"></script>
+        <script src="/scripts/cardinal/section.js"></script>
+        <script src="/scripts/cardinal/card.js"></script>
+        <script src="/scripts/cardinal/index.js"></script>
+    </body>
+</html>
