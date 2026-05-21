@@ -28,6 +28,3 @@ this will create a .tar folder which is the image
 
 2. For running the compiled instance the following command
     - **`docker run cardinal-<project_name> <project_name> <command>`**
-
-
-# docker run cardinal-moviecatalog moviecatalog run
