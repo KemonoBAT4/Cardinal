@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 import bcrypt
 import typing
@@ -193,7 +194,7 @@ class BaseModel(db.Model):
     # #enddef
 # #endclass BaseModel
 
-class BaseUser(BaseModel):
+class BaseUser(UserMixin, BaseModel):
 
     __abstract__ = True
 
