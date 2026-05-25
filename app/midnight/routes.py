@@ -28,4 +28,3 @@ def home():
     page.addCard(card)
     return page.render()
 # #enddef home
-
