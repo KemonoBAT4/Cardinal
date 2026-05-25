@@ -15,3 +15,4 @@ def table_movie_list():
     movie_list = Movie.query.all()
     return jsonify({"data": [movie.to_dict() for movie in movie_list]})
 # #enddef table_movie_list
+
