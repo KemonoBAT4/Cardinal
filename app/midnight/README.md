@@ -1,6 +1,6 @@
 
-# Movie Catalog
-The Movie Catalog is a library created for display a complete catalog of **films**, **TV series** & **more**, with the possibility to create specific lists (favourites, etc ...) with also a intern player for the downloaded films / videos ( **not the possibility to download films for legal reasons** )
+# Midnight
+Midnight is a desktop & mobile application made to handle basic tasks & projects with a little help of a small AI as support
 
 
 ## 1.  📌 Getting Started
@@ -28,3 +28,4 @@ this will create a .tar folder which is the image
 
 2. For running the compiled instance the following command
     - **`docker run cardinal-<project_name> <project_name> <command>`**
+

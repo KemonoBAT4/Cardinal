@@ -38,14 +38,6 @@ def home():
     return page.render()
 #enddef
 
-@routes.route("/data")
-def get_data():
-    data = [
-        {"id": 1, "nome": "Mario", "eta": 30, "citta": "Roma"},
-        {"id": 2, "nome": "Luigi", "eta": 28, "citta": "Milano"},
-        {"id": 3, "nome": "Anna", "eta": 35, "citta": "Torino"},
-    ]
-    return jsonify(data)
 ##################
 # ABOUT CARDINAL #
 #region ##########

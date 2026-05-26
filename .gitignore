@@ -1,9 +1,13 @@
 
 # Virtual Environment
 .venv
+.env
 
 # Python
 __pycache__
 
 # code editors
 .vscode
+
+# docker images
+**.tar

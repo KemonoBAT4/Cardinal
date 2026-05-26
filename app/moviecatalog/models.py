@@ -1,6 +1,6 @@
 
 from ._common import *
-from core.models.base import BaseModel, db, BaseUser
+from core.models.base import *
 
 class Movie(BaseModel):
 

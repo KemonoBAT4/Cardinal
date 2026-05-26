@@ -3,9 +3,10 @@ import os
 import configparser
 
 # flask imports
-from flask import Blueprint, redirect, url_for, request
+from flask import Blueprint, redirect, url_for, request, jsonify
 from flask import render_template, send_from_directory
 from flask_login import login_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 # local imports
 from .pages import *
@@ -16,30 +17,25 @@ from core.configs import config
 from core.models.base import db
 from core.models.models import User
 
-users = Blueprint('access', __name__)
+auth = Blueprint('auth', __name__)
 
-@users.route("/", methods=['GET'])
+@auth.route("/", methods=['GET'])
 def index():
     return redirect(url_for('access.me'))
 # #enddef index
 
-@users.route("/login", methods=['GET', 'POST'])
+@auth.route("/login", methods=['GET', 'POST'])
 def login():
-
-    if (request.method == 'POST'):
-        # TODO: implement login
-        pass
-    else:
-        page = Page(page_title="The Cardinal System", title="Cardinal: Login")
-        return page.render()
-    # #endif
+    return ""
 # #enddef login
 
-@users.route("/register", methods=['GET', 'POST'])
+@auth.route("/register", methods=['GET', 'POST'])
 def register():
 
     if (request.method == 'POST'):
         # TODO: implement register
+        data = request.get_json()
+
         pass
     else:
         page = Page(page_title="The Cardinal System", title="Cardinal: Register")
@@ -47,8 +43,7 @@ def register():
     # #endif
 # #enddef register
 
-@users.route("/me", methods=['GET'])
-@login_required
+@auth.route("/me", methods=['GET'])
 def me():
 
     # TODO: really check if the user is logged in
@@ -62,7 +57,7 @@ def me():
     # #endif
 # #enddef me
 
-@users.route("/logout", methods=['GET'])
+@auth.route("/logout", methods=['GET'])
 def logout():
 
     # TODO: really check if the user is logged in
