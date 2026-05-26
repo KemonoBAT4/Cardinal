@@ -37,6 +37,7 @@ def build_db_uri(cfg: configparser.ConfigParser) -> str:
     if all([db_host, db_name, db_user, db_pass]):
         # Siamo in Docker: costruisci l'URI dalle env var
         return f"mysql+pymysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
+    # #endif
 
     # Sviluppo locale: usa il .cfg com'è
     return cfg.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI")
