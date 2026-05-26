@@ -17,9 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy project
 COPY . .
 
-ARG APP_NAME=moviecatalog
+ARG APP_NAME=example
 ENV APP_NAME=${APP_NAME}
 
 ENTRYPOINT ["python", "run.py"]
 
-CMD ["moviecatalog", "run"]
+CMD ["example", "run"]
